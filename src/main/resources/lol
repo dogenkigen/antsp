@@ -1,0 +1,57 @@
+NAME : usa13509
+COMMENT : Cities with population at least 500 in the continental US.
+COMMENT : Contributed by David Applegate and Andre Rohe, based on the
+COMMENT : data set "US.lat-long" from the ftp site ftp.cs.toronto.edu.
+COMMENT : The file US.lat-long.Z can be found in the directory /doc/geography.
+TYPE : TSP
+DIMENSION : 13509
+EDGE_WEIGHT_TYPE : EUC_2D
+NODE_COORD_SECTION
+
+
+
+/*
+    public static double[][] berlin52 = {{565, 575}, {25, 185}, {345, 750}, {945,
+            685},
+            {845, 655},
+            {880, 660}, {25, 230}, {525, 1000}, {580, 1175}, {650, 1130}, {1605, 620},
+            {1220, 580}, {1465, 200}, {1530, 5}, {845, 680}, {725, 370}, {145, 665},
+            {415, 635}, {510, 875}, {560, 365}, {300, 465}, {520, 585}, {480, 415},
+            {835, 625}, {975, 580}, {1215, 245}, {1320, 315}, {1250, 400}, {660, 180},
+            {410, 250}, {420, 555}, {575, 665}, {1150, 1160}, {700, 580}, {685, 595},
+            {685, 610}, {770, 610}, {795, 645}, {720, 635}, {760, 650}, {475, 960},
+            {95, 260}, {875, 920}, {700, 500}, {555, 815}, {830, 485}, {1170, 65},
+            {830, 610}, {605, 625}, {595, 360}, {1340, 725}, {1740, 245}};
+
+    public static double euc_2d(double[] c1, double[] c2) {
+        return Math.sqrt(Math.pow(c1[0] - c2[0], 2) + Math.pow(c1[1] - c2[1], 2));
+    }
+
+    public static double cost(int[] permutation, double[][] cities) {
+        double distance = 0;
+        for (int i = 0; i < permutation.length; i++) {
+            int city1 = permutation[i];
+            int city2 = permutation.length - 1 == i ? permutation[0] :
+                    permutation[i + 1];
+            distance += euc_2d(cities[city1], cities[city2]);
+        }
+        return distance;
+    }
+
+
+    public static int[] random_permutation(double[][] cities) {
+        List<Integer> integers = IntStream.range(0, cities.length)
+                .boxed()
+                .collect(Collectors.toList());
+        Collections.shuffle(integers);
+        return integers.stream().mapToInt(i -> i).toArray();
+    }*/
+
+
+
+    in main
+
+
+            //Arrays.stream(random_permutation(berlin52)).forEach(System
+            //        .out::println);
+            //System.out.println();
