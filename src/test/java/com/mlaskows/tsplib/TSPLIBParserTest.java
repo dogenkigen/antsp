@@ -17,12 +17,13 @@ public class TSPLIBParserTest {
         ClassLoader classLoader = getClass().getClassLoader();
         File file = new File(classLoader.getResource("usa13509.tsp").getFile());
 
-        TSPLIBItem tsplibItem = TSPLIBParser.parse(file.getAbsolutePath());
-        Assert.assertEquals(tsplibItem.getName(), "usa13509");
-        Assert.assertEquals(tsplibItem.getDimension(), 13509);
-        Assert.assertEquals(tsplibItem.getType(), TSPLIBType.TSP);
-        Assert.assertEquals(tsplibItem.getEdgeWeightType(), EdgeWeightType.EUC_2D);
-        Assert.assertEquals(tsplibItem.getNodes().size(), 13509);
+        Item item = TSPLIBParser.parse(file.getAbsolutePath());
+
+        Assert.assertEquals(item.getName(), "usa13509");
+        Assert.assertEquals(item.getDimension(), 13509);
+        Assert.assertEquals(item.getType(), Type.TSP);
+        Assert.assertEquals(item.getEdgeWeightType(), EdgeWeightType.EUC_2D);
+        Assert.assertEquals(item.getNodes().size(), 13509);
     }
 
 }
