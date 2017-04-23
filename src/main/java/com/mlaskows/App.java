@@ -24,8 +24,8 @@ public class App {
      * <p>
      * The position r of a city j in city i’s nearest-neighbor list
      * nearestNeighborList[i]  is the index of the distance dij in the sorted list di',
-     * that is, nearestNeighborList[i] [r]  gives the identifier (index) of the r-th
-     * nearest city to city i (i.e., nearestNeighborList[i] [r]  = j)
+     * that is, nearestNeighborList[i][r]  gives the identifier (index) of the r-th
+     * nearest city to city i (i.e., nearestNeighborList[i][r]  = j)
      */
     int nearestNeighborList[][];
 

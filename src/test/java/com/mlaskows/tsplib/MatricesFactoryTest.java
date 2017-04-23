@@ -2,6 +2,7 @@ package com.mlaskows.tsplib;
 
 import com.mlaskows.MatricesFactory;
 import org.testng.Assert;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.io.File;
@@ -12,17 +13,30 @@ import java.io.IOException;
  */
 public class MatricesFactoryTest {
 
-    @Test
-    public void testDistancesUsa13509() throws IOException {
+    private static final int NN_FACOTR = 15;
+    private static Item item;
+    private static MatricesFactory matricesFactory;
+
+    @BeforeClass
+    public void init() throws IOException{
         ClassLoader classLoader = getClass().getClassLoader();
         File file = new File(classLoader.getResource("usa13509.tsp").getFile());
-        Item item = TSPLIBParser.parse(file.getAbsolutePath());
+        item = TSPLIBParser.parse(file.getAbsolutePath());
+        matricesFactory = new MatricesFactory(item, NN_FACOTR);
+    }
 
-        MatricesFactory matricesFactory = new MatricesFactory(item);
+    @Test
+    public void testDistancesUsa13509() {
         int[][] distanceMatrix = matricesFactory.getDistanceMatrix();
-
+        Assert.assertEquals(distanceMatrix.length, item.getDimension());
         Assert.assertEquals(distanceMatrix[3][3], Integer.MAX_VALUE);
+    }
 
+    @Test
+    public void testNNUsa13509() {
+        int[][] nearestNeighborList = matricesFactory.getNearestNeighborList();
+        Assert.assertEquals(nearestNeighborList.length, item.getDimension());
+        Assert.assertEquals(nearestNeighborList[1].length, NN_FACOTR);
     }
 
 }
