@@ -16,7 +16,12 @@ public class MatricesFactory {
     private final int nnFactor;
     private int distanceMatrix[][];
     private int nearestNeighborList[][];
-    //double heuristicInformationMatrix[][];
+    /**
+     * The heuristic information nij is typically inversely proportional to
+     * the distance between cities i and j, a straightforward choice being
+     * nij = 1/dij
+     */
+    private double heuristicInformationMatrix[][];
 
     public MatricesFactory(Item item, int nnFactor) {
         this.item = item;
@@ -25,23 +30,42 @@ public class MatricesFactory {
 
     public int[][] getDistanceMatrix() {
         if (distanceMatrix == null) {
-            // TODO add some more logic to determine right function or
-            // move it somewhere else or use polymorphism
-            calculateDistances(DistanceCalculationMethodFactory
-                    .getTwoNodesDistanceCalculationMethod(item.getEdgeWeightType()));
+            calculateMatrices();
         }
         return distanceMatrix;
     }
 
-    private void calculateDistances(
+    public int[][] getNearestNeighborList() {
+        if (nearestNeighborList == null) {
+            calculateMatrices();
+        }
+        return nearestNeighborList;
+    }
+
+    public double[][] getHeuristicInformationMatrix() {
+        if (heuristicInformationMatrix == null) {
+            calculateMatrices();
+        }
+        return heuristicInformationMatrix;
+    }
+
+    private void calculateMatrices() {
+        // TODO add some more logic to determine right function or
+        // move it somewhere else or use polymorphism
+        calculateMatrices(DistanceCalculationMethodFactory
+                .getTwoNodesDistanceCalculationMethod(item.getEdgeWeightType()));
+    }
+
+    private void calculateMatrices(
             BiFunction<Node, Node, Integer> twoNodesDistanceCalculationMethod) {
-        distanceMatrix = new int[item.getDimension()][item.getDimension()];
-        nearestNeighborList = new int[item.getDimension()][nnFactor];
+        initArrays();
         List<Node> nodes = item.getNodes();
         for (int i = 0; i < nodes.size(); i++) {
             List<Tuple> tuples = new ArrayList<>();
             for (int j = 0; j < nodes.size(); j++) {
                 int distance;
+                // TODO consider not calculating for already calculated
+                //boolean redundant = distanceMatrix[j][i] != 0;
                 if (i == j) {
                     // TODO check if it's valid! Maybe should be 0?
                     distance = Integer.MAX_VALUE;
@@ -51,22 +75,27 @@ public class MatricesFactory {
                             .apply(nodes.get(i), nodes.get(j));
                 }
                 distanceMatrix[i][j] = distance;
+                heuristicInformationMatrix[i][j] = (1.0 / ((double) distance + 0.1));
                 tuples.add(new Tuple(j, distance));
             }
-            // TODO consider performance improvement
-            nearestNeighborList[i] = tuples.stream()
-                    .sorted()
-                    .limit(nnFactor)
-                    .mapToInt(t -> t.getIndex())
-                    .toArray();
+            nearestNeighborList[i] = getNearestNeighbourRow(tuples);
         }
     }
 
-    public int[][] getNearestNeighborList() {
-        if (nearestNeighborList == null) {
-            getDistanceMatrix();
-        }
-        return nearestNeighborList;
+    private void initArrays() {
+        distanceMatrix = new int[item.getDimension()][item.getDimension()];
+        heuristicInformationMatrix = new double[item.getDimension()][item
+                .getDimension()];
+        nearestNeighborList = new int[item.getDimension()][nnFactor];
+    }
+
+    private int[] getNearestNeighbourRow(List<Tuple> tuples) {
+        // TODO consider performance improvement
+        return tuples.stream()
+                .sorted()
+                .limit(nnFactor)
+                .mapToInt(t -> t.getIndex())
+                .toArray();
     }
 
     private class Tuple implements Comparable<Tuple> {

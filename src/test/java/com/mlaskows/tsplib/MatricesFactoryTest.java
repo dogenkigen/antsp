@@ -18,7 +18,7 @@ public class MatricesFactoryTest {
     private static MatricesFactory matricesFactory;
 
     @BeforeClass
-    public void init() throws IOException{
+    public void init() throws IOException {
         ClassLoader classLoader = getClass().getClassLoader();
         File file = new File(classLoader.getResource("usa13509.tsp").getFile());
         item = TSPLIBParser.parse(file.getAbsolutePath());
@@ -37,6 +37,15 @@ public class MatricesFactoryTest {
         int[][] nearestNeighborList = matricesFactory.getNearestNeighborList();
         Assert.assertEquals(nearestNeighborList.length, item.getDimension());
         Assert.assertEquals(nearestNeighborList[1].length, NN_FACOTR);
+    }
+
+    @Test
+    public void testHeuristicUsa13509() {
+        double[][] heuristicInformationMatrix = matricesFactory.getHeuristicInformationMatrix();
+        Assert.assertEquals(heuristicInformationMatrix.length, item.getDimension());
+        int i = matricesFactory.getDistanceMatrix()[1][1];
+        double v = 1.0 / ((double) i + 0.1);
+        Assert.assertEquals(heuristicInformationMatrix[1][1], v);
     }
 
 }
