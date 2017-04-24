@@ -61,6 +61,10 @@ public class App {
      * <p>
      * Can be used to compute choiceInfo value. Since heuristic information
      * never changes this can be done once and reused.
+     *
+     *  The heuristic information nij is typically inversely proportional to
+     * the distance between cities i and j, a straightforward choice being
+     * nij = 1/dij
      */
     double heuristicInformationMatrix[][];
 
