@@ -69,6 +69,8 @@ public class MatricesFactory {
             // TODO consider reducing number of iterations
             // It can be started like j = i if assignment will be done also
             // for inverted pairs
+            // But think twice here since this inner loop may be used to
+            // performance improvement in NN calculations
             for (int j = 0; j < nodes.size(); j++) {
                 int distance;
                 // TODO consider not calculating for already calculated
