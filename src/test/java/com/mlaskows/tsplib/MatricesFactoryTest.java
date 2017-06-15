@@ -22,7 +22,7 @@ public class MatricesFactoryTest {
         ClassLoader classLoader = getClass().getClassLoader();
         File file = new File(classLoader.getResource("usa13509.tsp").getFile());
         item = TSPLIBParser.parse(file.getAbsolutePath());
-        matricesFactory = new MatricesFactory(item, NN_FACOTR);
+        matricesFactory = new MatricesFactory(item, NN_FACOTR, initialTrail);
     }
 
     @Test

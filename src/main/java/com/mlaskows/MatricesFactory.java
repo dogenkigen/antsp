@@ -14,8 +14,10 @@ import java.util.function.BiFunction;
 public class MatricesFactory {
     private final Item item;
     private final int nnFactor;
+    private final double initialTrail;
     private int distanceMatrix[][];
     private int nearestNeighborList[][];
+    private double pheromoneMatrix[][];
     /**
      * The heuristic information nij is typically inversely proportional to
      * the distance between cities i and j, a straightforward choice being
@@ -23,11 +25,13 @@ public class MatricesFactory {
      */
     private double heuristicInformationMatrix[][];
 
-    public MatricesFactory(Item item, int nnFactor) {
+    public MatricesFactory(Item item, int nnFactor, double initialTrail) {
         this.item = item;
         this.nnFactor = nnFactor;
+        this.initialTrail = initialTrail;
     }
 
+    // FIXME this getters are shit I guess
     public int[][] getDistanceMatrix() {
         if (distanceMatrix == null) {
             calculateMatrices();
@@ -62,6 +66,9 @@ public class MatricesFactory {
         List<Node> nodes = item.getNodes();
         for (int i = 0; i < nodes.size(); i++) {
             List<Tuple> tuples = new ArrayList<>();
+            // TODO consider reducing number of iterations
+            // It can be started like j = i if assignment will be done also
+            // for inverted pairs
             for (int j = 0; j < nodes.size(); j++) {
                 int distance;
                 // TODO consider not calculating for already calculated
