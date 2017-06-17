@@ -14,6 +14,7 @@ import java.io.IOException;
 public class MatricesFactoryTest {
 
     private static final int NN_FACOTR = 15;
+    final double INITIAL_TRAIL = 0.1;
     private static Item item;
     private static MatricesFactory matricesFactory;
 
@@ -22,14 +23,17 @@ public class MatricesFactoryTest {
         ClassLoader classLoader = getClass().getClassLoader();
         File file = new File(classLoader.getResource("usa13509.tsp").getFile());
         item = TSPLIBParser.parse(file.getAbsolutePath());
-        matricesFactory = new MatricesFactory(item, NN_FACOTR, initialTrail);
+        matricesFactory = new MatricesFactory(item, NN_FACOTR, INITIAL_TRAIL);
     }
 
     @Test
     public void testDistancesUsa13509() {
+        final long timeMillis = System.currentTimeMillis();
         int[][] distanceMatrix = matricesFactory.getDistanceMatrix();
         Assert.assertEquals(distanceMatrix.length, item.getDimension());
         Assert.assertEquals(distanceMatrix[3][3], Integer.MAX_VALUE);
+        System.out.println(System.currentTimeMillis() - timeMillis);
+        //TODO add checking if it's valid. For instance NY-Washington D.C.
     }
 
     @Test

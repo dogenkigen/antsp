@@ -26,4 +26,21 @@ public class TSPLIBParserTest {
         Assert.assertEquals(item.getNodes().size(), 13509);
     }
 
+    @Test
+    public void testali535() throws IOException {
+        ClassLoader classLoader = getClass().getClassLoader();
+        File file = new File(classLoader.getResource("ali535.tsp").getFile());
+
+        Item item = TSPLIBParser.parse(file.getAbsolutePath());
+
+        Assert.assertEquals(item.getName(), "ali535");
+        Assert.assertEquals(item.getDimension(), 535);
+        Assert.assertEquals(item.getType(), Type.TSP);
+        Assert.assertEquals(item.getEdgeWeightType(), EdgeWeightType.GEO);
+        Assert.assertEquals(item.getDisplayDataType(), DisplayDataType.COORD_DISPLAY);
+        Assert.assertEquals(item.getNodes().size(), 535);
+        Assert.assertEquals(item.getComment(), "535 Airports around the globe (Padberg/Rinaldi)");
+
+    }
+
 }

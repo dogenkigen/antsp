@@ -101,7 +101,8 @@ public class App {
     private static void initializeData() {
         try {
             ClassLoader classLoader = App.class.getClassLoader();
-            File file = new File(classLoader.getResource("usa13509.tsp").getFile());
+            File file = new File(classLoader.getResource("ali535.tsp").getFile
+                    ());
             Item item = TSPLIBParser.parse(file.getAbsolutePath());
             // FIXME initial trail value should be calculated depending on
             // algorithm type.
