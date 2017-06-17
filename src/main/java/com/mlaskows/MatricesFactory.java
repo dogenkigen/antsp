@@ -16,8 +16,9 @@ public class MatricesFactory {
     private final int nnFactor;
     private final double initialTrail;
     private int distanceMatrix[][];
-    private int nearestNeighborList[][];
+    private int nearestNeighbors[][];
     private double pheromoneMatrix[][];
+    private List<Ant> ants;
     /**
      * The heuristic information nij is typically inversely proportional to
      * the distance between cities i and j, a straightforward choice being
@@ -39,11 +40,11 @@ public class MatricesFactory {
         return distanceMatrix;
     }
 
-    public int[][] getNearestNeighborList() {
-        if (nearestNeighborList == null) {
+    public int[][] getNearestNeighbors() {
+        if (nearestNeighbors == null) {
             calculateMatrices();
         }
-        return nearestNeighborList;
+        return nearestNeighbors;
     }
 
     public double[][] getHeuristicInformationMatrix() {
@@ -51,6 +52,13 @@ public class MatricesFactory {
             calculateMatrices();
         }
         return heuristicInformationMatrix;
+    }
+
+    public List<Ant> getAnts() {
+        if (ants == null) {
+            calculateMatrices();
+        }
+        return ants;
     }
 
     private void calculateMatrices() {
@@ -64,6 +72,7 @@ public class MatricesFactory {
             BiFunction<Node, Node, Integer> twoNodesDistanceCalculationMethod) {
         initArrays();
         List<Node> nodes = item.getNodes();
+        ants = new ArrayList<>();
         for (int i = 0; i < nodes.size(); i++) {
             List<Tuple> tuples = new ArrayList<>();
             // TODO consider reducing number of iterations
@@ -85,9 +94,11 @@ public class MatricesFactory {
                 }
                 distanceMatrix[i][j] = distance;
                 heuristicInformationMatrix[i][j] = (1.0 / ((double) distance + 0.1));
+                pheromoneMatrix[i][j] = initialTrail;
                 tuples.add(new Tuple(j, distance));
             }
-            nearestNeighborList[i] = getNearestNeighbourRow(tuples);
+            nearestNeighbors[i] = getNearestNeighbourRow(tuples);
+            ants.add(new Ant());
         }
     }
 
@@ -95,7 +106,8 @@ public class MatricesFactory {
         distanceMatrix = new int[item.getDimension()][item.getDimension()];
         heuristicInformationMatrix = new double[item.getDimension()][item
                 .getDimension()];
-        nearestNeighborList = new int[item.getDimension()][nnFactor];
+        pheromoneMatrix = new double[item.getDimension()][item.getDimension()];
+        nearestNeighbors = new int[item.getDimension()][nnFactor];
     }
 
     private int[] getNearestNeighbourRow(List<Tuple> tuples) {

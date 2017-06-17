@@ -6,6 +6,7 @@ import com.mlaskows.tsplib.TSPLIBParser;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Hello world!
@@ -14,14 +15,14 @@ public class App {
 
     // Representation of problem data
     //number of cities
-    private static final int n = 1;
+    private static int numberOfCites;
 
     /**
      * distance matrix.
      * <p>
      * Where distance between two cities j and i is distanceMatrix[j][i]. Simple as that.
      */
-    static int distanceMatrix[][];
+    private static int distanceMatrix[][];
 
     /**
      * matrix with nearest neighbor lists of depth NN_FACTOR
@@ -29,11 +30,11 @@ public class App {
      * city a list of its nearest neighbors.
      * <p>
      * The position r of a city j in city i’s nearest-neighbor list
-     * nearestNeighborList[i]  is the index of the distance dij in the sorted list di',
-     * that is, nearestNeighborList[i][r]  gives the identifier (index) of the r-th
-     * nearest city to city i (i.e., nearestNeighborList[i][r]  = j)
+     * nearestNeighbors[i]  is the index of the distance dij in the sorted list di',
+     * that is, nearestNeighbors[i][r]  gives the identifier (index) of the r-th
+     * nearest city to city i (i.e., nearestNeighbors[i][r]  = j)
      */
-    static int nearestNeighborList[][];
+    private static int nearestNeighbors[][];
 
     /**
      * An enormous speedup is obtained for the solution construction in ACO
@@ -51,7 +52,7 @@ public class App {
      * for each connection (i, j) a number tij corresponding to the
      * pheromoneMatrix trail associated with that connection.
      */
-    static double pheromoneMatrix[][];
+    private static double pheromoneMatrix[][];
 
     /**
      * combined pheromoneMatrix and heuristic information for every pair i,j.
@@ -61,7 +62,7 @@ public class App {
      * of the numbers in the choiceInfo matrix to the connections between
      * a city and the cities of its nearest-neighbor list.
      */
-    static double choiceInfo[][];
+    private static double choiceInfo[][];
 
     /**
      * heuristic information matrix.
@@ -73,12 +74,12 @@ public class App {
      * the distance between cities i and j, a straightforward choice being
      * nij = 1/dij
      */
-    static double heuristicInformationMatrix[][];
+    private static double heuristicInformationMatrix[][];
 
     /**
-     * Ants matrix.
+     * Ants list.
      */
-    Ant ants[];
+    private static List<Ant> ants;
 
     public static void main(String[] args) {
 
@@ -105,15 +106,18 @@ public class App {
                     ());
             Item item = TSPLIBParser.parse(file.getAbsolutePath());
             // FIXME initial trail value should be calculated depending on
-            // algorithm type.
+            // algorithm type. Ant system page 71 !!!
+            // Cnn means nearest neighbour heuristic algorithm for a whole graph
             MatricesFactory matricesFactory = new MatricesFactory(item,
                     NN_FACTOR, 0.01);
-            distanceMatrix =  matricesFactory.getDistanceMatrix();
+
+            distanceMatrix = matricesFactory.getDistanceMatrix();
             heuristicInformationMatrix = matricesFactory
-            .getHeuristicInformationMatrix();
-            nearestNeighborList = matricesFactory.getNearestNeighborList();
+                    .getHeuristicInformationMatrix();
+            nearestNeighbors = matricesFactory.getNearestNeighbors();
             System.out.println(item);
             //page 104
+            // TODO initial pheromone
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -122,7 +126,7 @@ public class App {
             ComputeDistances ✓
             ComputeNearestNeighborLists ✓
             ComputeChoiceInformation
-            InitializeAnts
+            InitializeAnts ✓
             InitializeParameters
             InitializeStatistics
          */
@@ -139,29 +143,5 @@ public class App {
 
     private static void updatePheromones() {
     }
-
-    // Representation of ants
-    private static class Ant {
-        public int tourLength; // the ant’s tour length
-
-        /**
-         * ant’s memory storing (partial) tours.
-         * <p>
-         * For the TSP we represent tours by arrays of length n + 1, where at
-         * position n + 1 the first city is repeated. This choice makes
-         * easier some of the other procedures like the computation of the tour
-         * length.
-         */
-        public int tour[];
-
-        /**
-         * An additional array visited whose values are set to visited[j]
-         * true if city i has already been visited by the ant, and to visited[j]
-         * false otherwise. This array is updated by the ant while it builds
-         * a solution.
-         */
-        public boolean visited[]; // visited cities
-    }
-
 
 }

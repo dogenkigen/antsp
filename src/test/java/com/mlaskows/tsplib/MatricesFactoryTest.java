@@ -38,7 +38,7 @@ public class MatricesFactoryTest {
 
     @Test
     public void testNNUsa13509() {
-        int[][] nearestNeighborList = matricesFactory.getNearestNeighborList();
+        int[][] nearestNeighborList = matricesFactory.getNearestNeighbors();
         Assert.assertEquals(nearestNeighborList.length, item.getDimension());
         Assert.assertEquals(nearestNeighborList[1].length, NN_FACOTR);
     }
@@ -50,6 +50,12 @@ public class MatricesFactoryTest {
         int i = matricesFactory.getDistanceMatrix()[1][1];
         double v = 1.0 / ((double) i + 0.1);
         Assert.assertEquals(heuristicInformationMatrix[1][1], v);
+    }
+
+    @Test
+    public void testDistancesAli535() {
+        // TODO add checking if distance calculation is ok.
+        Assert.assertTrue(true);
     }
 
 }
