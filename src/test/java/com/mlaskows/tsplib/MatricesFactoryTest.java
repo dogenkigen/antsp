@@ -16,7 +16,6 @@ import java.io.IOException;
 public class MatricesFactoryTest {
 
     private static final int NN_FACOTR = 15;
-    final double INITIAL_TRAIL = 0.1;
     private static Item item;
     private static MatricesHolder matrices;
 

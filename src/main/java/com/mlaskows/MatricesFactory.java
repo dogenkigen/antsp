@@ -62,7 +62,7 @@ public class MatricesFactory {
             for (int j = i; j < size; j++) {
                 fill(pheromoneMatrix, i, j, initialPheromoneValue);
             }
-            ants.add(new Ant());
+            ants.add(new Ant(size));
         }
     }
 
@@ -120,7 +120,6 @@ public class MatricesFactory {
         nearestNeighbors = new int[item.getDimension()][nnFactor];
     }
 
-
     private int[] getNearestNeighbourRow(List<Tuple> tuples) {
         // TODO consider performance improvement
         return tuples.stream()
@@ -128,29 +127,6 @@ public class MatricesFactory {
                 .limit(nnFactor)
                 .mapToInt(t -> t.getIndex())
                 .toArray();
-    }
-
-    private class Tuple implements Comparable<Tuple> {
-        private final int index;
-        private final int distance;
-
-        private Tuple(int index, int distance) {
-            this.index = index;
-            this.distance = distance;
-        }
-
-        public int getIndex() {
-            return index;
-        }
-
-        public int getDistance() {
-            return distance;
-        }
-
-        @Override
-        public int compareTo(Tuple tuple) {
-            return distance - tuple.getDistance();
-        }
     }
 
 }
