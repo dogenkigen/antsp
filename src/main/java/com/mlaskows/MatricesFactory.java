@@ -14,7 +14,6 @@ import java.util.function.BiFunction;
 public class MatricesFactory {
     private final Item item;
     private final int nnFactor;
-    private final double initialTrail;
     private int distanceMatrix[][];
     private int nearestNeighbors[][];
     private double pheromoneMatrix[][];
@@ -25,81 +24,92 @@ public class MatricesFactory {
      * nij = 1/dij
      */
     private double heuristicInformationMatrix[][];
+    private InitialPheromoneValueFactory pheromoneValueFactory;
 
-    public MatricesFactory(Item item, int nnFactor, double initialTrail) {
+    public MatricesFactory(Item item, int nnFactor) {
         this.item = item;
         this.nnFactor = nnFactor;
-        this.initialTrail = initialTrail;
     }
 
-    // FIXME this getters are shit I guess
-    public int[][] getDistanceMatrix() {
-        if (distanceMatrix == null) {
-            calculateMatrices();
+    public MatricesHolder createMatrices(AlgorithmType algorithmType) {
+        calculateMatrices(algorithmType);
+        return new MatricesHolder.MatricesHolderBuilder().withDistanceMatrix
+                (distanceMatrix).withNearestNeighbors(nearestNeighbors)
+                .withHeuristicInformationMatrix(heuristicInformationMatrix)
+                .withPheromoneMatrix(pheromoneMatrix).withAnts(ants).build();
+    }
+
+    private void calculateMatrices(AlgorithmType algorithmType) {
+        final BiFunction<Node, Node, Integer> distanceCalculationMethod =
+                DistanceCalculationMethodFactory
+                        .getDistanceCalculationMethod(item.getEdgeWeightType());
+        calculateMatrices(algorithmType, distanceCalculationMethod);
+    }
+
+    private void calculateMatrices(AlgorithmType algorithmType,
+                                   BiFunction<Node, Node, Integer> distanceCalculationMethod) {
+        if (isAtLeastOneArrayEmpty()) {
+            calculateBasicMatrices(distanceCalculationMethod);
         }
-        return distanceMatrix;
-    }
-
-    public int[][] getNearestNeighbors() {
-        if (nearestNeighbors == null) {
-            calculateMatrices();
+        if (pheromoneValueFactory == null) {
+            pheromoneValueFactory = new InitialPheromoneValueFactory
+                    (distanceMatrix);
         }
-        return nearestNeighbors;
-    }
-
-    public double[][] getHeuristicInformationMatrix() {
-        if (heuristicInformationMatrix == null) {
-            calculateMatrices();
+        final double initialPheromoneValue = pheromoneValueFactory
+                .calculateInitialPheromoneValue(algorithmType);
+        final int size = item.getNodes().size();
+        for (int i = 0; i < size; i++) {
+            for (int j = i; j < size; j++) {
+                fill(pheromoneMatrix, i, j, initialPheromoneValue);
+            }
+            ants.add(new Ant());
         }
-        return heuristicInformationMatrix;
     }
 
-    public List<Ant> getAnts() {
-        if (ants == null) {
-            calculateMatrices();
-        }
-        return ants;
+    private boolean isAtLeastOneArrayEmpty() {
+        return distanceMatrix == null || heuristicInformationMatrix == null ||
+                pheromoneMatrix == null || nearestNeighbors == null;
     }
 
-    private void calculateMatrices() {
-        // TODO add some more logic to determine right function or
-        // move it somewhere else or use polymorphism
-        calculateMatrices(DistanceCalculationMethodFactory
-                .getTwoNodesDistanceCalculationMethod(item.getEdgeWeightType()));
-    }
-
-    private void calculateMatrices(
-            BiFunction<Node, Node, Integer> twoNodesDistanceCalculationMethod) {
+    private void calculateBasicMatrices(BiFunction<Node, Node, Integer> distanceCalculationMethod) {
         initArrays();
         List<Node> nodes = item.getNodes();
         ants = new ArrayList<>();
         for (int i = 0; i < nodes.size(); i++) {
             List<Tuple> tuples = new ArrayList<>();
-            // TODO consider reducing number of iterations
-            // It can be started like j = i if assignment will be done also
-            // for inverted pairs
-            // But think twice here since this inner loop may be used to
-            // performance improvement in NN calculations
-            for (int j = 0; j < nodes.size(); j++) {
-                int distance;
-                // TODO consider not calculating for already calculated
-                //boolean redundant = distanceMatrix[j][i] != 0;
-                if (i == j) {
-                    // TODO check if it's valid! Maybe should be 0?
-                    distance = Integer.MAX_VALUE;
-
-                } else {
-                    distance = twoNodesDistanceCalculationMethod
-                            .apply(nodes.get(i), nodes.get(j));
-                }
-                distanceMatrix[i][j] = distance;
-                heuristicInformationMatrix[i][j] = (1.0 / ((double) distance + 0.1));
-                pheromoneMatrix[i][j] = initialTrail;
+            for (int j = i; j < nodes.size(); j++) {
+                int distance = getDistance(nodes
+                        .get(i), nodes.get(j), distanceCalculationMethod);
+                fill(distanceMatrix, i, j, distance);
+                fill(heuristicInformationMatrix, i, j, (1.0 / ((double) distance + 0.1)));
                 tuples.add(new Tuple(j, distance));
             }
             nearestNeighbors[i] = getNearestNeighbourRow(tuples);
-            ants.add(new Ant());
         }
+    }
+
+    private void fill(int[][] matrix, int i, int j, int value) {
+        matrix[i][j] = value;
+        matrix[j][i] = value;
+    }
+
+    private void fill(double[][] matrix, int i, int j, double value) {
+        matrix[i][j] = value;
+        matrix[j][i] = value;
+    }
+
+    private int getDistance(Node nodeI, Node nodeJ,
+                            BiFunction<Node, Node, Integer>
+                                    distanceCalculationMethod) {
+        int distance;
+        if (nodeI.equals(nodeJ)) {
+            distance = Integer.MAX_VALUE;
+
+        } else {
+            distance = distanceCalculationMethod
+                    .apply(nodeI, nodeJ);
+        }
+        return distance;
     }
 
     private void initArrays() {
@@ -109,6 +119,7 @@ public class MatricesFactory {
         pheromoneMatrix = new double[item.getDimension()][item.getDimension()];
         nearestNeighbors = new int[item.getDimension()][nnFactor];
     }
+
 
     private int[] getNearestNeighbourRow(List<Tuple> tuples) {
         // TODO consider performance improvement

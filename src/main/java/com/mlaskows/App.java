@@ -108,13 +108,14 @@ public class App {
             // FIXME initial trail value should be calculated depending on
             // algorithm type. Ant system page 71 !!!
             // Cnn means nearest neighbour heuristic algorithm for a whole graph
-            MatricesFactory matricesFactory = new MatricesFactory(item,
+            //https://pl.wikipedia.org/wiki/Algorytm_najbli%C5%BCszego_s%C4%85siada
+/*            MatricesFactory matricesFactory = new MatricesFactory(item,
                     NN_FACTOR, 0.01);
 
             distanceMatrix = matricesFactory.getDistanceMatrix();
             heuristicInformationMatrix = matricesFactory
                     .getHeuristicInformationMatrix();
-            nearestNeighbors = matricesFactory.getNearestNeighbors();
+            nearestNeighbors = matricesFactory.getNearestNeighbors();*/
             System.out.println(item);
             //page 104
             // TODO initial pheromone
