@@ -15,36 +15,44 @@ import java.io.IOException;
  */
 public class MatricesFactoryTest {
 
-    private static final int NN_FACOTR = 15;
+    private static final int NN_FACOTR = 5;
     private static Item item;
     private static MatricesHolder matrices;
 
     @BeforeClass
     public void init() throws IOException {
         ClassLoader classLoader = getClass().getClassLoader();
-        File file = new File(classLoader.getResource("usa13509.tsp").getFile());
+        File file = new File(classLoader.getResource("australia.tsp")
+                .getFile());
         item = TSPLIBParser.parse(file.getAbsolutePath());
         final MatricesFactory matricesFactory = new MatricesFactory(item, NN_FACOTR);
         matrices = matricesFactory.createMatrices(AlgorithmType.ANT_SYSTEM);
     }
 
     @Test
-    public void testDistancesUsa13509() {
+    public void testDistancesAustralia() {
         int[][] distanceMatrix = matrices.getDistanceMatrix();
+
         Assert.assertEquals(distanceMatrix.length, item.getDimension());
         Assert.assertEquals(distanceMatrix[3][3], Integer.MAX_VALUE);
-        //TODO add checking if it's valid. For instance NY-Washington D.C.
+        // Brisbane - Melbourne (real 1372.50)
+        Assert.assertEquals(distanceMatrix[0][1], 1371);
+        // Sydney - Darwin (real 3144)
+        Assert.assertEquals(distanceMatrix[2][5], 2928);
+
     }
 
     @Test
-    public void testNNUsa13509() {
+    public void testNNAustralia() {
         int[][] nearestNeighborList = matrices.getNearestNeighbors();
         Assert.assertEquals(nearestNeighborList.length, item.getDimension());
-        Assert.assertEquals(nearestNeighborList[1].length, NN_FACOTR);
+        Assert.assertEquals(nearestNeighborList[1].length, 5);
+        Assert.assertEquals(nearestNeighborList[0][0], 2);
+        Assert.assertEquals(nearestNeighborList[0][4], 3);
     }
 
     @Test
-    public void testHeuristicUsa13509() {
+    public void testHeuristicAustralia() {
         double[][] heuristicInformationMatrix = matrices.getHeuristicInformationMatrix();
         Assert.assertEquals(heuristicInformationMatrix.length, item.getDimension());
         int i = matrices.getDistanceMatrix()[1][1];
@@ -53,8 +61,8 @@ public class MatricesFactoryTest {
     }
 
     @Test
-    public void testDistancesAli535() {
-        // TODO add checking if distance calculation is ok.
+    public void testPheromoneAustralia() {
+        // TODO add checking if pheromone calculation is ok.
         Assert.assertTrue(true);
     }
 

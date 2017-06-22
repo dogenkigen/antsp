@@ -1,1 +1,4 @@
 * add tsplib utils java 8 style (calculating distances?)
+* during redesign consider GUI watching moving ants or pheromone
+    - pheromone update observer
+    - ants location observer
