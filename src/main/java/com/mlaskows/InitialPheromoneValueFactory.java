@@ -22,6 +22,9 @@ public class InitialPheromoneValueFactory {
         }
         switch (algorithmType) {
             case ANT_SYSTEM:
+                // FIXME should be number of ants (m) not problem size (n)
+                // Although for ANT_SYSTEM should be n=m so we can temporary
+                // leave it like this
                 return (double) distanceMatrix.length / heuristicLength;
             default:
                 return 0.0;
