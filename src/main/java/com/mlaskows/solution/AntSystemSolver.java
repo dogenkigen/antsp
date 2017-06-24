@@ -7,6 +7,7 @@ import com.mlaskows.matrices.MatricesHolder;
 import java.util.List;
 import java.util.SplittableRandom;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Created by mlaskows on 24/06/2017.
@@ -47,6 +48,13 @@ public class AntSystemSolver implements Solver {
     }
 
     private void constructSolution() {
+        IntStream.range(0, matrices.getProblemSize())
+                .forEach(step -> ants.stream()
+                        .forEach(ant -> decisionRule(ant, step)));
+    }
 
+    private void decisionRule(Ant ant, int step) {
+        final int current = ant.getCurrent();
+        //108
     }
 }

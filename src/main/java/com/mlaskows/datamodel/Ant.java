@@ -34,6 +34,10 @@ public class Ant {
         return tourLength;
     }
 
+    public int getCurrent() {
+        return tour.get(tour.size() - 1);
+    }
+
     /**
      * ant’s memory storing (partial) tours.
      * <p>
