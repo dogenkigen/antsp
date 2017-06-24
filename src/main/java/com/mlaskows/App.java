@@ -1,8 +1,9 @@
 package com.mlaskows;
 
 
+import com.mlaskows.datamodel.Ant;
 import com.mlaskows.tsplib.Item;
-import com.mlaskows.tsplib.TSPLIBParser;
+import com.mlaskows.tsplib.TspLibParser;
 
 import java.io.File;
 import java.io.IOException;
@@ -104,21 +105,8 @@ public class App {
             ClassLoader classLoader = App.class.getClassLoader();
             File file = new File(classLoader.getResource("ali535.tsp").getFile
                     ());
-            Item item = TSPLIBParser.parse(file.getAbsolutePath());
-            // FIXME initial trail value should be calculated depending on
-            // algorithm type. Ant system page 71 !!!
-            // Cnn means nearest neighbour heuristic algorithm for a whole graph
-            //https://pl.wikipedia.org/wiki/Algorytm_najbli%C5%BCszego_s%C4%85siada
-/*            MatricesFactory matricesFactory = new MatricesFactory(item,
-                    NN_FACTOR, 0.01);
-
-            distanceMatrix = matricesFactory.getDistanceMatrix();
-            heuristicInformationMatrix = matricesFactory
-                    .getHeuristicInformationMatrix();
-            nearestNeighbors = matricesFactory.getNearestNeighbors();*/
+            Item item = TspLibParser.parse(file.getAbsolutePath());
             System.out.println(item);
-            //page 104
-            // TODO initial pheromone
         } catch (IOException e) {
             e.printStackTrace();
         }

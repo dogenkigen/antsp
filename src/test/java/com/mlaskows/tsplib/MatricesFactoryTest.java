@@ -1,8 +1,7 @@
 package com.mlaskows.tsplib;
 
-import com.mlaskows.AlgorithmType;
-import com.mlaskows.MatricesFactory;
-import com.mlaskows.MatricesHolder;
+import com.mlaskows.matrices.MatricesFactory;
+import com.mlaskows.matrices.MatricesHolder;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -24,9 +23,9 @@ public class MatricesFactoryTest {
         ClassLoader classLoader = getClass().getClassLoader();
         File file = new File(classLoader.getResource("australia.tsp")
                 .getFile());
-        item = TSPLIBParser.parse(file.getAbsolutePath());
+        item = TspLibParser.parse(file.getAbsolutePath());
         final MatricesFactory matricesFactory = new MatricesFactory(item, NN_FACOTR);
-        matrices = matricesFactory.createMatrices(AlgorithmType.ANT_SYSTEM);
+        matrices = matricesFactory.createMatrices();
     }
 
     @Test
@@ -62,8 +61,8 @@ public class MatricesFactoryTest {
 
     @Test
     public void testPheromoneAustralia() {
-        // TODO add checking if pheromone calculation is ok.
-        Assert.assertTrue(true);
+        final double[][] pheromoneMatrix = matrices.getPheromoneMatrix();
+        Assert.assertEquals(pheromoneMatrix[0][1], 0.0009844134536505333);
     }
 
 }

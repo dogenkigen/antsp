@@ -1,4 +1,4 @@
-package com.mlaskows;
+package com.mlaskows.datamodel;
 
 //TODO consider keeping data in tuples. This might be memory overhead but can
 // reduce computation time

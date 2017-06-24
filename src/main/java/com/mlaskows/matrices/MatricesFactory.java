@@ -1,5 +1,9 @@
-package com.mlaskows;
+package com.mlaskows.matrices;
 
+import com.mlaskows.datamodel.Ant;
+import com.mlaskows.datamodel.Tuple;
+import com.mlaskows.solution.NearestNeighbourSolver;
+import com.mlaskows.solution.Solution;
 import com.mlaskows.tsplib.DistanceCalculationMethodFactory;
 import com.mlaskows.tsplib.Item;
 import com.mlaskows.tsplib.Node;
@@ -24,39 +28,36 @@ public class MatricesFactory {
      * nij = 1/dij
      */
     private double heuristicInformationMatrix[][];
-    private InitialPheromoneValueFactory pheromoneValueFactory;
 
     public MatricesFactory(Item item, int nnFactor) {
         this.item = item;
         this.nnFactor = nnFactor;
     }
 
-    public MatricesHolder createMatrices(AlgorithmType algorithmType) {
-        calculateMatrices(algorithmType);
+    public MatricesHolder createMatrices() {
+        calculateMatrices();
         return new MatricesHolder.MatricesHolderBuilder().withDistanceMatrix
                 (distanceMatrix).withNearestNeighbors(nearestNeighbors)
                 .withHeuristicInformationMatrix(heuristicInformationMatrix)
                 .withPheromoneMatrix(pheromoneMatrix).withAnts(ants).build();
     }
 
-    private void calculateMatrices(AlgorithmType algorithmType) {
+    private void calculateMatrices() {
         final BiFunction<Node, Node, Integer> distanceCalculationMethod =
                 DistanceCalculationMethodFactory
                         .getDistanceCalculationMethod(item.getEdgeWeightType());
-        calculateMatrices(algorithmType, distanceCalculationMethod);
+        calculateMatrices(distanceCalculationMethod);
     }
 
-    private void calculateMatrices(AlgorithmType algorithmType,
-                                   BiFunction<Node, Node, Integer> distanceCalculationMethod) {
+    private void calculateMatrices(
+            BiFunction<Node, Node, Integer> distanceCalculationMethod) {
         if (isAtLeastOneArrayEmpty()) {
             calculateBasicMatrices(distanceCalculationMethod);
         }
-        if (pheromoneValueFactory == null) {
-            pheromoneValueFactory = new InitialPheromoneValueFactory
-                    (distanceMatrix);
-        }
-        final double initialPheromoneValue = pheromoneValueFactory
-                .calculateInitialPheromoneValue(algorithmType);
+        final NearestNeighbourSolver nearestNeighbourSolver = new NearestNeighbourSolver(distanceMatrix);
+        final Solution solution = nearestNeighbourSolver.getSolution();
+        final double initialPheromoneValue = (double) distanceMatrix.length /
+                solution.getTourLength();
         final int size = item.getNodes().size();
         for (int i = 0; i < size; i++) {
             for (int j = i; j < size; j++) {

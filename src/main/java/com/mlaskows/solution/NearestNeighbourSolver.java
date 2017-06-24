@@ -1,40 +1,25 @@
-package com.mlaskows;
+package com.mlaskows.solution;
+
+import com.mlaskows.datamodel.Ant;
+import com.mlaskows.datamodel.Tuple;
 
 import java.util.stream.IntStream;
 
 /**
- * Created by mlaskows on 18/06/2017.
+ * Created by mlaskows on 24/06/2017.
+ * <p>
+ * Implementation of Nearest Neighbor, O(n^2)
  */
-//TODO this will require refactoring with different methods for different
-// algorithms
-public class InitialPheromoneValueFactory {
+public class NearestNeighbourSolver implements Solver {
 
-    private final int distanceMatrix[][];
-    private int heuristicLength;
+    private final int[][] distanceMatrix;
 
-    public InitialPheromoneValueFactory(int[][] distanceMatrix) {
+    public NearestNeighbourSolver(int[][] distanceMatrix) {
         this.distanceMatrix = distanceMatrix;
     }
 
-    public double calculateInitialPheromoneValue(AlgorithmType algorithmType) {
-        if (heuristicLength == 0) {
-            heuristicLength = calculateHeuristicLength();
-        }
-        switch (algorithmType) {
-            case ANT_SYSTEM:
-                // FIXME should be number of ants (m) not problem size (n)
-                // Although for ANT_SYSTEM should be n=m so we can temporary
-                // leave it like this
-                return (double) distanceMatrix.length / heuristicLength;
-            default:
-                return 0.0;
-        }
-
-
-    }
-
-    private int calculateHeuristicLength() {
-        // Implementation of Nearest Neighbor, O(n^2)
+    @Override
+    public Solution getSolution() {
         final int size = distanceMatrix.length;
         final Ant ant = new Ant(size);
         final ActualIndexHolder actual = new ActualIndexHolder();
@@ -48,7 +33,7 @@ public class InitialPheromoneValueFactory {
                     .findFirst()
                     .ifPresent(tuple -> moveAnt(ant, actual, tuple));
         }
-        return ant.getTourLength();
+        return new Solution(ant.getTour(), ant.getTourLength());
     }
 
     private void moveAnt(Ant ant, ActualIndexHolder actual, Tuple tuple) {
@@ -67,5 +52,4 @@ public class InitialPheromoneValueFactory {
             this.index = index;
         }
     }
-
 }

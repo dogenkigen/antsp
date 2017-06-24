@@ -1,4 +1,4 @@
-package com.mlaskows;
+package com.mlaskows.datamodel;
 
 import java.util.ArrayList;
 import java.util.List;

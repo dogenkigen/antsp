@@ -1,22 +1,25 @@
 package com.mlaskows.tsplib;
 
-import com.mlaskows.AlgorithmType;
-import com.mlaskows.InitialPheromoneValueFactory;
+import com.mlaskows.solution.NearestNeighbourSolver;
+import com.mlaskows.solution.Solution;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+
+import java.util.Arrays;
 
 /**
  * Created by mlaskows on 18/06/2017.
  */
-public class InitialPheromoneValueFactoryTest {
+public class NearestNeighbourSolverTest {
 
     @Test
     public void testForAntSystem() {
-        final InitialPheromoneValueFactory initialPheromoneValueFactory = new
-                InitialPheromoneValueFactory(getDistances());
-        final double initialPheromoneValue = initialPheromoneValueFactory.calculateInitialPheromoneValue
-                (AlgorithmType.ANT_SYSTEM);
-        Assert.assertEquals(initialPheromoneValue, 0.0009844134536505333);
+        final NearestNeighbourSolver solver = new NearestNeighbourSolver(getDistances());
+        final Solution solution = solver.getSolution();
+
+        final Integer[] expectedTour = {0, 2, 1, 4, 5, 3};
+        Assert.assertEquals(solution.getTour(), Arrays.asList(expectedTour));
+        Assert.assertEquals(solution.getTourLength(), 6095);
     }
 
     private int[][] getDistances() {

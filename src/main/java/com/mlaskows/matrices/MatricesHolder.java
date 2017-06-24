@@ -1,4 +1,6 @@
-package com.mlaskows;
+package com.mlaskows.matrices;
+
+import com.mlaskows.datamodel.Ant;
 
 import java.util.List;
 

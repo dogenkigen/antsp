@@ -9,7 +9,7 @@ import java.io.IOException;
 /**
  * Created by mlaskows on 21/04/2017.
  */
-public class TSPLIBParserTest {
+public class TspLibParserTest {
 
     @Test
     public void testUsa13509() throws IOException {
@@ -17,7 +17,7 @@ public class TSPLIBParserTest {
         ClassLoader classLoader = getClass().getClassLoader();
         File file = new File(classLoader.getResource("usa13509.tsp").getFile());
 
-        Item item = TSPLIBParser.parse(file.getAbsolutePath());
+        Item item = TspLibParser.parse(file.getAbsolutePath());
 
         Assert.assertEquals(item.getName(), "usa13509");
         Assert.assertEquals(item.getDimension(), 13509);
@@ -31,7 +31,7 @@ public class TSPLIBParserTest {
         ClassLoader classLoader = getClass().getClassLoader();
         File file = new File(classLoader.getResource("ali535.tsp").getFile());
 
-        Item item = TSPLIBParser.parse(file.getAbsolutePath());
+        Item item = TspLibParser.parse(file.getAbsolutePath());
 
         Assert.assertEquals(item.getName(), "ali535");
         Assert.assertEquals(item.getDimension(), 535);
