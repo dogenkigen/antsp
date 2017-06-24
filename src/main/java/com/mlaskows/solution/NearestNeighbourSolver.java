@@ -21,9 +21,8 @@ public class NearestNeighbourSolver implements Solver {
     @Override
     public Solution getSolution() {
         final int size = distanceMatrix.length;
-        final Ant ant = new Ant(size);
+        final Ant ant = new Ant(size, 0);
         final ActualIndexHolder actual = new ActualIndexHolder();
-        ant.visit(actual.getIndex(), 0);
         for (int i = 0; i < size - 1; i++) {
             final int[] row = this.distanceMatrix[actual.getIndex()];
             IntStream.range(0, size)

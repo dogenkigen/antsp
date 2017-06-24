@@ -1,9 +1,5 @@
 package com.mlaskows.matrices;
 
-import com.mlaskows.datamodel.Ant;
-
-import java.util.List;
-
 /**
  * Created by mlaskows on 18/06/2017.
  */
@@ -12,14 +8,12 @@ public class MatricesHolder {
     private final int nearestNeighbors[][];
     private final double heuristicInformationMatrix[][];
     private final double pheromoneMatrix[][];
-    private final List<Ant> ants;
 
-    public MatricesHolder(int[][] distanceMatrix, int[][] nearestNeighbors, double[][] heuristicInformationMatrix, double[][] pheromoneMatrix, List<Ant> ants) {
+    public MatricesHolder(int[][] distanceMatrix, int[][] nearestNeighbors, double[][] heuristicInformationMatrix, double[][] pheromoneMatrix) {
         this.distanceMatrix = distanceMatrix;
         this.nearestNeighbors = nearestNeighbors;
         this.heuristicInformationMatrix = heuristicInformationMatrix;
         this.pheromoneMatrix = pheromoneMatrix;
-        this.ants = ants;
     }
 
     public int[][] getDistanceMatrix() {
@@ -38,8 +32,8 @@ public class MatricesHolder {
         return pheromoneMatrix;
     }
 
-    public List<Ant> getAnts() {
-        return ants;
+    public int getProblemSize() {
+        return distanceMatrix.length;
     }
 
     public static class MatricesHolderBuilder {
@@ -47,7 +41,6 @@ public class MatricesHolder {
         private int[][] nearestNeighbors;
         private double[][] heuristicInformationMatrix;
         private double[][] pheromoneMatrix;
-        private List<Ant> ants;
 
         public MatricesHolderBuilder withDistanceMatrix(int[][] distanceMatrix) {
             this.distanceMatrix = distanceMatrix;
@@ -69,14 +62,9 @@ public class MatricesHolder {
             return this;
         }
 
-        public MatricesHolderBuilder withAnts(List<Ant> ants) {
-            this.ants = ants;
-            return this;
-        }
-
         public MatricesHolder build() {
             return new MatricesHolder(distanceMatrix, nearestNeighbors,
-                    heuristicInformationMatrix, pheromoneMatrix, ants);
+                    heuristicInformationMatrix, pheromoneMatrix);
         }
     }
 }

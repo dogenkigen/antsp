@@ -6,17 +6,18 @@ import java.util.List;
 /**
  * Created by mlaskows on 17/06/2017.
  */
+// TODO make it thread safe
 public class Ant {
 
     private int tourLength;
     private final List<Integer> tour;
     private final boolean visited[];
 
-    public Ant(int problemSize) {
+    public Ant(int problemSize, int initialPosition) {
         tour = new ArrayList<>();
         visited = new boolean[problemSize];
+        visit(0, 0);
     }
-
 
     public void visit(int index, int stepLength) {
         tourLength = tourLength + stepLength;

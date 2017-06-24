@@ -1,6 +1,5 @@
 package com.mlaskows.matrices;
 
-import com.mlaskows.datamodel.Ant;
 import com.mlaskows.datamodel.Tuple;
 import com.mlaskows.solution.NearestNeighbourSolver;
 import com.mlaskows.solution.Solution;
@@ -21,7 +20,6 @@ public class MatricesFactory {
     private int distanceMatrix[][];
     private int nearestNeighbors[][];
     private double pheromoneMatrix[][];
-    private List<Ant> ants;
     /**
      * The heuristic information nij is typically inversely proportional to
      * the distance between cities i and j, a straightforward choice being
@@ -39,7 +37,7 @@ public class MatricesFactory {
         return new MatricesHolder.MatricesHolderBuilder().withDistanceMatrix
                 (distanceMatrix).withNearestNeighbors(nearestNeighbors)
                 .withHeuristicInformationMatrix(heuristicInformationMatrix)
-                .withPheromoneMatrix(pheromoneMatrix).withAnts(ants).build();
+                .withPheromoneMatrix(pheromoneMatrix).build();
     }
 
     private void calculateMatrices() {
@@ -63,7 +61,6 @@ public class MatricesFactory {
             for (int j = i; j < size; j++) {
                 fill(pheromoneMatrix, i, j, initialPheromoneValue);
             }
-            ants.add(new Ant(size));
         }
     }
 
@@ -75,7 +72,6 @@ public class MatricesFactory {
     private void calculateBasicMatrices(BiFunction<Node, Node, Integer> distanceCalculationMethod) {
         initArrays();
         List<Node> nodes = item.getNodes();
-        ants = new ArrayList<>();
         for (int i = 0; i < nodes.size(); i++) {
             List<Tuple> tuples = new ArrayList<>();
             for (int j = i; j < nodes.size(); j++) {
