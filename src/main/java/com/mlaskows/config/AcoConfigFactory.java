@@ -6,15 +6,17 @@ package com.mlaskows.config;
 public class AcoConfigFactory {
 
     public static AcoConfig createDefaultAntSystemConfig(int problemSize) {
-        return createAntSystemConfig(3, 1, 0.5, problemSize);
+        // TODO NN can be between 15 and 40. Consider options
+        return createAntSystemConfig(3, 1, 0.5, problemSize, 15);
     }
 
     public static AcoConfig createAntSystemConfig(int heuristicImportance,
                                                   int pheromoneImportance,
                                                   double pheromoneEvaporationFactor,
-                                                  int problemSize) {
+                                                  int problemSize,
+                                                  int nearestNeighbourFactor) {
         return new AcoConfig(heuristicImportance, pheromoneImportance,
-                pheromoneEvaporationFactor, problemSize);
+                pheromoneEvaporationFactor, problemSize, nearestNeighbourFactor);
     }
 
 }

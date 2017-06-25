@@ -29,6 +29,10 @@ public class Ant {
         return visited[index];
     }
 
+    public boolean notVisited(int index) {
+        return !visited[index];
+    }
+
 
     public int getTourLength() {
         return tourLength;
