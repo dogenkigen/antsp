@@ -4,6 +4,7 @@ import com.mlaskows.config.AcoConfig;
 import com.mlaskows.datamodel.Ant;
 import com.mlaskows.matrices.MatricesHolder;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.SplittableRandom;
 import java.util.stream.Collectors;
@@ -21,32 +22,32 @@ public class AntSystemSolver implements Solver {
     private final List<Ant> ants;
     private final SplittableRandom random = new SplittableRandom();
     private final double[][] choicesInfo;
+    private final double[][] pheromoneMatrix;
     private int problemSize;
 
     public AntSystemSolver(AcoConfig config, MatricesHolder matrices) {
         this.config = config;
         this.matrices = matrices;
         this.problemSize = matrices.getProblemSize();
+        this.pheromoneMatrix = matrices.getPheromoneMatrix();
         // FIXME constructor shouldn't be so heavy?
         this.ants = getRandomPlacedAnts();
 
-        choicesInfo = getChoicesInfo();
+        choicesInfo = new double[problemSize][problemSize];
     }
 
-    private double[][] getChoicesInfo() {
+    private void computeChoicesInfo() {
         // TODO move to matrices holder?
-        final double[][] doubles = new double[problemSize][problemSize];
         for (int i = 0; i < problemSize; i++) {
             for (int j = i; j < problemSize; j++) {
                 final double choice = Math.pow(matrices.getPheromoneMatrix()[i][j], config
                         .getPheromoneImportance()) * Math.pow(matrices
                         .getHeuristicInformationMatrix()[i][j], config
                         .getHeuristicImportance());
-                doubles[i][j] = choice;
-                doubles[j][i] = choice;
+                choicesInfo[i][j] = choice;
+                choicesInfo[j][i] = choice;
             }
         }
-        return doubles;
     }
 
     private List<Ant> getRandomPlacedAnts() {
@@ -60,14 +61,16 @@ public class AntSystemSolver implements Solver {
     public Solution getSolution() {
         while (shouldNotTerminate()) {
             constructSolution();
-            // TODO localSearch
+            //110
+            // TODO localSearch (92, 3.7)
+            updatePheromone();
         }
-        return null;
+        // TODO merge solutions somehow?
+        return new Solution(Collections.emptyList(), 0);
     }
 
-
     private boolean shouldNotTerminate() {
-        return false;
+        return true;
     }
 
     private void constructSolution() {
@@ -84,12 +87,11 @@ public class AntSystemSolver implements Solver {
         double sumProbabilities = newSumProbabilities(ant, currentIndex,
                 matrices.getNearestNeighbors()[currentIndex]);
 
-        final double randomDouble = random.nextDouble(0, sumProbabilities);
-
         int nextIndex = 1;
         if (sumProbabilities == 0.0) {
             nextIndex = chooseBestNext(ant, currentIndex);
         } else {
+            final double randomDouble = random.nextDouble(0, sumProbabilities);
             double selectionProbability = choicesInfo[currentIndex][nextIndex];
             for (int j = 0; j < problemSize; j++) {
                 selectionProbability += choicesInfo[currentIndex][j];
@@ -138,5 +140,33 @@ public class AntSystemSolver implements Solver {
                 .reduce(0.0, (acc, choice) -> {
                     return acc += choice;
                 });
+    }
+
+    private void updatePheromone() {
+        evaporate();
+        ants.forEach(ant -> depositPheromone(ant));
+        computeChoicesInfo();
+    }
+
+    private void evaporate() {
+        for (int i = 0; i < problemSize; i++) {
+            for (int j = i; j < problemSize; j++) {
+                pheromoneMatrix[i][j] = (double) (1 - config
+                        .getPheromoneEvaporationFactor()) *
+                        pheromoneMatrix[i][j];
+                pheromoneMatrix[j][i] = pheromoneMatrix[i][j];
+            }
+        }
+    }
+
+    private void depositPheromone(Ant ant) {
+        double pheromoneDelta = (double) 1 / ant.getTourLength();
+        for (int i = 0; i < ant.getTour().size() - 1; i++) {
+            int j = ant.getTour().get(i);
+            int l = ant.getTour().get(i + 1);
+            pheromoneMatrix[j][l] = pheromoneMatrix[j][l] + pheromoneDelta;
+            pheromoneMatrix[l][j] = pheromoneMatrix[j][l];
+        }
+
     }
 }
