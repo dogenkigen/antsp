@@ -14,9 +14,9 @@ public class Ant {
     private final boolean visited[];
 
     public Ant(int problemSize, int initialPosition) {
-        tour = new ArrayList<>();
+        tour = new ArrayList<>(problemSize);
         visited = new boolean[problemSize];
-        visit(0, 0);
+        visit(initialPosition, 0);
     }
 
     public void visit(int index, int stepLength) {
