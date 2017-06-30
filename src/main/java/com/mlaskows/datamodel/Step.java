@@ -1,13 +1,13 @@
 package com.mlaskows.datamodel;
 
-//TODO consider keeping data in tuples. This might be memory overhead but can
+//TODO consider keeping data in steps. This might be memory overhead but can
 // reduce computation time
-public class Tuple implements Comparable<Tuple> {
+public class Step implements Comparable<Step> {
 
     private final int index;
     private final int distance;
 
-    public Tuple(int index, int distance) {
+    public Step(int index, int distance) {
         this.index = index;
         this.distance = distance;
     }
@@ -21,8 +21,8 @@ public class Tuple implements Comparable<Tuple> {
     }
 
     @Override
-    public int compareTo(Tuple tuple) {
-        return distance - tuple.getDistance();
+    public int compareTo(Step step) {
+        return distance - step.getDistance();
     }
 }
 
