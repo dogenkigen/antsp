@@ -1,7 +1,7 @@
 package com.mlaskows.solution;
 
 import com.mlaskows.datamodel.Ant;
-import com.mlaskows.datamodel.Tuple;
+import com.mlaskows.datamodel.Step;
 
 import java.util.stream.IntStream;
 
@@ -26,18 +26,18 @@ public class NearestNeighbourSolver implements Solver {
         for (int i = 0; i < size - 1; i++) {
             final int[] row = this.distanceMatrix[actual.getIndex()];
             IntStream.range(0, size)
-                    .mapToObj(index -> new Tuple(index, row[index]))
-                    .filter(tuple -> !ant.isVisited(tuple.getIndex()))
+                    .mapToObj(index -> new Step(index, row[index]))
+                    .filter(step -> !ant.isVisited(step.getIndex()))
                     .sorted()
                     .findFirst()
-                    .ifPresent(tuple -> moveAnt(ant, actual, tuple));
+                    .ifPresent(step -> moveAnt(ant, actual, step));
         }
         return new Solution(ant.getTour(), ant.getTourLength());
     }
 
-    private void moveAnt(Ant ant, ActualIndexHolder actual, Tuple tuple) {
-        ant.visit(tuple.getIndex(), tuple.getDistance());
-        actual.setIndex(tuple.getIndex());
+    private void moveAnt(Ant ant, ActualIndexHolder actual, Step step) {
+        ant.visit(step.getIndex(), step.getDistance());
+        actual.setIndex(step.getIndex());
     }
 
     private static class ActualIndexHolder {

@@ -1,6 +1,6 @@
 package com.mlaskows.matrices;
 
-import com.mlaskows.datamodel.Tuple;
+import com.mlaskows.datamodel.Step;
 import com.mlaskows.solution.NearestNeighbourSolver;
 import com.mlaskows.solution.Solution;
 import com.mlaskows.tsplib.DistanceCalculationMethodFactory;
@@ -73,15 +73,15 @@ public class MatricesFactory {
         initArrays();
         List<Node> nodes = item.getNodes();
         for (int i = 0; i < nodes.size(); i++) {
-            List<Tuple> tuples = new ArrayList<>();
+            List<Step> steps = new ArrayList<>();
             for (int j = i; j < nodes.size(); j++) {
                 int distance = getDistance(nodes
                         .get(i), nodes.get(j), distanceCalculationMethod);
                 fill(distanceMatrix, i, j, distance);
                 fill(heuristicInformationMatrix, i, j, (1.0 / ((double) distance + 0.1)));
-                tuples.add(new Tuple(j, distance));
+                steps.add(new Step(j, distance));
             }
-            nearestNeighbors[i] = getNearestNeighbourRow(tuples);
+            nearestNeighbors[i] = getNearestNeighbourRow(steps);
         }
     }
 
@@ -117,9 +117,9 @@ public class MatricesFactory {
         nearestNeighbors = new int[item.getDimension()][nnFactor];
     }
 
-    private int[] getNearestNeighbourRow(List<Tuple> tuples) {
+    private int[] getNearestNeighbourRow(List<Step> steps) {
         // TODO consider performance improvement
-        return tuples.stream()
+        return steps.stream()
                 .sorted()
                 .limit(nnFactor)
                 .mapToInt(t -> t.getIndex())
