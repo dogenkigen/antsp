@@ -38,7 +38,7 @@ public class App {
     private static int nearestNeighbors[][];
 
     /**
-     * An enormous speedup is obtained for the solution construction in ACO
+     * An enormous speedup is obtained for the solvers construction in ACO
      * algo- rithms, if the nearest-neighbor list is cut o¤ after a constant
      * number NN_FACTOR of nearest neighbors, where typically NN_FACTOR is a small value
      * ranging between 15 and 40.

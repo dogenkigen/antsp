@@ -1,7 +1,8 @@
-package com.mlaskows.solution;
+package com.mlaskows.solvers;
 
 import com.mlaskows.config.AcoConfig;
 import com.mlaskows.datamodel.Ant;
+import com.mlaskows.datamodel.Solution;
 import com.mlaskows.matrices.MatricesHolder;
 
 import java.util.Collections;

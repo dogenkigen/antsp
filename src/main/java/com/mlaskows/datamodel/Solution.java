@@ -1,4 +1,4 @@
-package com.mlaskows.solution;
+package com.mlaskows.datamodel;
 
 import java.util.List;
 
@@ -9,15 +9,16 @@ public class Solution {
     private final List<Integer> tour;
     private final int tourLength;
 
-    public Solution(List<Integer>  tour, int tourLength) {
+    public Solution(List<Integer> tour, int tourLength) {
         this.tour = tour;
         this.tourLength = tourLength;
     }
 
-    public List<Integer>  getTour() {
+    public List<Integer> getTour() {
         return tour;
     }
 
+    //TODO consider changing for long
     public int getTourLength() {
         return tourLength;
     }
