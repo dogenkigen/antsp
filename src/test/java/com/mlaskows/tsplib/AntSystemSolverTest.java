@@ -12,7 +12,7 @@ import org.testng.annotations.Test;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by mlaskows on 24/06/2017.
@@ -40,8 +40,8 @@ public class AntSystemSolverTest {
         final Solution solution = solver.getSolution();
 
         //FIXME make it work
-        final Integer[] expectedTour = {0, 2, 1, 4, 5, 3};
-        Assert.assertEquals(solution.getTour(), Arrays.asList(expectedTour));
+        final List<Integer> expectedTour = List.of(0, 2, 1, 4, 5, 3);
+        Assert.assertEquals(solution.getTour(), expectedTour);
         Assert.assertEquals(solution.getTourLength(), 6095);
     }
 

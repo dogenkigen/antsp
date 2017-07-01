@@ -5,7 +5,7 @@ import com.mlaskows.solution.Solution;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by mlaskows on 18/06/2017.
@@ -17,8 +17,9 @@ public class NearestNeighbourSolverTest {
         final NearestNeighbourSolver solver = new NearestNeighbourSolver(getDistances());
         final Solution solution = solver.getSolution();
 
-        final Integer[] expectedTour = {0, 2, 1, 4, 5, 3};
-        Assert.assertEquals(solution.getTour(), Arrays.asList(expectedTour));
+        final List<Integer> expectedTour = List.of(0, 2, 1, 4, 5, 3);
+
+        Assert.assertEquals(solution.getTour(), expectedTour);
         Assert.assertEquals(solution.getTourLength(), 6095);
     }
 

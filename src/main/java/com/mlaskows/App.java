@@ -83,7 +83,7 @@ public class App {
     private static List<Ant> ants;
 
     public static void main(String[] args) {
-
+        //System.out.println(Runtime.getRuntime().availableProcessors());
         initializeData();
 
         boolean shouldTerminate = false;
@@ -96,8 +96,6 @@ public class App {
             updatePheromones();
             shouldTerminate = true;
         }
-
-
     }
 
     private static void initializeData() {
