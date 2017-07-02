@@ -42,7 +42,8 @@ public class TwoOptSolver implements Solver {
 
     private int tryImproveDistance(int bestDistance) {
         int newDistance = 0;
-        outer : for (int from = 1; from < tour.size() - 1; from++) {
+        outer:
+        for (int from = 1; from < tour.size() - 1; from++) {
             for (int to = from + 1; to < tour.size(); to++) {
                 final List<Integer> newTour = twOptSwap(tour, from, to);
                 newDistance = getDistance(newTour);
