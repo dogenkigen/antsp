@@ -4,6 +4,7 @@ package com.mlaskows.matrices;
  * Created by mlaskows on 18/06/2017.
  */
 public class MatricesHolder {
+    //TODO refactor to optionals
     private final int distanceMatrix[][];
     private final int nearestNeighbors[][];
     private final double heuristicInformationMatrix[][];

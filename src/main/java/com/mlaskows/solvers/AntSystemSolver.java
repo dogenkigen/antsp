@@ -9,7 +9,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.SplittableRandom;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 /**
  * Created by mlaskows on 24/06/2017.
@@ -67,6 +66,7 @@ public class AntSystemSolver implements Solver {
             updatePheromone();
         }
         // TODO merge solutions somehow?
+        // it doesn't need to be merged. best ant is the solution
         return new Solution(Collections.emptyList(), 0);
     }
 
@@ -119,11 +119,6 @@ public class AntSystemSolver implements Solver {
 
     private double newSumProbabilities(Ant ant, int currentIndex, int[]
             nearestNeighbors) {
-        // TODO consider performance overhead for streams
-        /*Arrays.stream(nearestNeighbors)
-                .filter(ant::notVisited)
-                .mapToDouble(index -> choicesInfo[currentIndex][index])
-                .reduce(0.0, (acc, choice) -> acc += choice);*/
         double sumProbabilities = 0.0;
         for (int j = 0; j < nearestNeighbors.length; j++) {
             if (ant.notVisited(nearestNeighbors[j])) {
@@ -132,15 +127,6 @@ public class AntSystemSolver implements Solver {
             }
         }
         return sumProbabilities;
-    }
-
-    private double oldSumProbabilities(Ant ant, double[] doubles) {
-        return IntStream.range(0, problemSize)
-                .filter(ant::notVisited)
-                .mapToDouble(index -> doubles[index])
-                .reduce(0.0, (acc, choice) -> {
-                    return acc += choice;
-                });
     }
 
     private void updatePheromone() {
