@@ -11,7 +11,6 @@ import java.util.List;
  */
 public class TwoOptSolver implements Solver {
 
-    private final Solution initialSolution;
     private final int[][] distanceMatrix;
     private List<Integer> tour;
 
@@ -21,41 +20,36 @@ public class TwoOptSolver implements Solver {
                     "should be equal to problem size.");
         }
         this.distanceMatrix = distanceMatrix;
-        this.initialSolution = initialSolution;
         tour = initialSolution.getTour();
     }
 
     @Override
     public Solution getSolution() {
-        int bestDistance = getDistance(tour);
         boolean wasImproved = true;
         while (wasImproved) {
-            final int newDistance = tryImproveDistance(bestDistance);
-            wasImproved = newDistance < bestDistance;
-            if (wasImproved) {
-                bestDistance = newDistance;
-            }
+            wasImproved = tryToImproveDistance();
         }
-
-        return new Solution(tour, bestDistance);
+        return new Solution(tour, getDistance(tour));
     }
 
-    private int tryImproveDistance(int bestDistance) {
-        int newDistance = 0;
-        outer:
+    private boolean tryToImproveDistance() {
         for (int from = 1; from < tour.size() - 1; from++) {
             for (int to = from + 1; to < tour.size(); to++) {
-                final List<Integer> newTour = twOptSwap(tour, from, to);
-                newDistance = getDistance(newTour);
-                if (newDistance < bestDistance) {
-                    tour = newTour;
-                    break outer;
+                if (isWorthToImprove(tour, from, to)) {
+                    tour = twOptSwap(tour, from, to);
+                    return true;
                 }
             }
         }
-        return newDistance;
+        return false;
     }
 
+    //TODO look only into NN list
+    private boolean isWorthToImprove(List<Integer> tour, int from, int to) {
+        // An observation made by Steiglitz and Weiner
+        return distanceMatrix[tour.get(from - 1)][tour.get(from)] >
+                distanceMatrix[tour.get(from - 1)][tour.get(to)];
+    }
 
     private List<Integer> twOptSwap(List<Integer> tour, int from, int to) {
         final List<Integer> swappedTour = new ArrayList<>(tour.size());
@@ -68,14 +62,11 @@ public class TwoOptSolver implements Solver {
     }
 
     private int getDistance(List<Integer> tour) {
-        return getDistance(tour, 0, tour.size() - 1);
-    }
-
-    private int getDistance(List<Integer> tour, int from, int to) {
         int distance = 0;
-        for (int i = from; i < to; i++) {
+        for (int i = 0; i < tour.size() - 1; i++) {
             distance += distanceMatrix[tour.get(i)][tour.get(i + 1)];
         }
         return distance;
     }
+
 }
