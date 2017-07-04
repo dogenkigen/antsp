@@ -3,9 +3,9 @@ package com.mlaskows.solvers;
 import com.mlaskows.config.AcoConfig;
 import com.mlaskows.datamodel.Ant;
 import com.mlaskows.datamodel.Solution;
+import com.mlaskows.exeptions.SolutionException;
 import com.mlaskows.matrices.MatricesHolder;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.SplittableRandom;
 import java.util.stream.Collectors;
@@ -19,7 +19,7 @@ public class AntSystemSolver implements Solver {
 
     private final AcoConfig config;
     private final MatricesHolder matrices;
-    private final List<Ant> ants;
+    private List<Ant> ants;
     private final SplittableRandom random = new SplittableRandom();
     private final double[][] choicesInfo;
     private final double[][] pheromoneMatrix;
@@ -30,8 +30,6 @@ public class AntSystemSolver implements Solver {
         this.matrices = matrices;
         this.problemSize = matrices.getProblemSize();
         this.pheromoneMatrix = matrices.getPheromoneMatrix();
-        // FIXME constructor shouldn't be so heavy?
-        this.ants = getRandomPlacedAnts();
 
         choicesInfo = new double[problemSize][problemSize];
     }
@@ -59,19 +57,27 @@ public class AntSystemSolver implements Solver {
 
     @Override
     public Solution getSolution() {
-        while (shouldNotTerminate()) {
+        int iterationsWithNoImprovementCount = 0;
+        int lastTourLength = 0;
+        Ant bestAnt = null;
+        while (shouldNotTerminate(iterationsWithNoImprovementCount)) {
+            ants = getRandomPlacedAnts();
             constructSolution();
-            //110
             // TODO localSearch (92, 3.7)
             updatePheromone();
+            bestAnt = getBestAnt();
+            if (lastTourLength > bestAnt.getTourLength()) {
+                iterationsWithNoImprovementCount = 0;
+            } else {
+                iterationsWithNoImprovementCount++;
+            }
+            lastTourLength = bestAnt.getTourLength();
         }
-        // TODO merge solutions somehow?
-        // it doesn't need to be merged. best ant is the solution
-        return new Solution(Collections.emptyList(), 0);
+        return new Solution(bestAnt.getTour(), bestAnt.getTourLength());
     }
 
-    private boolean shouldNotTerminate() {
-        return true;
+    private boolean shouldNotTerminate(int iterationsWithNoImprovementCount) {
+        return iterationsWithNoImprovementCount < 20;
     }
 
     private void constructSolution() {
@@ -155,5 +161,11 @@ public class AntSystemSolver implements Solver {
             pheromoneMatrix[l][j] = pheromoneMatrix[j][l];
         }
 
+    }
+
+    public Ant getBestAnt() {
+        return ants.stream()
+                .reduce((ant, acc) -> ant.getTourLength() < acc.getTourLength() ? ant : acc)
+                .orElseThrow(SolutionException::new);
     }
 }
