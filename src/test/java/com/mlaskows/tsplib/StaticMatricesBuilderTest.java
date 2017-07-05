@@ -43,7 +43,7 @@ public class StaticMatricesBuilderTest {
         StaticMatricesHolder matricesHolder = new StaticMatricesBuilder(item)
                 .withNearestNeighbors(NN_FACOTR)
                 .build();
-        int[][] nearestNeighborList = matricesHolder.getNearestNeighbors().orElseThrow(RuntimeException::new);
+        int[][] nearestNeighborList = matricesHolder.getNearestNeighborsMatrix().orElseThrow(RuntimeException::new);
         Assert.assertEquals(nearestNeighborList.length, item.getDimension());
         Assert.assertEquals(nearestNeighborList[1].length, 5);
         Assert.assertEquals(nearestNeighborList[0][0], 2);

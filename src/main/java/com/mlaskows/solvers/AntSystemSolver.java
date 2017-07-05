@@ -35,8 +35,11 @@ public class AntSystemSolver implements Solver {
         pheromoneMatrix = new double[problemSize][problemSize];
         choicesInfo = new double[problemSize][problemSize];
         distanceMatrix = matrices.getDistanceMatrix();
-        heuristicInformationMatrix = matrices.getHeuristicInformationMatrix().orElseThrow(IllegalArgumentException::new);
-        nearestNeighbors = matrices.getNearestNeighbors().orElseThrow(IllegalArgumentException::new);
+        // TODO move error messages to new class
+        heuristicInformationMatrix = matrices.getHeuristicInformationMatrix()
+                .orElseThrow(() -> new IllegalArgumentException("Heuristic matrix can't be empty!"));
+        nearestNeighbors = matrices.getNearestNeighborsMatrix()
+                .orElseThrow(() -> new IllegalArgumentException("Nearest neighbors matrix can't be empty!"));
         // FIXME constructor shouldn't be so heavy?
         this.ants = getRandomPlacedAnts();
         initPheromone();

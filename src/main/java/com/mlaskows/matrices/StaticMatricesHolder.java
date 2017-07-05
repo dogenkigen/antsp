@@ -8,12 +8,12 @@ import java.util.Optional;
 public class StaticMatricesHolder {
 
     private final int distanceMatrix[][];
-    private final Optional<int[][]> nearestNeighbors;
+    private final Optional<int[][]> nearestNeighborsMatrix;
     private final Optional<double[][]> heuristicInformationMatrix;
 
-    public StaticMatricesHolder(int[][] distanceMatrix, int[][] nearestNeighbors, double[][] heuristicInformationMatrix) {
+    public StaticMatricesHolder(int[][] distanceMatrix, int[][] nearestNeighborsMatrix, double[][] heuristicInformationMatrix) {
         this.distanceMatrix = distanceMatrix;
-        this.nearestNeighbors = Optional.ofNullable(nearestNeighbors);
+        this.nearestNeighborsMatrix = Optional.ofNullable(nearestNeighborsMatrix);
         this.heuristicInformationMatrix = Optional.ofNullable(heuristicInformationMatrix);
     }
 
@@ -21,8 +21,8 @@ public class StaticMatricesHolder {
         return distanceMatrix;
     }
 
-    public Optional<int[][]> getNearestNeighbors() {
-        return nearestNeighbors;
+    public Optional<int[][]> getNearestNeighborsMatrix() {
+        return nearestNeighborsMatrix;
     }
 
     public Optional<double[][]> getHeuristicInformationMatrix() {

@@ -9,14 +9,16 @@ import org.testng.annotations.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 /**
  * Created by mlaskows on 01/07/2017.
  */
 public class TwoOptSolverTest {
     @Test
-    public void testSolution() throws IOException {
+    public void testAustraliaSolution() throws IOException {
         ClassLoader classLoader = getClass().getClassLoader();
         File file = new File(classLoader.getResource("australia.tsp")
                 .getFile());
@@ -34,6 +36,26 @@ public class TwoOptSolverTest {
         final List<Integer> expectedTour = List.of(0, 2, 1, 4, 5, 3);
         Assert.assertEquals(solution.getTour(), expectedTour);
         Assert.assertEquals(solution.getTourLength(), 6095);
+    }
+
+    @Test
+    public void testAli535Solution() throws IOException {
+        ClassLoader classLoader = getClass().getClassLoader();
+        File file = new File(classLoader.getResource("ali535.tsp")
+                .getFile());
+        final Item item = TspLibParser.parse(file.getAbsolutePath());
+
+        StaticMatricesHolder matricesHolder = new StaticMatricesBuilder(item).withNearestNeighbors(5).build();
+        final List<Integer> initialTour = new ArrayList<>(535);
+        IntStream.range(0, 535).forEach(index -> initialTour.add(index));
+        int initialDistnace = calculateDistance(matricesHolder.getDistanceMatrix(),
+                initialTour);
+
+        final TwoOptSolver solver = new TwoOptSolver
+                (new Solution(initialTour, initialDistnace), matricesHolder);
+        final Solution solution = solver.getSolution();
+
+        Assert.assertTrue(solution.getTourLength() < initialDistnace);
     }
 
     private int calculateDistance(int[][] australianDistances, List<Integer> initialTour) {

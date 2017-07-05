@@ -8,6 +8,7 @@ import com.mlaskows.tsplib.Node;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
+import java.util.stream.IntStream;
 
 /**
  * Created by maciej_laskowski on 05.07.2017.
@@ -53,18 +54,19 @@ public class StaticMatricesBuilder {
 
     private void calculateMatrices() {
         List<Node> nodes = item.getNodes();
-        for (int i = 0; i < nodes.size(); i++) {
-            List<Step> steps = new ArrayList<>(nodes.size());
-            for (int j = i; j < nodes.size(); j++) {
+        for (int i = 0; i < problemSize; i++) {
+            for (int j = i; j < problemSize; j++) {
                 int distance = getDistance(nodes.get(i), nodes.get(j));
                 fill(distanceMatrix, i, j, distance);
                 if (heuristicInformationMatrix != null) {
                     fill(heuristicInformationMatrix, i, j, (1.0 / ((double) distance + 0.1)));
                 }
-                steps.add(new Step(j, distance));
             }
-            if (nearestNeighbors != null) {
-                nearestNeighbors[i] = getNearestNeighbourRow(steps);
+
+        }
+        if (nearestNeighbors != null) {
+            for (int i = 0; i < problemSize; i++) {
+                nearestNeighbors[i] = getNearestNeighbourRow(distanceMatrix[i]);
             }
         }
     }
@@ -89,12 +91,13 @@ public class StaticMatricesBuilder {
         matrix[j][i] = value;
     }
 
-    private int[] getNearestNeighbourRow(List<Step> steps) {
+    private int[] getNearestNeighbourRow(int[] distances) {
         // TODO consider performance improvement
-        return steps.stream()
+        return IntStream.range(0, problemSize)
+                .mapToObj(index -> new Step(index, distances[index]))
                 .sorted()
                 .limit(nnFactor)
-                .mapToInt(t -> t.getTo())
+                .mapToInt(step -> step.getTo())
                 .toArray();
     }
 
