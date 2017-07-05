@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.SplittableRandom;
 import java.util.stream.Collectors;
 
+import static com.mlaskows.exeptions.Reason.*;
+
 /**
  * Created by mlaskows on 24/06/2017.
  */
@@ -35,11 +37,10 @@ public class AntSystemSolver implements Solver {
         pheromoneMatrix = new double[problemSize][problemSize];
         choicesInfo = new double[problemSize][problemSize];
         distanceMatrix = matrices.getDistanceMatrix();
-        // TODO move error messages to new class
         heuristicInformationMatrix = matrices.getHeuristicInformationMatrix()
-                .orElseThrow(() -> new IllegalArgumentException("Heuristic matrix can't be empty!"));
+                .orElseThrow(() -> new SolutionException(EMPTY_HEURISTIC_MATRIX));
         nearestNeighbors = matrices.getNearestNeighborsMatrix()
-                .orElseThrow(() -> new IllegalArgumentException("Nearest neighbors matrix can't be empty!"));
+                .orElseThrow(() -> new SolutionException(EMPTY_NN_MATRIX));
         // FIXME constructor shouldn't be so heavy?
         this.ants = getRandomPlacedAnts();
         initPheromone();
@@ -188,6 +189,6 @@ public class AntSystemSolver implements Solver {
     public Ant getBestAnt() {
         return ants.stream()
                 .reduce((ant, acc) -> ant.getTourLength() < acc.getTourLength() ? ant : acc)
-                .orElseThrow(SolutionException::new);
+                .orElseThrow(() -> new SolutionException(NO_BEST_ANT));
     }
 }

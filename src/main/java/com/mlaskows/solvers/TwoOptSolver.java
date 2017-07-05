@@ -19,10 +19,12 @@ public class TwoOptSolver implements Solver {
     public TwoOptSolver(Solution initialSolution, StaticMatricesHolder matricesHolder) {
         this.distanceMatrix = matricesHolder.getDistanceMatrix();
         if (initialSolution.getTour().size() != distanceMatrix.length) {
-            throw new IllegalArgumentException("Initial solution tour size " + initialSolution.getTour().size() +
-                    " should be equal to problem size " + distanceMatrix.length);
+            throw new IllegalArgumentException("Initial solution tour size "
+                    + initialSolution.getTour().size() + " should be equal to" +
+                    " problem size " + distanceMatrix.length);
         }
-        nearestNeighboursMatrix = matricesHolder.getNearestNeighborsMatrix().orElse(null);
+        nearestNeighboursMatrix = matricesHolder.getNearestNeighborsMatrix()
+                .orElse(null);
         tour = initialSolution.getTour();
     }
 
@@ -55,14 +57,16 @@ public class TwoOptSolver implements Solver {
         // End of the tour case
         int c4 = to + 1 == tour.size() ? -1 : tour.get(to + 1);
         if (nearestNeighboursMatrix != null) {
-            return isInNearestNeighbourhood(c1, c2, c3, c4) && isShorterDistance(c1, c2, c3, c4);
+            return isInNearestNeighbourhood(c1, c2, c3, c4)
+                    && isShorterDistance(c1, c2, c3, c4);
         }
         return isShorterDistance(c1, c2, c3, c4);
     }
 
     private boolean isInNearestNeighbourhood(int c1, int c2, int c3, int c4) {
-        // TODO Consider putting OR instead of AND
-        return isFromInNearestNeighbourhood(c1, c2) && isToInNearestNeighbourhood(c3, c4);
+        // TODO Consider parameterizing OR instead of AND
+        return isFromInNearestNeighbourhood(c1, c2)
+                && isToInNearestNeighbourhood(c3, c4);
     }
 
     private boolean isFromInNearestNeighbourhood(int c1, int c2) {
@@ -88,7 +92,8 @@ public class TwoOptSolver implements Solver {
 
     public boolean isShorterDistance(int c1, int c2, int c3, int c4) {
         return c4 > 0 ?
-                distanceMatrix[c1][c2] + distanceMatrix[c3][c4] > distanceMatrix[c1][c3] + distanceMatrix[c2][c4] :
+                distanceMatrix[c1][c2] + distanceMatrix[c3][c4]
+                        > distanceMatrix[c1][c3] + distanceMatrix[c2][c4] :
                 distanceMatrix[c1][c2] > distanceMatrix[c1][c3];
     }
 
