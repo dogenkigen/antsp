@@ -2,7 +2,9 @@
 * during redesign consider GUI watching moving ants or pheromone
     - pheromone update observer
     - ants location observer
-
+* check performance on 2-opt
+    - with NN and without
+    - same for small and big instances
 
 NOTES MIN-MAX
 * only either the iteration-best ant, that is, the ant that produced the

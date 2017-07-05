@@ -29,7 +29,7 @@ public class NearestNeighbourSolverTest implements SolverTest {
     @Test
     public void testAli535Solution() throws IOException {
         final Solution solution = getSolution("ali535.tsp");
-        
+
         Assert.assertEquals(solution.getTourLength(), 224358);
     }
 

@@ -22,8 +22,7 @@ public class TwoOptSolver implements Solver {
             throw new IllegalArgumentException("Initial solution tour size " + initialSolution.getTour().size() +
                     " should be equal to problem size " + distanceMatrix.length);
         }
-        nearestNeighboursMatrix = matricesHolder.getNearestNeighborsMatrix()
-                .orElseThrow(() -> new IllegalArgumentException("Nearest neighbors matrix can't be empty!"));
+        nearestNeighboursMatrix = matricesHolder.getNearestNeighborsMatrix().orElse(null);
         tour = initialSolution.getTour();
     }
 
@@ -37,7 +36,7 @@ public class TwoOptSolver implements Solver {
     }
 
     private boolean tryToImproveDistance() {
-        // from value is inclusive and to value is exclusive
+        // From value is inclusive and to value is exclusive
         for (int from = 1; from < tour.size() - 1; from++) {
             for (int to = from + 1; to < tour.size(); to++) {
                 if (isWorthToImprove(tour, from, to)) {
@@ -53,15 +52,34 @@ public class TwoOptSolver implements Solver {
         int c1 = tour.get(from - 1);
         int c2 = tour.get(from);
         int c3 = tour.get(to);
+        // End of the tour case
         int c4 = to + 1 == tour.size() ? -1 : tour.get(to + 1);
-//isInNearestNeighbourhood(c1, c2, c3, c4) &&
+        if (nearestNeighboursMatrix != null) {
+            return isInNearestNeighbourhood(c1, c2, c3, c4) && isShorterDistance(c1, c2, c3, c4);
+        }
         return isShorterDistance(c1, c2, c3, c4);
     }
 
     private boolean isInNearestNeighbourhood(int c1, int c2, int c3, int c4) {
-        for (int i = 0; i < this.nearestNeighboursMatrix[0].length; i++) {
-            if (this.nearestNeighboursMatrix[c2][i] == c1
-                    && (c4 < 0 || this.nearestNeighboursMatrix[c3][i] == c4)) {
+        // TODO Consider putting OR instead of AND
+        return isFromInNearestNeighbourhood(c1, c2) && isToInNearestNeighbourhood(c3, c4);
+    }
+
+    private boolean isFromInNearestNeighbourhood(int c1, int c2) {
+        for (int i = 0; i < this.nearestNeighboursMatrix[c2].length; i++) {
+            if (this.nearestNeighboursMatrix[c2][i] == c1) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isToInNearestNeighbourhood(int c3, int c4) {
+        if (c4 < 0) {
+            return true;
+        }
+        for (int i = 0; i < this.nearestNeighboursMatrix[c3].length; i++) {
+            if (this.nearestNeighboursMatrix[c3][i] == c4) {
                 return true;
             }
         }
@@ -72,7 +90,6 @@ public class TwoOptSolver implements Solver {
         return c4 > 0 ?
                 distanceMatrix[c1][c2] + distanceMatrix[c3][c4] > distanceMatrix[c1][c3] + distanceMatrix[c2][c4] :
                 distanceMatrix[c1][c2] > distanceMatrix[c1][c3];
-        //was c1c2> c1c3
     }
 
     private List<Integer> twOptSwap(List<Integer> tour, int from, int to) {
