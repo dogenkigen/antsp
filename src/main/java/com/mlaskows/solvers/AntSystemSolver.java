@@ -3,7 +3,7 @@ package com.mlaskows.solvers;
 import com.mlaskows.config.AcoConfig;
 import com.mlaskows.datamodel.Ant;
 import com.mlaskows.datamodel.Solution;
-import com.mlaskows.matrices.MatricesHolder;
+import com.mlaskows.matrices.StaticMatricesHolder;
 
 import java.util.Collections;
 import java.util.List;
@@ -18,32 +18,50 @@ import java.util.stream.Collectors;
 public class AntSystemSolver implements Solver {
 
     private final AcoConfig config;
-    private final MatricesHolder matrices;
+    private final StaticMatricesHolder matrices;
     private final List<Ant> ants;
     private final SplittableRandom random = new SplittableRandom();
     private final double[][] choicesInfo;
-    private final double[][] pheromoneMatrix;
     private int problemSize;
+    private final double[][] heuristicInformationMatrix;
+    private final int[][] distanceMatrix;
+    private double[][] pheromoneMatrix;
+    private int[][] nearestNeighbors;
 
-    public AntSystemSolver(AcoConfig config, MatricesHolder matrices) {
+    public AntSystemSolver(AcoConfig config, StaticMatricesHolder matrices) {
         this.config = config;
         this.matrices = matrices;
         this.problemSize = matrices.getProblemSize();
-        this.pheromoneMatrix = matrices.getPheromoneMatrix();
+        pheromoneMatrix = new double[problemSize][problemSize];
+        choicesInfo = new double[problemSize][problemSize];
+        distanceMatrix = matrices.getDistanceMatrix();
+        heuristicInformationMatrix = matrices.getHeuristicInformationMatrix().orElseThrow(IllegalArgumentException::new);
+        nearestNeighbors = matrices.getNearestNeighbors().orElseThrow(IllegalArgumentException::new);
         // FIXME constructor shouldn't be so heavy?
         this.ants = getRandomPlacedAnts();
+        initPheromone();
+    }
 
-        choicesInfo = new double[problemSize][problemSize];
+    private void initPheromone() {
+        final NearestNeighbourSolver nearestNeighbourSolver = new NearestNeighbourSolver(distanceMatrix);
+        final Solution solution = nearestNeighbourSolver.getSolution();
+        final double initialPheromoneValue = (double) distanceMatrix.length /
+                solution.getTourLength();
+        for (int i = 0; i < problemSize; i++) {
+            for (int j = i; j < problemSize; j++) {
+                pheromoneMatrix[i][j] = initialPheromoneValue;
+                pheromoneMatrix[j][i] = initialPheromoneValue;
+            }
+        }
     }
 
     private void computeChoicesInfo() {
         // TODO move to matrices holder?
         for (int i = 0; i < problemSize; i++) {
             for (int j = i; j < problemSize; j++) {
-                final double choice = Math.pow(matrices.getPheromoneMatrix()[i][j], config
-                        .getPheromoneImportance()) * Math.pow(matrices
-                        .getHeuristicInformationMatrix()[i][j], config
-                        .getHeuristicImportance());
+                final double choice = Math.pow(pheromoneMatrix[i][j], config
+                        .getPheromoneImportance()) * Math.pow(heuristicInformationMatrix[i][j],
+                        config.getHeuristicImportance());
                 choicesInfo[i][j] = choice;
                 choicesInfo[j][i] = choice;
             }
@@ -86,7 +104,7 @@ public class AntSystemSolver implements Solver {
         //https://en.wikipedia.org/wiki/Fitness_proportionate_selection
         final int currentIndex = ant.getCurrent();
         double sumProbabilities = newSumProbabilities(ant, currentIndex,
-                matrices.getNearestNeighbors()[currentIndex]);
+                nearestNeighbors[currentIndex]);
 
         int nextIndex = 1;
         if (sumProbabilities == 0.0) {

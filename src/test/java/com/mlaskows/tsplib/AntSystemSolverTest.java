@@ -2,8 +2,8 @@ package com.mlaskows.tsplib;
 
 import com.mlaskows.config.AcoConfig;
 import com.mlaskows.config.AcoConfigFactory;
-import com.mlaskows.matrices.MatricesFactory;
-import com.mlaskows.matrices.MatricesHolder;
+import com.mlaskows.matrices.StaticMatricesBuilder;
+import com.mlaskows.matrices.StaticMatricesHolder;
 import com.mlaskows.solvers.AntSystemSolver;
 import com.mlaskows.datamodel.Solution;
 import org.testng.Assert;
@@ -20,7 +20,7 @@ import java.util.List;
 public class AntSystemSolverTest {
 
     private static final int NN_FACOTR = 5;
-    private static MatricesHolder matrices;
+    private static StaticMatricesHolder matrices;
 
     @BeforeClass
     public void init() throws IOException {
@@ -28,8 +28,7 @@ public class AntSystemSolverTest {
         File file = new File(classLoader.getResource("australia.tsp")
                 .getFile());
         final Item item = TspLibParser.parse(file.getAbsolutePath());
-        final MatricesFactory matricesFactory = new MatricesFactory(item, NN_FACOTR);
-        matrices = matricesFactory.createMatrices();
+        matrices = new StaticMatricesBuilder(item).withHeuristicInformationMatrix().withNearestNeighbors(NN_FACOTR).build();
     }
 
     @Test
