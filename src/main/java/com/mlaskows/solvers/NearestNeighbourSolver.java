@@ -3,6 +3,7 @@ package com.mlaskows.solvers;
 import com.mlaskows.datamodel.Ant;
 import com.mlaskows.datamodel.Solution;
 import com.mlaskows.datamodel.Step;
+import com.mlaskows.matrices.StaticMatricesHolder;
 
 import java.util.stream.IntStream;
 
@@ -15,8 +16,8 @@ public class NearestNeighbourSolver implements Solver {
 
     private final int[][] distanceMatrix;
 
-    public NearestNeighbourSolver(int[][] distanceMatrix) {
-        this.distanceMatrix = distanceMatrix;
+    public NearestNeighbourSolver(StaticMatricesHolder matricesHolder) {
+        this.distanceMatrix = matricesHolder.getDistanceMatrix();
     }
 
     @Override

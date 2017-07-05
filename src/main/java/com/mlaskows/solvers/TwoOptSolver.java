@@ -1,6 +1,8 @@
 package com.mlaskows.solvers;
 
 import com.mlaskows.datamodel.Solution;
+import com.mlaskows.matrices.StaticMatricesBuilder;
+import com.mlaskows.matrices.StaticMatricesHolder;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,12 +16,12 @@ public class TwoOptSolver implements Solver {
     private final int[][] distanceMatrix;
     private List<Integer> tour;
 
-    public TwoOptSolver(Solution initialSolution, int[][] distanceMatrix) {
+    public TwoOptSolver(Solution initialSolution, StaticMatricesHolder matricesHolder) {
+        this.distanceMatrix = matricesHolder.getDistanceMatrix();
         if (initialSolution.getTour().size() != distanceMatrix.length) {
             throw new IllegalArgumentException("Initial solution tour size " +
                     "should be equal to problem size.");
         }
-        this.distanceMatrix = distanceMatrix;
         tour = initialSolution.getTour();
     }
 

@@ -43,7 +43,7 @@ public class AntSystemSolver implements Solver {
     }
 
     private void initPheromone() {
-        final NearestNeighbourSolver nearestNeighbourSolver = new NearestNeighbourSolver(distanceMatrix);
+        final NearestNeighbourSolver nearestNeighbourSolver = new NearestNeighbourSolver(matrices);
         final Solution solution = nearestNeighbourSolver.getSolution();
         final double initialPheromoneValue = (double) distanceMatrix.length /
                 solution.getTourLength();
