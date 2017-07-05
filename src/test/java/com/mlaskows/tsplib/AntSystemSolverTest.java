@@ -17,17 +17,14 @@ import java.util.List;
 /**
  * Created by mlaskows on 24/06/2017.
  */
-public class AntSystemSolverTest {
+public class AntSystemSolverTest implements SolverTest {
 
     private static final int NN_FACOTR = 5;
     private static StaticMatricesHolder matrices;
 
     @BeforeClass
     public void init() throws IOException {
-        ClassLoader classLoader = getClass().getClassLoader();
-        File file = new File(classLoader.getResource("australia.tsp")
-                .getFile());
-        final Item item = TspLibParser.parse(file.getAbsolutePath());
+        final Item item = getItem("australia.tsp");
         matrices = new StaticMatricesBuilder(item).withHeuristicInformationMatrix().withNearestNeighbors(NN_FACOTR).build();
     }
 

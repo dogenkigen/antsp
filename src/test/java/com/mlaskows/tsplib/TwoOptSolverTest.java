@@ -16,22 +16,17 @@ import java.util.stream.IntStream;
 /**
  * Created by mlaskows on 01/07/2017.
  */
-public class TwoOptSolverTest {
+public class TwoOptSolverTest implements SolverTest{
     @Test
     public void testAustraliaSolution() throws IOException {
-        ClassLoader classLoader = getClass().getClassLoader();
-        File file = new File(classLoader.getResource("australia.tsp")
-                .getFile());
-        final Item item = TspLibParser.parse(file.getAbsolutePath());
+        Item item = getItem("australia.tsp");
 
         StaticMatricesHolder matricesHolder = new StaticMatricesBuilder(item).withNearestNeighbors(5).build();
         final List<Integer> initialTour = List.of(0, 1, 2, 3, 4, 5);
         int initialDistnace = calculateDistance(matricesHolder.getDistanceMatrix(),
                 initialTour);
 
-        final TwoOptSolver solver = new TwoOptSolver
-                (new Solution(initialTour, initialDistnace), matricesHolder);
-        final Solution solution = solver.getSolution();
+        final Solution solution = computeSolution(initialTour, matricesHolder, initialDistnace);
 
         final List<Integer> expectedTour = List.of(0, 2, 1, 4, 5, 3);
         Assert.assertEquals(solution.getTour(), expectedTour);
@@ -40,22 +35,41 @@ public class TwoOptSolverTest {
 
     @Test
     public void testAli535Solution() throws IOException {
-        ClassLoader classLoader = getClass().getClassLoader();
-        File file = new File(classLoader.getResource("ali535.tsp")
-                .getFile());
-        final Item item = TspLibParser.parse(file.getAbsolutePath());
+        final Item item = getItem("ali535.tsp");
 
         StaticMatricesHolder matricesHolder = new StaticMatricesBuilder(item).withNearestNeighbors(5).build();
-        final List<Integer> initialTour = new ArrayList<>(535);
-        IntStream.range(0, 535).forEach(index -> initialTour.add(index));
+        final List<Integer> initialTour = getInitialTour(535);
         int initialDistnace = calculateDistance(matricesHolder.getDistanceMatrix(),
                 initialTour);
 
-        final TwoOptSolver solver = new TwoOptSolver
-                (new Solution(initialTour, initialDistnace), matricesHolder);
-        final Solution solution = solver.getSolution();
+        final Solution solution = computeSolution(initialTour, matricesHolder, initialDistnace);
 
         Assert.assertTrue(solution.getTourLength() < initialDistnace);
+    }
+
+    @Test
+    public void testBerlin52() throws IOException {
+        Item item = getItem("berlin52.tsp");
+        List<Integer> initialTour = getInitialTour(52);
+        StaticMatricesHolder matricesHolder = new StaticMatricesBuilder(item).withNearestNeighbors(5).build();
+        int initialDistnace = calculateDistance(matricesHolder.getDistanceMatrix(),
+                initialTour);
+
+        final Solution solution = computeSolution(initialTour, matricesHolder, initialDistnace);
+
+        Assert.assertTrue(solution.getTourLength() < initialDistnace);
+    }
+
+    private Solution computeSolution(List<Integer> initialTour, StaticMatricesHolder matricesHolder, int initialDistnace) {
+        final TwoOptSolver solver = new TwoOptSolver
+                (new Solution(initialTour, initialDistnace), matricesHolder);
+        return solver.getSolution();
+    }
+
+    private List<Integer> getInitialTour(int size) {
+        final List<Integer> initialTour = new ArrayList<>(size);
+        IntStream.range(0, size).forEach(index -> initialTour.add(index));
+        return initialTour;
     }
 
     private int calculateDistance(int[][] australianDistances, List<Integer> initialTour) {
