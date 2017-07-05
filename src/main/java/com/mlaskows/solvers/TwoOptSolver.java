@@ -98,6 +98,9 @@ public class TwoOptSolver implements Solver {
     }
 
     private List<Integer> twOptSwap(List<Integer> tour, int from, int to) {
+        // TODO reverse shorter parts which will improve time
+        // this means we might not pay attention where the start was
+        // the question is if it's valid
         final List<Integer> swappedTour = new ArrayList<>(tour.size());
         swappedTour.addAll(tour.subList(0, from));
         final List<Integer> fromTo = new ArrayList<>(tour.subList(from, to + 1));
