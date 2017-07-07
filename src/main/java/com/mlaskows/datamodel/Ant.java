@@ -1,5 +1,7 @@
 package com.mlaskows.datamodel;
 
+import com.mlaskows.exeptions.SolutionException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +22,10 @@ public class Ant {
     }
 
     public void visit(int index, int stepLength) {
+        // FIXME remove this check for production version
+        if (visited[index]) {
+            throw new SolutionException("Ant already visited!");
+        }
         tourLength = tourLength + stepLength;
         visited[index] = true;
         tour.add(index);

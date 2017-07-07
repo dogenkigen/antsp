@@ -42,6 +42,9 @@ public class TwoOptSolver implements Solver {
         for (int from = 1; from < tour.size() - 1; from++) {
             for (int to = from + 1; to < tour.size(); to++) {
                 if (isWorthToImprove(tour, from, to)) {
+                    // TODO for now it seeks for the fist better than
+                    // existing solution. Consider seeking for the best
+                    // solution.
                     tour = twOptSwap(tour, from, to);
                     return true;
                 }

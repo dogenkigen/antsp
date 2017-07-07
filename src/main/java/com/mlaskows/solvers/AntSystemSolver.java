@@ -85,6 +85,7 @@ public class AntSystemSolver implements Solver {
         Ant bestAnt = null;
         while (shouldNotTerminate(iterationsWithNoImprovementCount)) {
             ants = getRandomPlacedAnts();
+            computeChoicesInfo();
             constructSolution();
             // TODO localSearch (92, 3.7)
             updatePheromone();
@@ -104,7 +105,9 @@ public class AntSystemSolver implements Solver {
     }
 
     private void constructSolution() {
-        for (int i = 0; i < problemSize; i++) {
+        // We should start iterating from 1 since every ant has already
+        // visited one city
+        for (int i = 1; i < problemSize; i++) {
             for (Ant ant : ants) {
                 decisionRule(ant);
             }
@@ -118,14 +121,16 @@ public class AntSystemSolver implements Solver {
                 nearestNeighbors[currentIndex]);
 
         int nextIndex = 1;
+        // This is the case when all nearest neighbours are already visited
         if (sumProbabilities == 0.0) {
             nextIndex = chooseBestNext(ant, currentIndex);
         } else {
             final double randomDouble = random.nextDouble(0, sumProbabilities);
-            double selectionProbability = choicesInfo[currentIndex][nextIndex];
+            double selectionProbability = 0.0;
             for (int j = 0; j < problemSize; j++) {
-                selectionProbability += choicesInfo[currentIndex][j];
-                if (randomDouble > selectionProbability) {
+                selectionProbability +=
+                        ant.isVisited(j) ? 0.0 : choicesInfo[currentIndex][j];
+                if (randomDouble < selectionProbability) {
                     nextIndex = j;
                     break;
                 }
@@ -161,7 +166,6 @@ public class AntSystemSolver implements Solver {
     private void updatePheromone() {
         evaporate();
         ants.forEach(ant -> depositPheromone(ant));
-        computeChoicesInfo();
     }
 
     private void evaporate() {

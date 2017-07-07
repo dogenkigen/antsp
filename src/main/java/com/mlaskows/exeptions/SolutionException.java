@@ -9,4 +9,8 @@ public class SolutionException extends RuntimeException {
         super(reason.toString());
     }
 
+    public SolutionException(String reason) {
+        super(reason);
+    }
+
 }
