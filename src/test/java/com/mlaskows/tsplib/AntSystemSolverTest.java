@@ -7,7 +7,6 @@ import com.mlaskows.matrices.StaticMatricesBuilder;
 import com.mlaskows.matrices.StaticMatricesHolder;
 import com.mlaskows.solvers.AntSystemSolver;
 import org.testng.Assert;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
@@ -18,17 +17,14 @@ import java.util.List;
  */
 public class AntSystemSolverTest implements SolverTest {
 
-    private static final int NN_FACOTR = 5;
-    private static StaticMatricesHolder matrices;
-
-    @BeforeClass
-    public void init() throws IOException {
-        final Item item = getItem("australia.tsp");
-        matrices = new StaticMatricesBuilder(item).withHeuristicInformationMatrix().withNearestNeighbors(NN_FACOTR).build();
-    }
 
     @Test
-    public void testSolution() {
+    public void testAustraliaSolution() throws IOException {
+        final Item item = getItem("australia.tsp");
+        StaticMatricesHolder matrices = new StaticMatricesBuilder(item)
+                .withHeuristicInformationMatrix()
+                .withNearestNeighbors(5)
+                .build();
         final AcoConfig config = AcoConfigFactory.createDefaultAntSystemConfig(matrices
                 .getDistanceMatrix().length);
         final AntSystemSolver solver = new AntSystemSolver(config, matrices);
@@ -38,6 +34,23 @@ public class AntSystemSolverTest implements SolverTest {
         final List<Integer> expectedTour = List.of(0, 2, 1, 4, 5, 3);
         Assert.assertEquals(solution.getTour(), expectedTour);
         Assert.assertEquals(solution.getTourLength(), 6095);
+    }
+
+    @Test
+    public void testAli535Solution() throws IOException {
+        final Item item = getItem("ali535.tsp");
+        final AcoConfig config =
+                AcoConfigFactory.createDefaultAntSystemConfig(item.getDimension());
+        final StaticMatricesHolder matrices = new StaticMatricesBuilder(item)
+                .withHeuristicInformationMatrix()
+                .withNearestNeighbors(config.getNearestNeighbourFactor())
+                .build();
+        final AntSystemSolver solver = new AntSystemSolver(config, matrices);
+        final Solution solution = solver.getSolution();
+
+        // We assume here that solution will be better than for nearest
+        // neighbour algorithm.
+        Assert.assertTrue(solution.getTourLength() < 224358);
     }
 
 }

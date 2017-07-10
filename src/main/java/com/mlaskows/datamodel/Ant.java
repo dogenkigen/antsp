@@ -24,7 +24,8 @@ public class Ant {
     public void visit(int index, int stepLength) {
         // FIXME remove this check for production version
         if (visited[index]) {
-            throw new SolutionException("Ant already visited!");
+            throw new SolutionException("Following index already visited: " +
+                    index);
         }
         tourLength = tourLength + stepLength;
         visited[index] = true;
@@ -47,11 +48,12 @@ public class Ant {
         return tour.get(tour.size() - 1);
     }
 
-    /**
-     * ant’s memory storing (partial) tours.
-     */
     public List<Integer> getTour() {
         return tour;
+    }
+
+    public Solution getSolution() {
+        return new Solution(tour, tourLength);
     }
 
 }

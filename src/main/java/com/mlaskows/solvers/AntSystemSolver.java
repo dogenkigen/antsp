@@ -22,6 +22,7 @@ public class AntSystemSolver implements Solver {
     private final AcoConfig config;
     private final StaticMatricesHolder matrices;
     private List<Ant> ants;
+    private Ant bestSoFarAnt;
     private final SplittableRandom random = new SplittableRandom();
     private final double[][] choicesInfo;
     private int problemSize;
@@ -37,6 +38,7 @@ public class AntSystemSolver implements Solver {
         pheromoneMatrix = new double[problemSize][problemSize];
         choicesInfo = new double[problemSize][problemSize];
         distanceMatrix = matrices.getDistanceMatrix();
+        // TODO move to java generic exceptions
         heuristicInformationMatrix = matrices.getHeuristicInformationMatrix()
                 .orElseThrow(() -> new SolutionException(EMPTY_HEURISTIC_MATRIX));
         nearestNeighbors = matrices.getNearestNeighborsMatrix()
@@ -59,18 +61,6 @@ public class AntSystemSolver implements Solver {
         }
     }
 
-    private void computeChoicesInfo() {
-        for (int i = 0; i < problemSize; i++) {
-            for (int j = i; j < problemSize; j++) {
-                final double choice = Math.pow(pheromoneMatrix[i][j], config
-                        .getPheromoneImportance()) * Math.pow(heuristicInformationMatrix[i][j],
-                        config.getHeuristicImportance());
-                choicesInfo[i][j] = choice;
-                choicesInfo[j][i] = choice;
-            }
-        }
-    }
-
     private List<Ant> getRandomPlacedAnts() {
         return random.ints(0, problemSize)
                 .limit(config.getAntsCount())
@@ -81,8 +71,7 @@ public class AntSystemSolver implements Solver {
     @Override
     public Solution getSolution() {
         int iterationsWithNoImprovementCount = 0;
-        int lastTourLength = 0;
-        Ant bestAnt = null;
+        Ant bestAnt;
         while (shouldNotTerminate(iterationsWithNoImprovementCount)) {
             ants = getRandomPlacedAnts();
             computeChoicesInfo();
@@ -90,18 +79,31 @@ public class AntSystemSolver implements Solver {
             // TODO localSearch (92, 3.7)
             updatePheromone();
             bestAnt = getBestAnt();
-            if (lastTourLength > bestAnt.getTourLength()) {
+            if (bestSoFarAnt == null ||
+                    bestAnt.getTourLength() < bestSoFarAnt.getTourLength()) {
+                bestSoFarAnt = bestAnt;
                 iterationsWithNoImprovementCount = 0;
             } else {
                 iterationsWithNoImprovementCount++;
             }
-            lastTourLength = bestAnt.getTourLength();
         }
-        return new Solution(bestAnt.getTour(), bestAnt.getTourLength());
+        return bestSoFarAnt.getSolution();
     }
 
     private boolean shouldNotTerminate(int iterationsWithNoImprovementCount) {
-        return iterationsWithNoImprovementCount < 20;
+        return iterationsWithNoImprovementCount < config.getMaxStagnationCount();
+    }
+
+    private void computeChoicesInfo() {
+        for (int i = 0; i < problemSize; i++) {
+            for (int j = i; j < problemSize; j++) {
+                final double choice = Math.pow(pheromoneMatrix[i][j], config
+                        .getPheromoneImportance()) * Math.pow(heuristicInformationMatrix[i][j],
+                        config.getHeuristicImportance());
+                choicesInfo[i][j] = choice;
+                choicesInfo[j][i] = choice;
+            }
+        }
     }
 
     private void constructSolution() {
@@ -121,7 +123,7 @@ public class AntSystemSolver implements Solver {
                 nearestNeighbors[currentIndex]);
 
         int nextIndex = 1;
-        // This is the case when all nearest neighbours are already visited
+        // This si true in case when all nearest neighbours are already visited
         if (sumProbabilities == 0.0) {
             nextIndex = chooseBestNext(ant, currentIndex);
         } else {
@@ -187,9 +189,9 @@ public class AntSystemSolver implements Solver {
             pheromoneMatrix[j][l] = pheromoneMatrix[j][l] + pheromoneDelta;
             pheromoneMatrix[l][j] = pheromoneMatrix[j][l];
         }
-
     }
 
+    // TODO consider moving to normal loop for performance improvement
     public Ant getBestAnt() {
         return ants.stream()
                 .reduce((ant, acc) -> ant.getTourLength() < acc.getTourLength() ? ant : acc)
