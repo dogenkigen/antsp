@@ -58,8 +58,7 @@ public class AntSystemSolver implements Solver {
                 solution.getTourLength();
         for (int i = 0; i < problemSize; i++) {
             for (int j = i; j < problemSize; j++) {
-                pheromoneMatrix[i][j] = initialPheromoneValue;
-                pheromoneMatrix[j][i] = initialPheromoneValue;
+                updatePheromoneOnEdge(i, j, initialPheromoneValue);
             }
         }
     }
@@ -101,9 +100,9 @@ public class AntSystemSolver implements Solver {
     private void computeChoicesInfo() {
         for (int i = 0; i < problemSize; i++) {
             for (int j = i; j < problemSize; j++) {
-                final double choice = Math.pow(pheromoneMatrix[i][j], config
-                        .getPheromoneImportance()) * Math.pow(heuristicInformationMatrix[i][j],
-                        config.getHeuristicImportance());
+                final double choice =
+                        Math.pow(pheromoneMatrix[i][j], config.getPheromoneImportance()) *
+                                Math.pow(heuristicInformationMatrix[i][j], config.getHeuristicImportance());
                 choicesInfo[i][j] = choice;
                 choicesInfo[j][i] = choice;
             }
@@ -170,32 +169,39 @@ public class AntSystemSolver implements Solver {
     }
 
     private void updatePheromone() {
-        evaporate();
-        ants.forEach(ant -> depositPheromone(ant));
+        evaporatePheromone();
+        depositAllAntsPheromone();
     }
 
-    private void evaporate() {
+    private void evaporatePheromone() {
         for (int i = 0; i < problemSize; i++) {
             for (int j = i; j < problemSize; j++) {
-                pheromoneMatrix[i][j] = (double) (1 - config
-                        .getPheromoneEvaporationFactor()) *
-                        pheromoneMatrix[i][j];
-                pheromoneMatrix[j][i] = pheromoneMatrix[i][j];
+                double value =
+                        (1 - config.getPheromoneEvaporationFactor()) *
+                                pheromoneMatrix[i][j];
+                updatePheromoneOnEdge(i, j, value);
             }
         }
     }
 
-    private void depositPheromone(Ant ant) {
+    private void depositAllAntsPheromone() {
+        ants.forEach(ant -> depositAntPheromone(ant));
+    }
+
+    private void depositAntPheromone(Ant ant) {
         double pheromoneDelta = (double) 1 / ant.getTourLength();
         for (int i = 0; i < ant.getTour().size() - 1; i++) {
             int j = ant.getTour().get(i);
             int l = ant.getTour().get(i + 1);
-            pheromoneMatrix[j][l] = pheromoneMatrix[j][l] + pheromoneDelta;
-            pheromoneMatrix[l][j] = pheromoneMatrix[j][l];
+            updatePheromoneOnEdge(j, l, pheromoneMatrix[j][l] + pheromoneDelta);
         }
     }
 
-    // TODO consider moving to normal loop for performance improvement
+    private void updatePheromoneOnEdge(int from, int to, double pheromoneValue) {
+        pheromoneMatrix[from][to] = pheromoneValue;
+        pheromoneMatrix[to][from] = pheromoneValue;
+    }
+
     private Ant getBestAnt() {
         return ants.stream()
                 .reduce((ant, acc) -> ant.getTourLength() < acc.getTourLength() ? ant : acc)
