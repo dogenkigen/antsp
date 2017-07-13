@@ -126,7 +126,7 @@ public class AntSystemSolver implements Solver {
                 nearestNeighbors[currentIndex]);
 
         int nextIndex = 1;
-        // This si true in case when all nearest neighbours are already visited
+        // This is true in case when all nearest neighbours are already visited
         if (sumProbabilities == 0.0) {
             nextIndex = chooseBestNext(ant, currentIndex);
         } else {
