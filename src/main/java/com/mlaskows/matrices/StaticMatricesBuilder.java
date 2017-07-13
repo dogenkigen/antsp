@@ -5,7 +5,6 @@ import com.mlaskows.tsplib.DistanceCalculationMethodFactory;
 import com.mlaskows.tsplib.Item;
 import com.mlaskows.tsplib.Node;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.stream.IntStream;
@@ -65,9 +64,12 @@ public class StaticMatricesBuilder {
 
         }
         if (nearestNeighbors != null) {
-            for (int i = 0; i < problemSize; i++) {
-                nearestNeighbors[i] = getNearestNeighbourRow(distanceMatrix[i]);
-            }
+            // Parallel NN calculation will be slower for small instances
+            // which are calculated fast anyway, so it will make no difference
+            // For big instances this will make huge bust.
+            IntStream.iterate(0, i -> i < problemSize, i -> i + 1)
+                    .parallel()
+                    .forEach((i) -> nearestNeighbors[i] = getNearestNeighbourRow(distanceMatrix[i]));
         }
     }
 
@@ -92,7 +94,6 @@ public class StaticMatricesBuilder {
     }
 
     private int[] getNearestNeighbourRow(int[] distances) {
-        // TODO consider performance improvement
         return IntStream.range(0, problemSize)
                 .mapToObj(index -> new Step(index, distances[index]))
                 .sorted()
