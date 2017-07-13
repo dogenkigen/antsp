@@ -30,7 +30,7 @@ public class AntSystemSolverTest implements SolverTest {
         final AntSystemSolver solver = new AntSystemSolver(config, matrices);
         final Solution solution = solver.getSolution();
 
-        //FIXME make it work
+        //FIXME this fails randomly since algorithm is based on random values.
         final List<Integer> expectedTour = List.of(0, 2, 1, 4, 5, 3);
         Assert.assertEquals(solution.getTour(), expectedTour);
         Assert.assertEquals(solution.getTourLength(), 6095);

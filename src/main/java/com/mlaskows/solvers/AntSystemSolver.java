@@ -5,6 +5,8 @@ import com.mlaskows.datamodel.Ant;
 import com.mlaskows.datamodel.Solution;
 import com.mlaskows.exeptions.SolutionException;
 import com.mlaskows.matrices.StaticMatricesHolder;
+import com.mlaskows.statistics.Statistics;
+import com.mlaskows.statistics.StatisticsBuilder;
 
 import java.util.List;
 import java.util.SplittableRandom;
@@ -24,6 +26,7 @@ public class AntSystemSolver implements Solver {
     private List<Ant> ants;
     private Ant bestSoFarAnt;
     private final SplittableRandom random = new SplittableRandom();
+    private final StatisticsBuilder statisticsBuilder = new StatisticsBuilder();
     private final double[][] choicesInfo;
     private int problemSize;
     private final double[][] heuristicInformationMatrix;
@@ -79,6 +82,7 @@ public class AntSystemSolver implements Solver {
             // TODO localSearch (92, 3.7)
             updatePheromone();
             bestAnt = getBestAnt();
+            statisticsBuilder.addIterationTourLength(bestAnt.getTourLength());
             if (bestSoFarAnt == null ||
                     bestAnt.getTourLength() < bestSoFarAnt.getTourLength()) {
                 bestSoFarAnt = bestAnt;
@@ -192,9 +196,13 @@ public class AntSystemSolver implements Solver {
     }
 
     // TODO consider moving to normal loop for performance improvement
-    public Ant getBestAnt() {
+    private Ant getBestAnt() {
         return ants.stream()
                 .reduce((ant, acc) -> ant.getTourLength() < acc.getTourLength() ? ant : acc)
                 .orElseThrow(() -> new SolutionException(NO_BEST_ANT));
+    }
+
+    public Statistics getStatistics() {
+        return statisticsBuilder.build();
     }
 }
