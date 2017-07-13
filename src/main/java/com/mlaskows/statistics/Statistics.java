@@ -44,4 +44,15 @@ public class Statistics {
         }
         return result;
     }
+
+    public int getIterationIndexForBestSolution() {
+        return iterationTourLength.keySet().stream()
+                .min((id1, id2) ->  compareToursForGivenIds(id1, id2))
+                .get();
+    }
+
+    private int compareToursForGivenIds(Integer id1, Integer id2) {
+        return iterationTourLength.get(id1)
+                .compareTo(iterationTourLength.get(id2));
+    }
 }

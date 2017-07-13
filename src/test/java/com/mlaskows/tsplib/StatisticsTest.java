@@ -37,6 +37,11 @@ public class StatisticsTest {
                 .allMatch(StatisticsTest::isPrime));
     }
 
+    @Test
+    public void testIterationIndexForBestSolution() {
+        Assert.assertEquals(statistic.getIterationIndexForBestSolution(), 43);
+    }
+
     private static boolean isPrime(int n) {
         //check if n is a multiple of 2
         if (n % 2 == 0) return false;
