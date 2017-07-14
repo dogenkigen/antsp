@@ -1,8 +1,8 @@
 package com.mlaskows.tsplib;
 
 import com.mlaskows.datamodel.Solution;
-import com.mlaskows.matrices.StaticMatricesBuilder;
-import com.mlaskows.matrices.StaticMatricesHolder;
+import com.mlaskows.datamodel.matrices.StaticMatricesBuilder;
+import com.mlaskows.datamodel.matrices.StaticMatricesHolder;
 import com.mlaskows.solvers.TwoOptSolver;
 import org.testng.Assert;
 import org.testng.annotations.Test;

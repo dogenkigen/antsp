@@ -1,4 +1,4 @@
-package com.mlaskows.matrices;
+package com.mlaskows.datamodel.matrices;
 
 import com.mlaskows.datamodel.Step;
 import com.mlaskows.tsplib.DistanceCalculationMethodFactory;

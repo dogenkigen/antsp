@@ -1,7 +1,7 @@
 package com.mlaskows.tsplib;
 
-import com.mlaskows.matrices.StaticMatricesBuilder;
-import com.mlaskows.matrices.StaticMatricesHolder;
+import com.mlaskows.datamodel.matrices.StaticMatricesBuilder;
+import com.mlaskows.datamodel.matrices.StaticMatricesHolder;
 import com.mlaskows.solvers.NearestNeighbourSolver;
 import com.mlaskows.datamodel.Solution;
 import org.testng.Assert;

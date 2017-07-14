@@ -3,7 +3,7 @@ package com.mlaskows.solvers;
 import com.mlaskows.datamodel.Ant;
 import com.mlaskows.datamodel.Solution;
 import com.mlaskows.datamodel.Step;
-import com.mlaskows.matrices.StaticMatricesHolder;
+import com.mlaskows.datamodel.matrices.StaticMatricesHolder;
 
 import java.util.stream.IntStream;
 

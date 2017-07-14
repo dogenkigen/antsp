@@ -4,7 +4,7 @@ import com.mlaskows.config.AcoConfig;
 import com.mlaskows.datamodel.Ant;
 import com.mlaskows.datamodel.Solution;
 import com.mlaskows.exeptions.SolutionException;
-import com.mlaskows.matrices.StaticMatricesHolder;
+import com.mlaskows.datamodel.matrices.StaticMatricesHolder;
 import com.mlaskows.statistics.Statistics;
 import com.mlaskows.statistics.StatisticsBuilder;
 
