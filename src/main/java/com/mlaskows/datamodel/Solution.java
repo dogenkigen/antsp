@@ -22,4 +22,12 @@ public class Solution {
     public int getTourLength() {
         return tourLength;
     }
+
+    @Override
+    public String toString() {
+        return "Solution{" +
+                "tour=" + tour +
+                ", tourLength=" + tourLength +
+                '}';
+    }
 }
