@@ -1,4 +1,7 @@
-package com.mlaskows.tsplib;
+package com.mlaskows.solvers;
+
+import com.mlaskows.tsplib.Item;
+import com.mlaskows.tsplib.TspLibParser;
 
 import java.io.File;
 import java.io.IOException;

@@ -1,7 +1,5 @@
-package com.mlaskows.tsplib;
+package com.mlaskows.statistics;
 
-import com.mlaskows.statistics.Statistics;
-import com.mlaskows.statistics.StatisticsBuilder;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;

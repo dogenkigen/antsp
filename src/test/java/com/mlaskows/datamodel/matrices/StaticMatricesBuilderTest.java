@@ -1,7 +1,9 @@
-package com.mlaskows.tsplib;
+package com.mlaskows.datamodel.matrices;
 
 import com.mlaskows.datamodel.matrices.StaticMatricesBuilder;
 import com.mlaskows.datamodel.matrices.StaticMatricesHolder;
+import com.mlaskows.tsplib.Item;
+import com.mlaskows.tsplib.TspLibParser;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
