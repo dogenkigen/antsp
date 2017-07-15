@@ -19,22 +19,15 @@ public class AntSystemSolver extends AbstractAntSolver implements Solver {
 
     public AntSystemSolver(AcoConfig config, StaticMatricesHolder matrices) {
         super(config, matrices);
-        initializeRandomPlacedAnts(getProblemSize());
-        initPheromone();
     }
 
-    private void initPheromone() {
+    @Override
+    public double calculateInitialPheromoneValue() {
         final NearestNeighbourSolver nearestNeighbourSolver =
                 new  NearestNeighbourSolver(getMatrices());
         final Solution solution = nearestNeighbourSolver.getSolution();
-        final double initialPheromoneValue =
-                (double) getMatrices().getDistanceMatrix().length /
-                solution.getTourLength();
-        for (int i = 0; i < getProblemSize(); i++) {
-            for (int j = i; j < getProblemSize(); j++) {
-                updatePheromoneOnEdge(i, j, initialPheromoneValue);
-            }
-        }
+        return (double) getMatrices().getDistanceMatrix().length /
+                        solution.getTourLength();
     }
 
     @Override

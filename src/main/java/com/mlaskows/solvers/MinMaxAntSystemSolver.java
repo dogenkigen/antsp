@@ -14,6 +14,11 @@ public class MinMaxAntSystemSolver extends AbstractAntSolver implements Solver {
     }
 
     @Override
+    public double calculateInitialPheromoneValue() {
+        return 0;
+    }
+
+    @Override
     public Solution getSolution() {
         return null;
     }

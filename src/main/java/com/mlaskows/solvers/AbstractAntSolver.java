@@ -37,7 +37,11 @@ public abstract class AbstractAntSolver {
                 .orElseThrow(() -> new SolutionException(EMPTY_HEURISTIC_MATRIX));
         nearestNeighbors = matrices.getNearestNeighborsMatrix()
                 .orElseThrow(() -> new SolutionException(EMPTY_NN_MATRIX));
+        initializeRandomPlacedAnts(problemSize);
+        initPheromone(calculateInitialPheromoneValue());
     }
+
+    public abstract double calculateInitialPheromoneValue();
 
     protected void computeChoicesInfo() {
         for (int i = 0; i < problemSize; i++) {
@@ -53,7 +57,7 @@ public abstract class AbstractAntSolver {
 
     protected void constructSolution() {
         // We should start iterating from 1 since every ant has already
-        // visited one city
+        // visited one city during initialization.
         for (int i = 1; i < problemSize; i++) {
             for (Ant ant : ants) {
                 decisionRule(ant);
@@ -133,6 +137,14 @@ public abstract class AbstractAntSolver {
     protected void updatePheromoneOnEdge(int from, int to, double pheromoneValue) {
         pheromoneMatrix[from][to] = pheromoneValue;
         pheromoneMatrix[to][from] = pheromoneValue;
+    }
+
+    protected void initPheromone(double initialPheromoneValue) {
+        for (int i = 0; i < problemSize; i++) {
+            for (int j = i; j < problemSize; j++) {
+                updatePheromoneOnEdge(i, j, initialPheromoneValue);
+            }
+        }
     }
 
     protected void initializeRandomPlacedAnts(int antCount) {
