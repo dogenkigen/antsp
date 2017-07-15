@@ -10,6 +10,10 @@ public class AcoConfigFactory {
         return createAntSystemConfig(3, 1, 0.5, problemSize, 15, 10);
     }
 
+    public static AcoConfig createDefaultMinMaxConfig(int problemSize) {
+        return createAntSystemConfig(3, 1, 0.1, problemSize, 15, 8);
+    }
+
     public static AcoConfig createAntSystemConfig(int heuristicImportance,
                                                   int pheromoneImportance,
                                                   double pheromoneEvaporationFactor,
@@ -20,5 +24,6 @@ public class AcoConfigFactory {
                 pheromoneEvaporationFactor, problemSize, nearestNeighbourFactor,
                 maxStagnationCount);
     }
+
 
 }

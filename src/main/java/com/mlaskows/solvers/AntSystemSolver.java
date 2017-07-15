@@ -4,8 +4,6 @@ import com.mlaskows.config.AcoConfig;
 import com.mlaskows.datamodel.Ant;
 import com.mlaskows.datamodel.Solution;
 import com.mlaskows.datamodel.matrices.StaticMatricesHolder;
-import com.mlaskows.statistics.Statistics;
-import com.mlaskows.statistics.StatisticsBuilder;
 
 /**
  * Created by mlaskows on 24/06/2017.
@@ -15,7 +13,6 @@ import com.mlaskows.statistics.StatisticsBuilder;
 public class AntSystemSolver extends AbstractAntSolver implements Solver {
 
     private Ant bestSoFarAnt;
-    private final StatisticsBuilder statisticsBuilder = new StatisticsBuilder();
 
     public AntSystemSolver(AcoConfig config, StaticMatricesHolder matrices) {
         super(config, matrices);
@@ -40,7 +37,7 @@ public class AntSystemSolver extends AbstractAntSolver implements Solver {
             constructSolution();
             updatePheromone();
             bestAnt = getBestAnt();
-            statisticsBuilder.addIterationTourLength(bestAnt.getTourLength());
+            getStatisticsBuilder().addIterationTourLength(bestAnt.getTourLength());
             if (bestSoFarAnt == null ||
                     bestAnt.getTourLength() < bestSoFarAnt.getTourLength()) {
                 bestSoFarAnt = bestAnt;
@@ -52,20 +49,13 @@ public class AntSystemSolver extends AbstractAntSolver implements Solver {
         return bestSoFarAnt.getSolution();
     }
 
-    private boolean shouldNotTerminate(int iterationsWithNoImprovementCount) {
-        return iterationsWithNoImprovementCount < getConfig().getMaxStagnationCount();
-    }
-
     private void updatePheromone() {
         evaporatePheromone();
         depositAllAntsPheromone();
     }
 
     private void depositAllAntsPheromone() {
-        getAnts().forEach(ant -> depositAntPheromone(ant));
+        getAnts().forEach(ant -> depositAntPheromone(ant, (double) 1 / ant.getTourLength()));
     }
 
-    public Statistics getStatistics() {
-        return statisticsBuilder.build();
-    }
 }

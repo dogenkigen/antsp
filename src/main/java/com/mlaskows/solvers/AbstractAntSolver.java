@@ -4,6 +4,8 @@ import com.mlaskows.config.AcoConfig;
 import com.mlaskows.datamodel.Ant;
 import com.mlaskows.datamodel.matrices.StaticMatricesHolder;
 import com.mlaskows.exeptions.SolutionException;
+import com.mlaskows.statistics.Statistics;
+import com.mlaskows.statistics.StatisticsBuilder;
 
 import java.util.List;
 import java.util.SplittableRandom;
@@ -16,6 +18,8 @@ import static com.mlaskows.exeptions.Reason.*;
  */
 public abstract class AbstractAntSolver {
 
+
+    private final StatisticsBuilder statisticsBuilder = new StatisticsBuilder();
     private final SplittableRandom random = new SplittableRandom();
     private List<Ant> ants;
     private final AcoConfig config;
@@ -42,6 +46,10 @@ public abstract class AbstractAntSolver {
     }
 
     public abstract double calculateInitialPheromoneValue();
+
+    protected boolean shouldNotTerminate(int iterationsWithNoImprovementCount) {
+        return iterationsWithNoImprovementCount < getConfig().getMaxStagnationCount();
+    }
 
     protected void computeChoicesInfo() {
         for (int i = 0; i < problemSize; i++) {
@@ -125,8 +133,7 @@ public abstract class AbstractAntSolver {
         }
     }
 
-    protected void depositAntPheromone(Ant ant) {
-        double pheromoneDelta = (double) 1 / ant.getTourLength();
+    protected void depositAntPheromone(Ant ant, double pheromoneDelta) {
         for (int i = 0; i < ant.getTour().size() - 1; i++) {
             int j = ant.getTour().get(i);
             int l = ant.getTour().get(i + 1);
@@ -134,7 +141,7 @@ public abstract class AbstractAntSolver {
         }
     }
 
-    protected void updatePheromoneOnEdge(int from, int to, double pheromoneValue) {
+    private void updatePheromoneOnEdge(int from, int to, double pheromoneValue) {
         pheromoneMatrix[from][to] = pheromoneValue;
         pheromoneMatrix[to][from] = pheromoneValue;
     }
@@ -174,5 +181,17 @@ public abstract class AbstractAntSolver {
 
     protected int getProblemSize() {
         return problemSize;
+    }
+
+    protected StatisticsBuilder getStatisticsBuilder() {
+        return statisticsBuilder;
+    }
+
+    protected SplittableRandom getRandom() {
+        return random;
+    }
+
+    public Statistics getStatistics() {
+        return statisticsBuilder.build();
     }
 }

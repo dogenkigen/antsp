@@ -21,6 +21,13 @@ public class Ant {
         visit(initialPosition, 0);
     }
 
+    public Ant(Solution solution) {
+        tourLength = solution.getTourLength();
+        tour = solution.getTour();
+        visited = new boolean[solution.getTour().size()];
+        tour.forEach(index -> visited[index] = true);
+    }
+
     public void visit(int index, int stepLength) {
         // FIXME remove this check for production version
         if (visited[index]) {
