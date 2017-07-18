@@ -24,6 +24,9 @@ public class MinMaxAntSystemSolver extends AbstractAntSolver implements Solver {
 
     @Override
     public double calculateInitialPheromoneValue() {
+        // FIXME this method causes a bug because during reinitialization
+        // bestSoFarAnt will be overwritten plus this method breaks single
+        // responsibility rule
         final NearestNeighbourSolver nearestNeighbourSolver =
                 new NearestNeighbourSolver(getMatrices());
         final Solution solution = nearestNeighbourSolver.getSolution();
