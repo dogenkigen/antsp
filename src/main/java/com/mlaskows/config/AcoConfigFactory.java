@@ -11,7 +11,7 @@ public class AcoConfigFactory {
     }
 
     public static AcoConfig createDefaultMinMaxConfig(int problemSize) {
-        return createAntSystemConfig(3, 1, 0.1, problemSize, 15, 8);
+        return createAntSystemConfig(3, 1, 0.1, problemSize, 15, 60);
     }
 
     public static AcoConfig createAntSystemConfig(int heuristicImportance,

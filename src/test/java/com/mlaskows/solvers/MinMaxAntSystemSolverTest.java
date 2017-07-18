@@ -51,6 +51,7 @@ public class MinMaxAntSystemSolverTest implements SolverTest {
                 config.getMaxStagnationCount());
         // We assume here that solution will be better than for nearest
         // neighbour algorithm.
-        Assert.assertTrue(solution.getTourLength() < 224358);
+        Assert.assertTrue(solution.getTourLength() < 224358,
+                "Actual solution length is" + solution.getTourLength());
     }
 }

@@ -94,7 +94,7 @@ public class TwoOptSolver implements Solver {
     }
 
     public boolean isShorterDistance(int c1, int c2, int c3, int c4) {
-        return c4 > 0 ?
+        return c4 >= 0 ?
                 distanceMatrix[c1][c2] + distanceMatrix[c3][c4]
                         > distanceMatrix[c1][c3] + distanceMatrix[c2][c4] :
                 distanceMatrix[c1][c2] > distanceMatrix[c1][c3];

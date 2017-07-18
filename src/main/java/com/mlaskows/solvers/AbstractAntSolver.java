@@ -7,6 +7,7 @@ import com.mlaskows.exeptions.SolutionException;
 import com.mlaskows.statistics.Statistics;
 import com.mlaskows.statistics.StatisticsBuilder;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.SplittableRandom;
 import java.util.stream.Collectors;
@@ -162,8 +163,12 @@ public abstract class AbstractAntSolver {
     }
 
     protected Ant getBestAnt() {
+        return getBestAnt(ants);
+    }
+
+    protected Ant getBestAnt(List<Ant> ants) {
         return ants.stream()
-                .reduce((ant, acc) -> ant.getTourLength() < acc.getTourLength() ? ant : acc)
+                .min(Comparator.comparing(Ant::getTourLength))
                 .orElseThrow(() -> new SolutionException(NO_BEST_ANT));
     }
 

@@ -9,7 +9,7 @@ import java.util.List;
  * Created by mlaskows on 17/06/2017.
  */
 // TODO make it thread safe
-public class Ant {
+public class Ant implements Comparable<Ant> {
 
     private int tourLength;
     private final List<Integer> tour;
@@ -23,9 +23,11 @@ public class Ant {
 
     public Ant(Solution solution) {
         tourLength = solution.getTourLength();
-        tour = solution.getTour();
+        tour = new ArrayList<>(solution.getTour());
         visited = new boolean[solution.getTour().size()];
-        tour.forEach(index -> visited[index] = true);
+        for (Integer index : tour) {
+            visited[index] = true;
+        }
     }
 
     public void visit(int index, int stepLength) {
@@ -60,7 +62,11 @@ public class Ant {
     }
 
     public Solution getSolution() {
-        return new Solution(tour, tourLength);
+        return new Solution(new ArrayList<>(tour), tourLength);
     }
 
+    @Override
+    public int compareTo(Ant o) {
+        return this.getTourLength() - o.getTourLength();
+    }
 }
