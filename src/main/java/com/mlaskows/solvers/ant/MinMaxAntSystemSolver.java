@@ -20,7 +20,7 @@ public class MinMaxAntSystemSolver extends AbstractAntSolver implements Solver {
     private Ant bestSoFarAnt;
     private double minPheromoneValue;
     private double maxPheromoneValue;
-    private double a = 4;
+    private double a = 2;
     private final PheromoneProcessor pheromoneProcessor;
 
     public MinMaxAntSystemSolver(StaticMatricesHolder matrices, AcoConfig config) {
@@ -30,6 +30,7 @@ public class MinMaxAntSystemSolver extends AbstractAntSolver implements Solver {
                 new NearestNeighbourSolver(getMatrices());
         final Solution solution = nearestNeighbourSolver.getSolution();
         bestSoFarAnt = new Ant(solution);
+        pheromoneProcessor.initPheromone(calculateInitialPheromoneValue());
     }
 
     @Override
@@ -68,7 +69,7 @@ public class MinMaxAntSystemSolver extends AbstractAntSolver implements Solver {
                 iterationsWithNoImprovementCount = 0;
             } else {
                 iterationsWithNoImprovementCount++;
-                if (iterationsWithNoImprovementCount > getConfig()
+                if (iterationsWithNoImprovementCount == getConfig()
                         .getMaxStagnationCount() / 2) {
                     reinitialize();
                     continue;
