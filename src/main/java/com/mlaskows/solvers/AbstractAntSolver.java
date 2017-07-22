@@ -19,7 +19,6 @@ import static com.mlaskows.exeptions.Reason.*;
  */
 public abstract class AbstractAntSolver {
 
-
     private final StatisticsBuilder statisticsBuilder = new StatisticsBuilder();
     private final SplittableRandom random = new SplittableRandom();
     private List<Ant> ants;
@@ -29,7 +28,6 @@ public abstract class AbstractAntSolver {
     private final int problemSize;
     private final double[][] heuristicInformationMatrix;
     private double[][] pheromoneMatrix;
-    private int[][] nearestNeighbors;
 
     protected AbstractAntSolver(AcoConfig config, StaticMatricesHolder matrices) {
         this.config = config;
@@ -40,8 +38,6 @@ public abstract class AbstractAntSolver {
         // TODO move to java generic exceptions
         heuristicInformationMatrix = matrices.getHeuristicInformationMatrix()
                 .orElseThrow(() -> new SolutionException(EMPTY_HEURISTIC_MATRIX));
-        nearestNeighbors = matrices.getNearestNeighborsMatrix()
-                .orElseThrow(() -> new SolutionException(EMPTY_NN_MATRIX));
         initializeRandomPlacedAnts(problemSize);
         initPheromone(calculateInitialPheromoneValue());
     }
@@ -65,62 +61,14 @@ public abstract class AbstractAntSolver {
     }
 
     protected void constructSolution() {
+        AntMover antMover = new AntMover(matrices, choicesInfo);
         // We should start iterating from 1 since every ant has already
         // visited one city during initialization.
         for (int i = 1; i < problemSize; i++) {
-            for (Ant ant : ants) {
-                decisionRule(ant);
-            }
+            ants.stream()
+                    .parallel()
+                    .forEach(antMover::moveAnt);
         }
-    }
-
-    private void decisionRule(Ant ant) {
-        //https://en.wikipedia.org/wiki/Fitness_proportionate_selection
-        final int currentIndex = ant.getCurrent();
-        double sumProbabilities = newSumProbabilities(ant, currentIndex,
-                nearestNeighbors[currentIndex]);
-
-        int nextIndex = 1;
-        // This is true in case when all nearest neighbours are already visited
-        if (sumProbabilities == 0.0) {
-            nextIndex = chooseBestNext(ant, currentIndex);
-        } else {
-            final double randomDouble = random.nextDouble(0, sumProbabilities);
-            double selectionProbability = 0.0;
-            for (int j = 0; j < problemSize; j++) {
-                selectionProbability +=
-                        ant.isVisited(j) ? 0.0 : choicesInfo[currentIndex][j];
-                if (randomDouble < selectionProbability) {
-                    nextIndex = j;
-                    break;
-                }
-            }
-        }
-        ant.visit(nextIndex, matrices.getDistanceMatrix()[currentIndex][nextIndex]);
-    }
-
-    private int chooseBestNext(Ant ant, int currentIndex) {
-        int nextIndex = 1;
-        double v = 0.0;
-        for (int j = 0; j < problemSize; j++) {
-            if (ant.notVisited(j) && choicesInfo[currentIndex][j] > v) {
-                nextIndex = j;
-                v = choicesInfo[currentIndex][j];
-            }
-        }
-        return nextIndex;
-    }
-
-    private double newSumProbabilities(Ant ant, int currentIndex, int[]
-            nearestNeighbors) {
-        double sumProbabilities = 0.0;
-        for (int j = 0; j < nearestNeighbors.length; j++) {
-            if (ant.notVisited(nearestNeighbors[j])) {
-                sumProbabilities +=
-                        choicesInfo[currentIndex][nearestNeighbors[j]];
-            }
-        }
-        return sumProbabilities;
     }
 
     protected void evaporatePheromone() {
