@@ -12,6 +12,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.SplittableRandom;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static com.mlaskows.exeptions.Reason.*;
 
@@ -45,11 +46,12 @@ public abstract class AbstractAntSolver {
         AntMover antMover = new AntMover(matrices, choicesInfo);
         // We should start iterating from 1 since every ant has already
         // visited one city during initialization.
-        for (int i = 1; i < problemSize; i++) {
-            ants.stream()
-                    .parallel()
-                    .forEach(antMover::moveAnt);
-        }
+        ants.stream()
+                .parallel()
+                .forEach(ant ->
+                        IntStream.iterate(1, i -> i < problemSize, i -> i + 1)
+                                .forEach(i -> antMover.moveAnt(ant))
+                );
     }
 
 
