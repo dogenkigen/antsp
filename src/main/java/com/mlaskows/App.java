@@ -23,7 +23,7 @@ public class App {
                 .withHeuristicInformationMatrix()
                 .withNearestNeighbors(config.getNearestNeighbourFactor())
                 .build();
-        final AntSystemSolver solver = new AntSystemSolver(config, matrices);
+        final AntSystemSolver solver = new AntSystemSolver(matrices, config);
         final Solution solution = solver.getSolution();
 
         System.out.println(solution);

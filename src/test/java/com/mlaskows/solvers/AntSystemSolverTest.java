@@ -27,7 +27,7 @@ public class AntSystemSolverTest implements SolverTest {
                 .build();
         final AcoConfig config = AcoConfigFactory.createDefaultAntSystemConfig(matrices
                 .getDistanceMatrix().length);
-        final AntSystemSolver solver = new AntSystemSolver(config, matrices);
+        final AntSystemSolver solver = new AntSystemSolver(matrices, config);
         final Solution solution = solver.getSolution();
 
         //FIXME this fails randomly since algorithm is based on random values.
@@ -45,7 +45,7 @@ public class AntSystemSolverTest implements SolverTest {
                 .withHeuristicInformationMatrix()
                 .withNearestNeighbors(config.getNearestNeighbourFactor())
                 .build();
-        final AntSystemSolver solver = new AntSystemSolver(config, matrices);
+        final AntSystemSolver solver = new AntSystemSolver(matrices, config);
         final Solution solution = solver.getSolution();
 
         List<Integer> nonImprovementPeriods = solver.getStatistics().getNonImprovementPeriods();

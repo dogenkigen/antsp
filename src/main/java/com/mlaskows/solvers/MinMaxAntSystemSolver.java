@@ -17,23 +17,22 @@ public class MinMaxAntSystemSolver extends AbstractAntSolver implements Solver {
     private double minPheromoneValue;
     private double maxPheromoneValue;
     private double a = 4;
+    private final PheromoneProcessor pheromoneProcessor;
 
-    public MinMaxAntSystemSolver(AcoConfig config, StaticMatricesHolder matrices) {
-        super(config, matrices);
-    }
-
-    @Override
-    public double calculateInitialPheromoneValue() {
-        // FIXME this method causes a bug because during reinitialization
-        // bestSoFarAnt will be overwritten plus this method breaks single
-        // responsibility rule
+    public MinMaxAntSystemSolver(StaticMatricesHolder matrices, AcoConfig config) {
+        super(matrices, config);
+        pheromoneProcessor = new PheromoneProcessor(matrices, config);
         final NearestNeighbourSolver nearestNeighbourSolver =
                 new NearestNeighbourSolver(getMatrices());
         final Solution solution = nearestNeighbourSolver.getSolution();
         bestSoFarAnt = new Ant(solution);
+    }
+
+    @Override
+    public double calculateInitialPheromoneValue() {
         return (double) 1 /
                 getConfig().getPheromoneEvaporationFactor() *
-                solution.getTourLength();
+                bestSoFarAnt.getTourLength();
     }
 
     @Override
@@ -42,8 +41,7 @@ public class MinMaxAntSystemSolver extends AbstractAntSolver implements Solver {
         Ant bestAnt;
         while (shouldNotTerminate(iterationsWithNoImprovementCount)) {
             initializeRandomPlacedAnts(getProblemSize());
-            computeChoicesInfo();
-            constructSolution();
+            constructSolution(pheromoneProcessor.computeChoicesInfo());
 
             System.out.println("waiting for 2opt...");
             final long l = System.currentTimeMillis();
@@ -81,7 +79,7 @@ public class MinMaxAntSystemSolver extends AbstractAntSolver implements Solver {
                 break;
             }
             updateMinMax();
-            evaporatePheromone();
+            pheromoneProcessor.evaporatePheromone();
             // TODO improve choosing ant and local search
             final Ant ant = getRandom().nextBoolean() ? bestAnt : bestSoFarAnt;
             depositPheromone(ant);
@@ -97,7 +95,7 @@ public class MinMaxAntSystemSolver extends AbstractAntSolver implements Solver {
     }
 
     private void reinitialize() {
-        initPheromone(calculateInitialPheromoneValue());
+        pheromoneProcessor.initPheromone(calculateInitialPheromoneValue());
     }
 
     private void depositPheromone(Ant ant) {
@@ -106,7 +104,7 @@ public class MinMaxAntSystemSolver extends AbstractAntSolver implements Solver {
                 maxPheromoneValue : pheromoneDeltaCandidate;
         pheromoneDelta = pheromoneDelta < minPheromoneValue ?
                 minPheromoneValue : pheromoneDeltaCandidate;
-        depositAntPheromone(ant, pheromoneDelta);
+        pheromoneProcessor.depositAntPheromone(ant, pheromoneDelta);
     }
 
 }

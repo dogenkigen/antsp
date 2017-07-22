@@ -13,9 +13,12 @@ import com.mlaskows.datamodel.matrices.StaticMatricesHolder;
 public class AntSystemSolver extends AbstractAntSolver implements Solver {
 
     private Ant bestSoFarAnt;
+    private final PheromoneProcessor pheromoneProcessor;
 
-    public AntSystemSolver(AcoConfig config, StaticMatricesHolder matrices) {
-        super(config, matrices);
+    public AntSystemSolver(StaticMatricesHolder matrices, AcoConfig config) {
+        super(matrices, config);
+        pheromoneProcessor = new PheromoneProcessor(matrices, config);
+        pheromoneProcessor.initPheromone(calculateInitialPheromoneValue());
     }
 
     @Override
@@ -33,8 +36,7 @@ public class AntSystemSolver extends AbstractAntSolver implements Solver {
         Ant bestAnt;
         while (shouldNotTerminate(iterationsWithNoImprovementCount)) {
             initializeRandomPlacedAnts(getProblemSize());
-            computeChoicesInfo();
-            constructSolution();
+            constructSolution(pheromoneProcessor.computeChoicesInfo());
             updatePheromone();
             bestAnt = getBestAnt();
             getStatisticsBuilder().addIterationTourLength(bestAnt.getTourLength());
@@ -50,12 +52,13 @@ public class AntSystemSolver extends AbstractAntSolver implements Solver {
     }
 
     private void updatePheromone() {
-        evaporatePheromone();
+        pheromoneProcessor.evaporatePheromone();
         depositAllAntsPheromone();
     }
 
     private void depositAllAntsPheromone() {
-        getAnts().forEach(ant -> depositAntPheromone(ant, (double) 1 / ant.getTourLength()));
+        getAnts().forEach(ant ->
+                pheromoneProcessor.depositAntPheromone(ant, (double) 1 / ant.getTourLength()));
     }
 
 }

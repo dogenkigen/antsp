@@ -24,22 +24,13 @@ public abstract class AbstractAntSolver {
     private List<Ant> ants;
     private final AcoConfig config;
     private final StaticMatricesHolder matrices;
-    private final double[][] choicesInfo;
     private final int problemSize;
-    private final double[][] heuristicInformationMatrix;
-    private double[][] pheromoneMatrix;
 
-    protected AbstractAntSolver(AcoConfig config, StaticMatricesHolder matrices) {
+    protected AbstractAntSolver(StaticMatricesHolder matrices, AcoConfig config) {
         this.config = config;
         this.matrices = matrices;
         problemSize = matrices.getProblemSize();
-        pheromoneMatrix = new double[problemSize][problemSize];
-        choicesInfo = new double[problemSize][problemSize];
-        // TODO move to java generic exceptions
-        heuristicInformationMatrix = matrices.getHeuristicInformationMatrix()
-                .orElseThrow(() -> new SolutionException(EMPTY_HEURISTIC_MATRIX));
         initializeRandomPlacedAnts(problemSize);
-        initPheromone(calculateInitialPheromoneValue());
     }
 
     public abstract double calculateInitialPheromoneValue();
@@ -48,19 +39,8 @@ public abstract class AbstractAntSolver {
         return iterationsWithNoImprovementCount < getConfig().getMaxStagnationCount();
     }
 
-    protected void computeChoicesInfo() {
-        for (int i = 0; i < problemSize; i++) {
-            for (int j = i; j < problemSize; j++) {
-                final double choice =
-                        Math.pow(pheromoneMatrix[i][j], config.getPheromoneImportance()) *
-                                Math.pow(heuristicInformationMatrix[i][j], config.getHeuristicImportance());
-                choicesInfo[i][j] = choice;
-                choicesInfo[j][i] = choice;
-            }
-        }
-    }
 
-    protected void constructSolution() {
+    protected void constructSolution(double[][] choicesInfo) {
         AntMover antMover = new AntMover(matrices, choicesInfo);
         // We should start iterating from 1 since every ant has already
         // visited one city during initialization.
@@ -71,37 +51,6 @@ public abstract class AbstractAntSolver {
         }
     }
 
-    protected void evaporatePheromone() {
-        for (int i = 0; i < problemSize; i++) {
-            for (int j = i; j < problemSize; j++) {
-                double value =
-                        (1 - config.getPheromoneEvaporationFactor()) *
-                                pheromoneMatrix[i][j];
-                updatePheromoneOnEdge(i, j, value);
-            }
-        }
-    }
-
-    protected void depositAntPheromone(Ant ant, double pheromoneDelta) {
-        for (int i = 0; i < ant.getTour().size() - 1; i++) {
-            int j = ant.getTour().get(i);
-            int l = ant.getTour().get(i + 1);
-            updatePheromoneOnEdge(j, l, pheromoneMatrix[j][l] + pheromoneDelta);
-        }
-    }
-
-    private void updatePheromoneOnEdge(int from, int to, double pheromoneValue) {
-        pheromoneMatrix[from][to] = pheromoneValue;
-        pheromoneMatrix[to][from] = pheromoneValue;
-    }
-
-    protected void initPheromone(double initialPheromoneValue) {
-        for (int i = 0; i < problemSize; i++) {
-            for (int j = i; j < problemSize; j++) {
-                updatePheromoneOnEdge(i, j, initialPheromoneValue);
-            }
-        }
-    }
 
     protected void initializeRandomPlacedAnts(int antCount) {
         ants = random.ints(0, antCount)

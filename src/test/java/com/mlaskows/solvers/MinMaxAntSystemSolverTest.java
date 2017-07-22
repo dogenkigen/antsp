@@ -25,7 +25,7 @@ public class MinMaxAntSystemSolverTest implements SolverTest {
                 .build();
         final AcoConfig config = AcoConfigFactory.createDefaultAntSystemConfig(matrices
                 .getDistanceMatrix().length);
-        final MinMaxAntSystemSolver solver = new MinMaxAntSystemSolver(config, matrices);
+        final MinMaxAntSystemSolver solver = new MinMaxAntSystemSolver(matrices, config);
         final Solution solution = solver.getSolution();
 
         //FIXME this fails randomly since algorithm is based on random values.
@@ -43,7 +43,7 @@ public class MinMaxAntSystemSolverTest implements SolverTest {
                 .withHeuristicInformationMatrix()
                 .withNearestNeighbors(config.getNearestNeighbourFactor())
                 .build();
-        final MinMaxAntSystemSolver solver = new MinMaxAntSystemSolver(config, matrices);
+        final MinMaxAntSystemSolver solver = new MinMaxAntSystemSolver(matrices, config);
         final Solution solution = solver.getSolution();
 
         List<Integer> nonImprovementPeriods = solver.getStatistics().getNonImprovementPeriods();
