@@ -1,10 +1,11 @@
-package com.mlaskows.solvers;
+package com.mlaskows.solvers.ant;
 
 import com.mlaskows.config.AcoConfig;
 import com.mlaskows.config.AcoConfigFactory;
 import com.mlaskows.datamodel.Solution;
 import com.mlaskows.datamodel.matrices.StaticMatricesBuilder;
 import com.mlaskows.datamodel.matrices.StaticMatricesHolder;
+import com.mlaskows.solvers.SolverTest;
 import com.mlaskows.tsplib.Item;
 import org.testng.Assert;
 import org.testng.annotations.Test;

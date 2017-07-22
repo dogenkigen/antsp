@@ -1,9 +1,12 @@
-package com.mlaskows.solvers;
+package com.mlaskows.solvers.ant;
 
 import com.mlaskows.config.AcoConfig;
 import com.mlaskows.datamodel.Ant;
 import com.mlaskows.datamodel.Solution;
 import com.mlaskows.datamodel.matrices.StaticMatricesHolder;
+import com.mlaskows.solvers.NearestNeighbourSolver;
+import com.mlaskows.solvers.ant.util.PheromoneProcessor;
+import com.mlaskows.solvers.Solver;
 
 /**
  * Created by mlaskows on 24/06/2017.

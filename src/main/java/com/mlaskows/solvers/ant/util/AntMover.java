@@ -1,4 +1,4 @@
-package com.mlaskows.solvers;
+package com.mlaskows.solvers.ant.util;
 
 import com.mlaskows.datamodel.Ant;
 import com.mlaskows.datamodel.matrices.StaticMatricesHolder;

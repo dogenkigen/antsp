@@ -1,9 +1,13 @@
-package com.mlaskows.solvers;
+package com.mlaskows.solvers.ant;
 
 import com.mlaskows.config.AcoConfig;
 import com.mlaskows.datamodel.Ant;
 import com.mlaskows.datamodel.Solution;
 import com.mlaskows.datamodel.matrices.StaticMatricesHolder;
+import com.mlaskows.solvers.NearestNeighbourSolver;
+import com.mlaskows.solvers.ant.util.PheromoneProcessor;
+import com.mlaskows.solvers.Solver;
+import com.mlaskows.solvers.TwoOptSolver;
 
 import java.util.List;
 import java.util.stream.Collectors;

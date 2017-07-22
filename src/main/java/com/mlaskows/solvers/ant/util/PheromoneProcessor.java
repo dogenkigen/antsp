@@ -1,4 +1,4 @@
-package com.mlaskows.solvers;
+package com.mlaskows.solvers.ant.util;
 
 import com.mlaskows.config.AcoConfig;
 import com.mlaskows.datamodel.Ant;
@@ -50,7 +50,7 @@ public class PheromoneProcessor {
         }
     }
 
-    protected double[][] computeChoicesInfo() {
+    public double[][] computeChoicesInfo() {
         for (int i = 0; i < problemSize; i++) {
             for (int j = i; j < problemSize; j++) {
                 final double choice =

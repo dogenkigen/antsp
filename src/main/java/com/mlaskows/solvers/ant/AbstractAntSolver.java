@@ -1,9 +1,10 @@
-package com.mlaskows.solvers;
+package com.mlaskows.solvers.ant;
 
 import com.mlaskows.config.AcoConfig;
 import com.mlaskows.datamodel.Ant;
 import com.mlaskows.datamodel.matrices.StaticMatricesHolder;
 import com.mlaskows.exeptions.SolutionException;
+import com.mlaskows.solvers.ant.util.AntMover;
 import com.mlaskows.statistics.Statistics;
 import com.mlaskows.statistics.StatisticsBuilder;
 
