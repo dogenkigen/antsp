@@ -20,7 +20,6 @@ public class MinMaxAntSystemSolver extends AbstractAntSolver implements Solver {
     private Ant bestSoFarAnt;
     private double minPheromoneValue;
     private double maxPheromoneValue;
-    private double a = 2;
     private final PheromoneProcessor pheromoneProcessor;
 
     public MinMaxAntSystemSolver(StaticMatricesHolder matrices, AcoConfig config) {
@@ -96,7 +95,7 @@ public class MinMaxAntSystemSolver extends AbstractAntSolver implements Solver {
         maxPheromoneValue = (double) 1 /
                 getConfig().getPheromoneEvaporationFactor() *
                 bestSoFarAnt.getTourLength();
-        minPheromoneValue = maxPheromoneValue / a;
+        minPheromoneValue = maxPheromoneValue / getConfig().getMinPheromoneLimitDivider();
     }
 
     private void reinitialize() {

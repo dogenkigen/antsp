@@ -10,20 +10,31 @@ public class AcoConfig {
     private final int antsCount;
     private final int nearestNeighbourFactor;
     private final int maxStagnationCount;
+    private final double minPheromoneLimitDivider;
 
     public AcoConfig(int heuristicImportance, int pheromoneImportance,
                      double pheromoneEvaporationFactor, int antsCount,
                      int nearestNeighbourFactor, int maxStagnationCount) {
+        this(heuristicImportance, pheromoneImportance, pheromoneEvaporationFactor,
+                antsCount, nearestNeighbourFactor, maxStagnationCount, 1);
+    }
+
+    public AcoConfig(int heuristicImportance, int pheromoneImportance,
+                     double pheromoneEvaporationFactor, int antsCount,
+                     int nearestNeighbourFactor, int maxStagnationCount,
+                     double minPheromoneLimitDivider) {
         this.heuristicImportance = heuristicImportance;
         this.pheromoneImportance = pheromoneImportance;
         this.pheromoneEvaporationFactor = pheromoneEvaporationFactor;
         this.antsCount = antsCount;
         this.nearestNeighbourFactor = nearestNeighbourFactor;
         this.maxStagnationCount = maxStagnationCount;
+        this.minPheromoneLimitDivider = minPheromoneLimitDivider;
     }
 
     /**
      * β
+     *
      * @return
      */
     public int getHeuristicImportance() {
@@ -32,6 +43,7 @@ public class AcoConfig {
 
     /**
      * α
+     *
      * @return
      */
     public int getPheromoneImportance() {
@@ -40,6 +52,7 @@ public class AcoConfig {
 
     /**
      * ρ
+     *
      * @return
      */
     public double getPheromoneEvaporationFactor() {
@@ -48,6 +61,7 @@ public class AcoConfig {
 
     /**
      * m
+     *
      * @return
      */
     public int getAntsCount() {
@@ -61,4 +75,14 @@ public class AcoConfig {
     public int getMaxStagnationCount() {
         return maxStagnationCount;
     }
+
+    /**
+     * a
+     *
+     * @return
+     */
+    public double getMinPheromoneLimitDivider() {
+        return minPheromoneLimitDivider;
+    }
+
 }
