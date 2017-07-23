@@ -31,12 +31,10 @@ public class AcoConfigFactory {
                                             int problemSize,
                                             int nearestNeighbourFactor,
                                             int maxStagnationCount,
-                                            double minPheromoneLimitDivider) {
+                                            int minPheromoneLimitDivider) {
         return new AcoConfig(heuristicImportance, pheromoneImportance,
                 pheromoneEvaporationFactor, problemSize, nearestNeighbourFactor,
                 maxStagnationCount, minPheromoneLimitDivider);
     }
-
-
 
 }

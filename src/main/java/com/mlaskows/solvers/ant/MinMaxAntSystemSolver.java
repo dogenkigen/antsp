@@ -47,21 +47,7 @@ public class MinMaxAntSystemSolver extends AbstractAntSolver implements Solver {
             initializeRandomPlacedAnts(getProblemSize());
             constructSolution(pheromoneProcessor.computeChoicesInfo());
 
-            System.out.println("waiting for 2opt...");
-            final long l = System.currentTimeMillis();
-
-            final List<Ant> bestAnts = getAnts().stream()
-                    .sorted()
-                    .limit(Runtime.getRuntime().availableProcessors())
-                    .parallel()
-                    .map(ant -> new TwoOptSolver(ant.getSolution(), getMatrices()).getSolution())
-                    .map(solution -> new Ant(solution))
-                    .collect(Collectors.toList());
-
-            System.out.println("2opt done after " +
-                    (System.currentTimeMillis() - l));
-
-            bestAnt = getBestAnt(bestAnts);
+            bestAnt = getBestAntAfterLocalSearch();
             getStatisticsBuilder().addIterationTourLength(bestAnt.getTourLength());
             if (bestAnt.getTourLength() < bestSoFarAnt.getTourLength()) {
                 bestSoFarAnt = bestAnt;
@@ -82,13 +68,32 @@ public class MinMaxAntSystemSolver extends AbstractAntSolver implements Solver {
             if (!shouldNotTerminate(iterationsWithNoImprovementCount)) {
                 break;
             }
-            updateMinMax();
-            pheromoneProcessor.evaporatePheromone();
             // TODO improve choosing ant and local search
             final Ant ant = getRandom().nextBoolean() ? bestAnt : bestSoFarAnt;
-            depositPheromone(ant);
+            updatePheromone(ant);
         }
         return bestSoFarAnt.getSolution();
+    }
+
+    private Ant getBestAntAfterLocalSearch() {
+        Ant bestAnt;
+        System.out.println("waiting for 2opt...");
+        final long l = System.currentTimeMillis();
+        final List<Ant> bestAnts = getAnts().stream()
+                .sorted()
+                .limit(Runtime.getRuntime().availableProcessors())
+                .parallel()
+                .map(ant -> new TwoOptSolver(ant.getSolution(), getMatrices()).getSolution())
+                .map(solution -> new Ant(solution))
+                .collect(Collectors.toList());
+        System.out.println("2opt done after " +
+                (System.currentTimeMillis() - l));
+        bestAnt = getBestAnt(bestAnts);
+        return bestAnt;
+    }
+
+    private void reinitialize() {
+        pheromoneProcessor.initPheromone(calculateInitialPheromoneValue());
     }
 
     private void updateMinMax() {
@@ -98,8 +103,10 @@ public class MinMaxAntSystemSolver extends AbstractAntSolver implements Solver {
         minPheromoneValue = maxPheromoneValue / getConfig().getMinPheromoneLimitDivider();
     }
 
-    private void reinitialize() {
-        pheromoneProcessor.initPheromone(calculateInitialPheromoneValue());
+    private void updatePheromone(Ant ant) {
+        updateMinMax();
+        pheromoneProcessor.evaporatePheromone();
+        depositPheromone(ant);
     }
 
     private void depositPheromone(Ant ant) {

@@ -8,6 +8,8 @@ import com.mlaskows.solvers.NearestNeighbourSolver;
 import com.mlaskows.solvers.ant.util.PheromoneProcessor;
 import com.mlaskows.solvers.Solver;
 
+import java.util.Optional;
+
 /**
  * Created by mlaskows on 24/06/2017.
  */
@@ -54,14 +56,20 @@ public class AntSystemSolver extends AbstractAntSolver implements Solver {
         return bestSoFarAnt.getSolution();
     }
 
-    private void updatePheromone() {
+    protected void updatePheromone() {
         pheromoneProcessor.evaporatePheromone();
         depositAllAntsPheromone();
     }
 
     private void depositAllAntsPheromone() {
-        getAnts().forEach(ant ->
-                pheromoneProcessor.depositAntPheromone(ant, (double) 1 / ant.getTourLength()));
+        getAnts().forEach(ant -> depositAntPheromone(ant));
     }
 
+    protected Optional<Ant> getBestSoFarAnt() {
+        return Optional.ofNullable(bestSoFarAnt);
+    }
+
+    protected void depositAntPheromone(Ant ant) {
+        pheromoneProcessor.depositAntPheromone(ant, (double) 1 / ant.getTourLength());
+    }
 }
