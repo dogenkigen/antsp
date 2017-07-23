@@ -62,14 +62,14 @@ public class AntSystemSolver extends AbstractAntSolver implements Solver {
     }
 
     private void depositAllAntsPheromone() {
-        getAnts().forEach(ant -> depositAntPheromone(ant));
+        getAnts().forEach(ant -> depositAntPheromone(ant, (double) 1 / ant.getTourLength()));
     }
 
     protected Optional<Ant> getBestSoFarAnt() {
         return Optional.ofNullable(bestSoFarAnt);
     }
 
-    protected void depositAntPheromone(Ant ant) {
-        pheromoneProcessor.depositAntPheromone(ant, (double) 1 / ant.getTourLength());
+    protected void depositAntPheromone(Ant ant, double pheromoneDelta) {
+        pheromoneProcessor.depositAntPheromone(ant, pheromoneDelta);
     }
 }

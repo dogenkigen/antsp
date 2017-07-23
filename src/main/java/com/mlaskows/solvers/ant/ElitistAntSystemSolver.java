@@ -12,6 +12,7 @@ public class ElitistAntSystemSolver extends AntSystemSolver {
     @Override
     protected void updatePheromone() {
         super.updatePheromone();
-        getBestSoFarAnt().ifPresent(ant -> depositAntPheromone(ant));
+        getBestSoFarAnt().ifPresent(ant -> depositAntPheromone(ant, (double)
+                getProblemSize() / ant.getTourLength()));
     }
 }
