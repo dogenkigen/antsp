@@ -6,7 +6,7 @@ import com.mlaskows.datamodel.Solution;
 import com.mlaskows.datamodel.matrices.StaticMatricesBuilder;
 import com.mlaskows.datamodel.matrices.StaticMatricesHolder;
 import com.mlaskows.solvers.SolverTest;
-import com.mlaskows.tsplib.Item;
+import com.mlaskows.tsplib.datamodel.Tsp;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -19,8 +19,8 @@ import java.util.List;
 public class MinMaxAntSolverTest implements SolverTest {
     @Test
     public void testAustraliaSolution() throws IOException {
-        final Item item = getItem("australia.tsp");
-        StaticMatricesHolder matrices = new StaticMatricesBuilder(item)
+        final Tsp tsp = getTsp("australia.tsp");
+        StaticMatricesHolder matrices = new StaticMatricesBuilder(tsp)
                 .withHeuristicInformationMatrix()
                 .withNearestNeighbors(5)
                 .build();
@@ -37,10 +37,10 @@ public class MinMaxAntSolverTest implements SolverTest {
 
     @Test
     public void testAli535Solution() throws IOException {
-        final Item item = getItem("ali535.tsp");
+        final Tsp tsp = getTsp("ali535.tsp");
         final AcoConfig config =
-                AcoConfigFactory.createDefaultMinMaxConfig(item.getDimension());
-        final StaticMatricesHolder matrices = new StaticMatricesBuilder(item)
+                AcoConfigFactory.createDefaultMinMaxConfig(tsp.getDimension());
+        final StaticMatricesHolder matrices = new StaticMatricesBuilder(tsp)
                 .withHeuristicInformationMatrix()
                 .withNearestNeighbors(config.getNearestNeighbourFactor())
                 .build();

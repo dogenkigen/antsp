@@ -3,7 +3,7 @@ package com.mlaskows.solvers;
 import com.mlaskows.datamodel.matrices.StaticMatricesBuilder;
 import com.mlaskows.datamodel.matrices.StaticMatricesHolder;
 import com.mlaskows.datamodel.Solution;
-import com.mlaskows.tsplib.Item;
+import com.mlaskows.tsplib.datamodel.Tsp;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -34,8 +34,8 @@ public class NearestNeighbourSolverTest implements SolverTest {
     }
 
     private Solution getSolution(String fileName) throws IOException {
-        final Item item = getItem(fileName);
-        StaticMatricesHolder matricesHolder = new StaticMatricesBuilder(item).build();
+        final Tsp tsp = getTsp(fileName);
+        StaticMatricesHolder matricesHolder = new StaticMatricesBuilder(tsp).build();
 
         final NearestNeighbourSolver solver = new NearestNeighbourSolver
                 (matricesHolder);

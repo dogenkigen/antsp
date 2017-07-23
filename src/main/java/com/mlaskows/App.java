@@ -7,7 +7,7 @@ import com.mlaskows.datamodel.Solution;
 import com.mlaskows.datamodel.matrices.StaticMatricesBuilder;
 import com.mlaskows.datamodel.matrices.StaticMatricesHolder;
 import com.mlaskows.solvers.ant.AntSystemSolver;
-import com.mlaskows.tsplib.Item;
+import com.mlaskows.tsplib.datamodel.Tsp;
 import com.mlaskows.tsplib.TspLibParser;
 
 import java.io.File;
@@ -16,10 +16,10 @@ import java.io.IOException;
 public class App {
 
     public static void main(String[] args) throws IOException {
-        final Item item = getItem("ali535.tsp");
+        final Tsp tsp = getTsp("ali535.tsp");
         final AcoConfig config =
-                AcoConfigFactory.createDefaultAntSystemConfig(item.getDimension());
-        final StaticMatricesHolder matrices = new StaticMatricesBuilder(item)
+                AcoConfigFactory.createDefaultAntSystemConfig(tsp.getDimension());
+        final StaticMatricesHolder matrices = new StaticMatricesBuilder(tsp)
                 .withHeuristicInformationMatrix()
                 .withNearestNeighbors(config.getNearestNeighbourFactor())
                 .build();
@@ -29,7 +29,7 @@ public class App {
         System.out.println(solution);
     }
 
-    static Item getItem(String fileName) throws IOException {
+    static Tsp getTsp(String fileName) throws IOException {
         ClassLoader classLoader = App.class.getClassLoader();
         File file = new File(classLoader.getResource(fileName)
                 .getFile());

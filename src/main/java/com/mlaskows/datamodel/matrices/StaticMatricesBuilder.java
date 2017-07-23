@@ -1,9 +1,9 @@
 package com.mlaskows.datamodel.matrices;
 
 import com.mlaskows.datamodel.Step;
-import com.mlaskows.tsplib.DistanceCalculationMethodFactory;
-import com.mlaskows.tsplib.Item;
-import com.mlaskows.tsplib.Node;
+import com.mlaskows.tsplib.util.DistanceCalculationMethodFactory;
+import com.mlaskows.tsplib.datamodel.Tsp;
+import com.mlaskows.tsplib.datamodel.Node;
 
 import java.util.List;
 import java.util.function.BiFunction;
@@ -18,15 +18,15 @@ public class StaticMatricesBuilder {
     private int nnFactor;
     private double[][] heuristicInformationMatrix;
     private final int problemSize;
-    private final Item item;
+    private final Tsp tsp;
     private final BiFunction<Node, Node, Integer> distanceCalculationMethod;
 
-    public StaticMatricesBuilder(Item item) {
-        this.problemSize = item.getDimension();
+    public StaticMatricesBuilder(Tsp tsp) {
+        this.problemSize = tsp.getDimension();
         this.distanceMatrix = new int[this.problemSize][this.problemSize];
-        this.item = item;
+        this.tsp = tsp;
         this.distanceCalculationMethod = DistanceCalculationMethodFactory
-                .getDistanceCalculationMethod(item.getEdgeWeightType());
+                .getDistanceCalculationMethod(tsp.getEdgeWeightType());
     }
 
     public StaticMatricesBuilder withNearestNeighbors(int nnFactor) {
@@ -52,7 +52,7 @@ public class StaticMatricesBuilder {
     }
 
     private void calculateMatrices() {
-        List<Node> nodes = item.getNodes();
+        List<Node> nodes = tsp.getNodes();
         for (int i = 0; i < problemSize; i++) {
             for (int j = i; j < problemSize; j++) {
                 int distance = getDistance(nodes.get(i), nodes.get(j));
@@ -65,7 +65,7 @@ public class StaticMatricesBuilder {
         }
         if (nearestNeighbors != null) {
             // Parallel NN calculation will be slower for small instances
-            // which are calculated fast anyway, so it will make no difference
+            // which are calculated fast anyway, so it will make no difference.
             // For big instances this will make huge bust.
             IntStream.iterate(0, i -> i < problemSize, i -> i + 1)
                     .parallel()

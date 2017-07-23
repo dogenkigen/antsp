@@ -1,6 +1,6 @@
 package com.mlaskows.solvers;
 
-import com.mlaskows.tsplib.Item;
+import com.mlaskows.tsplib.datamodel.Tsp;
 import com.mlaskows.tsplib.TspLibParser;
 
 import java.io.File;
@@ -11,7 +11,7 @@ import java.io.IOException;
  */
 public interface SolverTest {
 
-    default Item getItem(String fileName) throws IOException {
+    default Tsp getTsp(String fileName) throws IOException {
         ClassLoader classLoader = getClass().getClassLoader();
         File file = new File(classLoader.getResource(fileName)
                 .getFile());
