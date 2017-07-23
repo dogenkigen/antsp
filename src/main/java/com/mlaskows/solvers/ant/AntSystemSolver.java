@@ -42,7 +42,8 @@ public class AntSystemSolver extends AbstractAntSolver implements Solver {
         while (shouldNotTerminate(iterationsWithNoImprovementCount)) {
             initializeRandomPlacedAnts(getProblemSize());
             constructSolution(pheromoneProcessor.computeChoicesInfo());
-            updatePheromone();
+            pheromoneProcessor.evaporatePheromone();
+            depositPheromone();
             bestAnt = getBestAnt();
             getStatisticsBuilder().addIterationTourLength(bestAnt.getTourLength());
             if (bestSoFarAnt == null ||
@@ -56,8 +57,7 @@ public class AntSystemSolver extends AbstractAntSolver implements Solver {
         return bestSoFarAnt.getSolution();
     }
 
-    protected void updatePheromone() {
-        pheromoneProcessor.evaporatePheromone();
+    protected void depositPheromone() {
         depositAllAntsPheromone();
     }
 
@@ -70,6 +70,8 @@ public class AntSystemSolver extends AbstractAntSolver implements Solver {
     }
 
     protected void depositAntPheromone(Ant ant, double pheromoneDelta) {
+        // TODO it can be refactored to just pass nominator since pheromone
+        // delta is always computed as x / ant.tourLen
         pheromoneProcessor.depositAntPheromone(ant, pheromoneDelta);
     }
 }

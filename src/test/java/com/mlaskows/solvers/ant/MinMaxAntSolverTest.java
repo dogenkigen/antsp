@@ -6,7 +6,6 @@ import com.mlaskows.datamodel.Solution;
 import com.mlaskows.datamodel.matrices.StaticMatricesBuilder;
 import com.mlaskows.datamodel.matrices.StaticMatricesHolder;
 import com.mlaskows.solvers.SolverTest;
-import com.mlaskows.solvers.ant.MinMaxAntSystemSolver;
 import com.mlaskows.tsplib.Item;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -17,7 +16,7 @@ import java.util.List;
 /**
  * Created by mlaskows on 15/07/2017.
  */
-public class MinMaxAntSystemSolverTest implements SolverTest {
+public class MinMaxAntSolverTest implements SolverTest {
     @Test
     public void testAustraliaSolution() throws IOException {
         final Item item = getItem("australia.tsp");
@@ -27,7 +26,7 @@ public class MinMaxAntSystemSolverTest implements SolverTest {
                 .build();
         final AcoConfig config = AcoConfigFactory.createDefaultAntSystemConfig(matrices
                 .getDistanceMatrix().length);
-        final MinMaxAntSystemSolver solver = new MinMaxAntSystemSolver(matrices, config);
+        final MinMaxAntSolver solver = new MinMaxAntSolver(matrices, config);
         final Solution solution = solver.getSolution();
 
         //FIXME this fails randomly since algorithm is based on random values.
@@ -45,7 +44,7 @@ public class MinMaxAntSystemSolverTest implements SolverTest {
                 .withHeuristicInformationMatrix()
                 .withNearestNeighbors(config.getNearestNeighbourFactor())
                 .build();
-        final MinMaxAntSystemSolver solver = new MinMaxAntSystemSolver(matrices, config);
+        final MinMaxAntSolver solver = new MinMaxAntSolver(matrices, config);
         final Solution solution = solver.getSolution();
 
         List<Integer> nonImprovementPeriods = solver.getStatistics().getNonImprovementPeriods();

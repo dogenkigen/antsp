@@ -5,9 +5,9 @@ import com.mlaskows.datamodel.Ant;
 import com.mlaskows.datamodel.Solution;
 import com.mlaskows.datamodel.matrices.StaticMatricesHolder;
 import com.mlaskows.solvers.NearestNeighbourSolver;
-import com.mlaskows.solvers.ant.util.PheromoneProcessor;
 import com.mlaskows.solvers.Solver;
 import com.mlaskows.solvers.TwoOptSolver;
+import com.mlaskows.solvers.ant.util.PheromoneProcessor;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,14 +15,14 @@ import java.util.stream.Collectors;
 /**
  * Created by mlaskows on 15/07/2017.
  */
-public class MinMaxAntSystemSolver extends AbstractAntSolver implements Solver {
+public class MinMaxAntSolver extends AbstractAntSolver implements Solver {
 
     private Ant bestSoFarAnt;
     private double minPheromoneValue;
     private double maxPheromoneValue;
     private final PheromoneProcessor pheromoneProcessor;
 
-    public MinMaxAntSystemSolver(StaticMatricesHolder matrices, AcoConfig config) {
+    public MinMaxAntSolver(StaticMatricesHolder matrices, AcoConfig config) {
         super(matrices, config);
         pheromoneProcessor = new PheromoneProcessor(matrices, config);
         final NearestNeighbourSolver nearestNeighbourSolver =
@@ -79,9 +79,8 @@ public class MinMaxAntSystemSolver extends AbstractAntSolver implements Solver {
         Ant bestAnt;
         System.out.println("waiting for 2opt...");
         final long l = System.currentTimeMillis();
-        final List<Ant> bestAnts = getAnts().stream()
-                .sorted()
-                .limit(Runtime.getRuntime().availableProcessors())
+        final List<Ant> bestAnts =
+                getSortedAntsStream(Runtime.getRuntime().availableProcessors())
                 .parallel()
                 .map(ant -> new TwoOptSolver(ant.getSolution(), getMatrices()).getSolution())
                 .map(solution -> new Ant(solution))

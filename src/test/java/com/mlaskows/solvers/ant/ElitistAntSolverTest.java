@@ -13,7 +13,7 @@ import org.testng.annotations.Test;
 import java.io.IOException;
 import java.util.List;
 
-public class ElitistAntSystemSolverTest implements SolverTest {
+public class ElitistAntSolverTest implements SolverTest {
 
     @Test
     public void testAli535Solution() throws IOException {
@@ -24,7 +24,7 @@ public class ElitistAntSystemSolverTest implements SolverTest {
                 .withHeuristicInformationMatrix()
                 .withNearestNeighbors(config.getNearestNeighbourFactor())
                 .build();
-        final AntSystemSolver solver = new ElitistAntSystemSolver(matrices, config);
+        final AntSystemSolver solver = new ElitistAntSolver(matrices, config);
         final Solution solution = solver.getSolution();
 
         List<Integer> nonImprovementPeriods = solver.getStatistics().getNonImprovementPeriods();

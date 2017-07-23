@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.SplittableRandom;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import static com.mlaskows.exeptions.Reason.*;
 
@@ -70,6 +71,12 @@ public abstract class AbstractAntSolver {
         return ants.stream()
                 .min(Comparator.comparing(Ant::getTourLength))
                 .orElseThrow(() -> new SolutionException(NO_BEST_ANT));
+    }
+
+    protected Stream<Ant> getSortedAntsStream(int maxSize) {
+        return getAnts().stream()
+                .sorted()
+                .limit(maxSize);
     }
 
     protected List<Ant> getAnts() {
