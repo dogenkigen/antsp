@@ -1,4 +1,4 @@
-package com.mlaskows.solvers.ant;
+package com.mlaskows.solvers.antsolvers;
 
 import com.mlaskows.config.AcoConfig;
 import com.mlaskows.config.AcoConfigFactory;
@@ -14,11 +14,9 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Created by mlaskows on 24/06/2017.
+ * Created by mlaskows on 15/07/2017.
  */
-public class AntSystemSolverTest implements SolverTest {
-
-
+public class MinMaxAntSolverTest implements SolverTest {
     @Test
     public void testAustraliaSolution() throws IOException {
         final Tsp tsp = getTsp("australia.tsp");
@@ -28,7 +26,7 @@ public class AntSystemSolverTest implements SolverTest {
                 .build();
         final AcoConfig config = AcoConfigFactory.createDefaultAntSystemConfig(matrices
                 .getDistanceMatrix().length);
-        final AntSystemSolver solver = new AntSystemSolver(matrices, config);
+        final MinMaxAntSolver solver = new MinMaxAntSolver(matrices, config);
         final Solution solution = solver.getSolution();
 
         //FIXME this fails randomly since algorithm is based on random values.
@@ -41,12 +39,12 @@ public class AntSystemSolverTest implements SolverTest {
     public void testAli535Solution() throws IOException {
         final Tsp tsp = getTsp("ali535.tsp");
         final AcoConfig config =
-                AcoConfigFactory.createDefaultAntSystemConfig(tsp.getDimension());
+                AcoConfigFactory.createDefaultMinMaxConfig(tsp.getDimension());
         final StaticMatricesHolder matrices = new StaticMatricesBuilder(tsp)
                 .withHeuristicInformationMatrix()
                 .withNearestNeighbors(config.getNearestNeighbourFactor())
                 .build();
-        final AntSystemSolver solver = new AntSystemSolver(matrices, config);
+        final MinMaxAntSolver solver = new MinMaxAntSolver(matrices, config);
         final Solution solution = solver.getSolution();
 
         List<Integer> nonImprovementPeriods = solver.getStatistics().getNonImprovementPeriods();
@@ -54,7 +52,7 @@ public class AntSystemSolverTest implements SolverTest {
                 config.getMaxStagnationCount());
         // We assume here that solution will be better than for nearest
         // neighbour algorithm.
-        Assert.assertTrue(solution.getTourLength() < 224358);
+        Assert.assertTrue(solution.getTourLength() < 224358,
+                "Actual solution length is" + solution.getTourLength());
     }
-
 }

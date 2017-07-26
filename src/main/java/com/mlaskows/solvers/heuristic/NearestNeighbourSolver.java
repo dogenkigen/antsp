@@ -1,9 +1,10 @@
-package com.mlaskows.solvers;
+package com.mlaskows.solvers.heuristic;
 
 import com.mlaskows.datamodel.Ant;
 import com.mlaskows.datamodel.Solution;
 import com.mlaskows.datamodel.Step;
 import com.mlaskows.datamodel.matrices.StaticMatricesHolder;
+import com.mlaskows.solvers.Solver;
 
 import java.util.stream.IntStream;
 

@@ -1,10 +1,10 @@
-package com.mlaskows.solvers.ant;
+package com.mlaskows.solvers.antsolvers;
 
 import com.mlaskows.config.AcoConfig;
 import com.mlaskows.datamodel.Ant;
 import com.mlaskows.datamodel.matrices.StaticMatricesHolder;
 import com.mlaskows.exeptions.SolutionException;
-import com.mlaskows.solvers.ant.util.AntMover;
+import com.mlaskows.solvers.antsolvers.util.ant.AntMover;
 import com.mlaskows.statistics.Statistics;
 import com.mlaskows.statistics.StatisticsBuilder;
 
@@ -61,10 +61,6 @@ public abstract class AbstractAntSolver {
                 .limit(config.getAntsCount())
                 .mapToObj(position -> new Ant(problemSize, position))
                 .collect(Collectors.toList());
-    }
-
-    protected Ant getBestAnt() {
-        return getBestAnt(ants);
     }
 
     protected Ant getBestAnt(List<Ant> ants) {

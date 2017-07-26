@@ -1,4 +1,4 @@
-package com.mlaskows.solvers.ant.util;
+package com.mlaskows.solvers.antsolvers.util.pheromone;
 
 import com.mlaskows.config.AcoConfig;
 import com.mlaskows.datamodel.Ant;

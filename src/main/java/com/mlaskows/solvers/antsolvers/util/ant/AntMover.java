@@ -1,4 +1,4 @@
-package com.mlaskows.solvers.ant.util;
+package com.mlaskows.solvers.antsolvers.util.ant;
 
 import com.mlaskows.datamodel.Ant;
 import com.mlaskows.datamodel.matrices.StaticMatricesHolder;
@@ -7,6 +7,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import static com.mlaskows.exeptions.Reason.EMPTY_NN_MATRIX;
 
+// TODO consider deleting this class and moving code where it's actually used
 public class AntMover {
 
     private final double[][] choicesInfo;

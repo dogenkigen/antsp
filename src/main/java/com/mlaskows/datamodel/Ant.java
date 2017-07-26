@@ -69,4 +69,8 @@ public class Ant implements Comparable<Ant> {
     public int compareTo(Ant o) {
         return this.getTourLength() - o.getTourLength();
     }
+
+    public boolean hasBetterSolutionThen(Ant ant) {
+        return this.getTourLength() < ant.getTourLength();
+    }
 }

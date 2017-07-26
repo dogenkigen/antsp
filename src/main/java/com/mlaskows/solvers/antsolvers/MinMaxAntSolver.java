@@ -1,13 +1,13 @@
-package com.mlaskows.solvers.ant;
+package com.mlaskows.solvers.antsolvers;
 
 import com.mlaskows.config.AcoConfig;
 import com.mlaskows.datamodel.Ant;
 import com.mlaskows.datamodel.Solution;
 import com.mlaskows.datamodel.matrices.StaticMatricesHolder;
-import com.mlaskows.solvers.NearestNeighbourSolver;
+import com.mlaskows.solvers.heuristic.NearestNeighbourSolver;
 import com.mlaskows.solvers.Solver;
-import com.mlaskows.solvers.TwoOptSolver;
-import com.mlaskows.solvers.ant.util.PheromoneProcessor;
+import com.mlaskows.solvers.heuristic.TwoOptSolver;
+import com.mlaskows.solvers.antsolvers.util.pheromone.PheromoneProcessor;
 
 import java.util.List;
 import java.util.stream.Collectors;

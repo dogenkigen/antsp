@@ -3,6 +3,7 @@ package com.mlaskows.solvers;
 import com.mlaskows.datamodel.Solution;
 import com.mlaskows.datamodel.matrices.StaticMatricesBuilder;
 import com.mlaskows.datamodel.matrices.StaticMatricesHolder;
+import com.mlaskows.solvers.heuristic.TwoOptSolver;
 import com.mlaskows.tsplib.datamodel.Tsp;
 import org.testng.Assert;
 import org.testng.annotations.Test;

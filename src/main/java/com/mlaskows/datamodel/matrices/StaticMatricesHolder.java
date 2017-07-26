@@ -5,6 +5,7 @@ import java.util.Optional;
 /**
  * Created by mlaskows on 18/06/2017.
  */
+// TODO rename for just static matrices?
 public class StaticMatricesHolder {
 
     private final int distanceMatrix[][];

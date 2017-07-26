@@ -6,7 +6,7 @@ import com.mlaskows.config.AcoConfigFactory;
 import com.mlaskows.datamodel.Solution;
 import com.mlaskows.datamodel.matrices.StaticMatricesBuilder;
 import com.mlaskows.datamodel.matrices.StaticMatricesHolder;
-import com.mlaskows.solvers.ant.AntSystemSolver;
+import com.mlaskows.solvers.antsolvers.AntSystemSolver;
 import com.mlaskows.tsplib.datamodel.Tsp;
 import com.mlaskows.tsplib.TspLibParser;
 
