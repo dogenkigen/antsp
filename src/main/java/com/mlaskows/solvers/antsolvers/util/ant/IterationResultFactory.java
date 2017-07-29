@@ -2,7 +2,7 @@ package com.mlaskows.solvers.antsolvers.util.ant;
 
 import com.mlaskows.config.AcoConfig;
 import com.mlaskows.datamodel.Ant;
-import com.mlaskows.datamodel.IterationAntsWithSolution;
+import com.mlaskows.datamodel.IterationResult;
 import com.mlaskows.datamodel.matrices.StaticMatricesHolder;
 
 import java.util.List;
@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 
-public class AntsWithSolutionFactory {
+public class IterationResultFactory {
 
     private final StaticMatricesHolder matrices;
     private final AcoConfig config;
@@ -20,13 +20,13 @@ public class AntsWithSolutionFactory {
     private final SplittableRandom random = new SplittableRandom();
     private Ant bestAntSoFar;
 
-    public AntsWithSolutionFactory(StaticMatricesHolder matrices, AcoConfig config) {
+    public IterationResultFactory(StaticMatricesHolder matrices, AcoConfig config) {
         this.matrices = matrices;
         this.config = config;
         this.problemSize = matrices.getProblemSize();
     }
 
-    public IterationAntsWithSolution createIterationAntsWithSolution(double[][] choicesInfo) {
+    public IterationResult createIterationResult(double[][] choicesInfo) {
         final List<Ant> ants = constructAntsSolution(choicesInfo);
         final List<Ant> sortedAnts = ants.stream().sorted().collect(toList());
         final Ant iterationBestAnt = sortedAnts.get(0);
@@ -36,7 +36,7 @@ public class AntsWithSolutionFactory {
             bestAntSoFar = iterationBestAnt;
             isImprovedIteration = true;
         }
-        return new IterationAntsWithSolution(sortedAnts, bestAntSoFar, isImprovedIteration);
+        return new IterationResult(sortedAnts, bestAntSoFar, isImprovedIteration);
     }
 
     private List<Ant> constructAntsSolution(double[][] choicesInfo) {

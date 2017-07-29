@@ -5,12 +5,12 @@ import java.util.List;
 /**
  *
  */
-public class IterationAntsWithSolution {
+public class IterationResult {
     private final List<Ant> sortedAnts;
     private final Ant bestAntSoFar;
     private final boolean isImprovedIteration;
 
-    public IterationAntsWithSolution(List<Ant> sortedAnts, Ant bestAntSoFar, boolean isImprovedIteration) {
+    public IterationResult(List<Ant> sortedAnts, Ant bestAntSoFar, boolean isImprovedIteration) {
         this.sortedAnts = sortedAnts;
         this.bestAntSoFar = bestAntSoFar;
         this.isImprovedIteration = isImprovedIteration;

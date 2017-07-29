@@ -2,7 +2,7 @@ package com.mlaskows.solvers.antsolvers.util.pheromone;
 
 import com.mlaskows.config.AcoConfig;
 import com.mlaskows.datamodel.Ant;
-import com.mlaskows.datamodel.IterationAntsWithSolution;
+import com.mlaskows.datamodel.IterationResult;
 import com.mlaskows.datamodel.Solution;
 import com.mlaskows.datamodel.matrices.StaticMatricesHolder;
 import com.mlaskows.solvers.heuristic.NearestNeighbourSolver;
@@ -41,8 +41,8 @@ public class AntSystemPheromoneBehaviour implements PheromoneBehaviour {
     }
 
     @Override
-    public void depositPheromone(IterationAntsWithSolution iterationAntsWithSolution) {
-        iterationAntsWithSolution.getSortedAnts()
+    public void depositPheromone(IterationResult iterationResult) {
+        iterationResult.getSortedAnts()
                 .forEach(ant ->
                         // TODO it can be refactored to just pass nominator since pheromone
                         // delta is always computed as x / ant.tourLen

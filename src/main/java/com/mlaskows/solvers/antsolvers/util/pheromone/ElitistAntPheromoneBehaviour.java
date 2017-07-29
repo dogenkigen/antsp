@@ -2,7 +2,7 @@ package com.mlaskows.solvers.antsolvers.util.pheromone;
 
 import com.mlaskows.config.AcoConfig;
 import com.mlaskows.datamodel.Ant;
-import com.mlaskows.datamodel.IterationAntsWithSolution;
+import com.mlaskows.datamodel.IterationResult;
 import com.mlaskows.datamodel.matrices.StaticMatricesHolder;
 
 public class ElitistAntPheromoneBehaviour extends AntSystemPheromoneBehaviour {
@@ -15,9 +15,9 @@ public class ElitistAntPheromoneBehaviour extends AntSystemPheromoneBehaviour {
     }
 
     @Override
-    public void depositPheromone(IterationAntsWithSolution iterationAntsWithSolution) {
-        super.depositPheromone(iterationAntsWithSolution);
-        final Ant bestAntSoFar = iterationAntsWithSolution.getBestAntSoFar();
+    public void depositPheromone(IterationResult iterationResult) {
+        super.depositPheromone(iterationResult);
+        final Ant bestAntSoFar = iterationResult.getBestAntSoFar();
         depositAntPheromone(bestAntSoFar,
                 (double) problemSize / bestAntSoFar.getTourLength());
     }

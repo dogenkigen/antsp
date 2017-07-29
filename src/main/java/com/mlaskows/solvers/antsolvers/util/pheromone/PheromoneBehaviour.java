@@ -1,6 +1,6 @@
 package com.mlaskows.solvers.antsolvers.util.pheromone;
 
-import com.mlaskows.datamodel.IterationAntsWithSolution;
+import com.mlaskows.datamodel.IterationResult;
 
 public interface PheromoneBehaviour {
 
@@ -10,6 +10,6 @@ public interface PheromoneBehaviour {
 
     void evaporatePheromone();
 
-    void depositPheromone(IterationAntsWithSolution iterationAntsWithSolution);
+    void depositPheromone(IterationResult iterationResult);
 
 }

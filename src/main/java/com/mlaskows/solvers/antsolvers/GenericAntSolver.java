@@ -1,25 +1,25 @@
 package com.mlaskows.solvers.antsolvers;
 
 import com.mlaskows.config.AcoConfig;
-import com.mlaskows.datamodel.IterationAntsWithSolution;
+import com.mlaskows.datamodel.IterationResult;
 import com.mlaskows.datamodel.Solution;
 import com.mlaskows.datamodel.matrices.StaticMatricesHolder;
 import com.mlaskows.solvers.Solver;
-import com.mlaskows.solvers.antsolvers.util.ant.AntsWithSolutionFactory;
+import com.mlaskows.solvers.antsolvers.util.ant.IterationResultFactory;
 import com.mlaskows.solvers.antsolvers.util.pheromone.PheromoneBehaviour;
 
 public class GenericAntSolver implements Solver {
     private final StaticMatricesHolder matrices;
     private final AcoConfig config;
-    private final AntsWithSolutionFactory antsWithSolutionFactory;
+    private final IterationResultFactory iterationResultFactory;
     private final PheromoneBehaviour pheromoneBehaviour;
 
     public GenericAntSolver(StaticMatricesHolder matrices, AcoConfig config,
-                            AntsWithSolutionFactory antsWithSolutionFactory,
+                            IterationResultFactory iterationResultFactory,
                             PheromoneBehaviour pheromoneBehaviour) {
         this.matrices = matrices;
         this.config = config;
-        this.antsWithSolutionFactory = antsWithSolutionFactory;
+        this.iterationResultFactory = iterationResultFactory;
         this.pheromoneBehaviour = pheromoneBehaviour;
     }
 
@@ -30,21 +30,21 @@ public class GenericAntSolver implements Solver {
         // which means calling this method 2 times is not a good idea so
         // either clean the factory state or throw exception if called 2 times
         int iterationsWithNoImprovement = 0;
-        IterationAntsWithSolution iterationAntsWithSolution = null;
+        IterationResult iterationResult = null;
 
         pheromoneBehaviour.initializePheromone();
         while (iterationsWithNoImprovement < config.getMaxStagnationCount()) {
             final double[][] choicesInfo = pheromoneBehaviour.getChoicesInfo();
-            iterationAntsWithSolution =
-                    antsWithSolutionFactory.createIterationAntsWithSolution(choicesInfo);
+            iterationResult =
+                    iterationResultFactory.createIterationResult(choicesInfo);
             pheromoneBehaviour.evaporatePheromone();
-            pheromoneBehaviour.depositPheromone(iterationAntsWithSolution);
-            if (iterationAntsWithSolution.isImprovedIteration()) {
+            pheromoneBehaviour.depositPheromone(iterationResult);
+            if (iterationResult.isImprovedIteration()) {
                 iterationsWithNoImprovement = 0;
             } else {
                 iterationsWithNoImprovement++;
             }
         }
-        return iterationAntsWithSolution.getBestAntSoFar().getSolution();
+        return iterationResult.getBestAntSoFar().getSolution();
     }
 }

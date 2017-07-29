@@ -2,7 +2,7 @@ package com.mlaskows.solvers.antsolvers.util.pheromone;
 
 import com.mlaskows.config.AcoConfig;
 import com.mlaskows.datamodel.Ant;
-import com.mlaskows.datamodel.IterationAntsWithSolution;
+import com.mlaskows.datamodel.IterationResult;
 import com.mlaskows.datamodel.matrices.StaticMatricesHolder;
 
 import java.util.List;
@@ -15,11 +15,11 @@ public class RankBasedAntPheromoneBehaviour extends AntSystemPheromoneBehaviour 
     }
 
     @Override
-    public void depositPheromone(IterationAntsWithSolution iterationAntsWithSolution) {
-        final Ant bestAntSoFar = iterationAntsWithSolution.getBestAntSoFar();
+    public void depositPheromone(IterationResult iterationResult) {
+        final Ant bestAntSoFar = iterationResult.getBestAntSoFar();
         // TODO move this to config which will require config refactor
         final int weight = 6;
-        final List<Ant> ants = iterationAntsWithSolution.getSortedAnts()
+        final List<Ant> ants = iterationResult.getSortedAnts()
                 .stream()
                 .limit(weight - 1)
                 .collect(Collectors.toList());
