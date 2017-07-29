@@ -39,7 +39,9 @@ public class GenericAntSolver implements Solver {
                     antsWithSolutionFactory.createIterationAntsWithSolution(choicesInfo);
             pheromoneBehaviour.evaporatePheromone();
             pheromoneBehaviour.depositPheromone(iterationAntsWithSolution);
-            if (!iterationAntsWithSolution.isImprovedIteration()) {
+            if (iterationAntsWithSolution.isImprovedIteration()) {
+                iterationsWithNoImprovement = 0;
+            } else {
                 iterationsWithNoImprovement++;
             }
         }

@@ -8,10 +8,12 @@ import java.util.List;
 public class IterationAntsWithSolution {
     private final List<Ant> sortedAnts;
     private final Ant bestAntSoFar;
+    private final boolean isImprovedIteration;
 
-    public IterationAntsWithSolution(List<Ant> sortedAnts, Ant bestAntSoFar) {
+    public IterationAntsWithSolution(List<Ant> sortedAnts, Ant bestAntSoFar, boolean isImprovedIteration) {
         this.sortedAnts = sortedAnts;
         this.bestAntSoFar = bestAntSoFar;
+        this.isImprovedIteration = isImprovedIteration;
     }
 
     public List<Ant> getSortedAnts() {
@@ -27,6 +29,6 @@ public class IterationAntsWithSolution {
     }
 
     public boolean isImprovedIteration() {
-        return getIterationBestAnt().hasBetterSolutionThen(getIterationBestAnt());
+        return isImprovedIteration;
     }
 }

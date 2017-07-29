@@ -30,11 +30,13 @@ public class AntsWithSolutionFactory {
         final List<Ant> ants = constructAntsSolution(choicesInfo);
         final List<Ant> sortedAnts = ants.stream().sorted().collect(toList());
         final Ant iterationBestAnt = sortedAnts.get(0);
+        boolean isImprovedIteration = false;
         if (bestAntSoFar == null
                 || iterationBestAnt.hasBetterSolutionThen(bestAntSoFar)) {
             bestAntSoFar = iterationBestAnt;
+            isImprovedIteration = true;
         }
-        return new IterationAntsWithSolution(sortedAnts, bestAntSoFar);
+        return new IterationAntsWithSolution(sortedAnts, bestAntSoFar, isImprovedIteration);
     }
 
     private List<Ant> constructAntsSolution(double[][] choicesInfo) {

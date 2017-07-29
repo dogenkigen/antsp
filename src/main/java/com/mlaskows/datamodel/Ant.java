@@ -3,6 +3,7 @@ package com.mlaskows.datamodel;
 import com.mlaskows.exeptions.SolutionException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -65,12 +66,33 @@ public class Ant implements Comparable<Ant> {
         return new Solution(new ArrayList<>(tour), tourLength);
     }
 
+    public boolean hasBetterSolutionThen(Ant ant) {
+        return this.getTourLength() < ant.getTourLength();
+    }
+
     @Override
     public int compareTo(Ant o) {
         return this.getTourLength() - o.getTourLength();
     }
 
-    public boolean hasBetterSolutionThen(Ant ant) {
-        return this.getTourLength() < ant.getTourLength();
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Ant ant = (Ant) o;
+
+        if (tourLength != ant.tourLength) return false;
+        if (tour != null ? !tour.equals(ant.tour) : ant.tour != null)
+            return false;
+        return Arrays.equals(visited, ant.visited);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = tourLength;
+        result = 31 * result + (tour != null ? tour.hashCode() : 0);
+        result = 31 * result + Arrays.hashCode(visited);
+        return result;
     }
 }
