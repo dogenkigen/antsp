@@ -1,7 +1,7 @@
 package com.mlaskows.solvers.antsolvers;
 
-import com.mlaskows.config.AcoConfig;
 import com.mlaskows.config.AcoConfigFactory;
+import com.mlaskows.config.RankedBasedConfig;
 import com.mlaskows.datamodel.Solution;
 import com.mlaskows.datamodel.matrices.StaticMatricesBuilder;
 import com.mlaskows.datamodel.matrices.StaticMatricesHolder;
@@ -17,8 +17,8 @@ public class RankBasedAntSolverTest implements SolverTest {
     @Test
     public void testAli535Solution() throws IOException {
         final Tsp tsp = getTsp("ali535.tsp");
-        final AcoConfig config =
-                AcoConfigFactory.createDefaultAntSystemConfig(tsp.getDimension());
+        final RankedBasedConfig config =
+                AcoConfigFactory.createDefaultRankedBasedConfig(tsp.getDimension());
         final StaticMatricesHolder matrices = new StaticMatricesBuilder(tsp)
                 .withHeuristicInformationMatrix()
                 .withNearestNeighbors(config.getNearestNeighbourFactor())

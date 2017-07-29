@@ -10,6 +10,11 @@ public class AcoConfigFactory {
         return createAcoConfig(3, 1, 0.5, problemSize, 15, 10);
     }
 
+    public static RankedBasedConfig createDefaultRankedBasedConfig(int problemSize) {
+        return createRankedBasedConfig(3, 1, 0.1, problemSize, 15, 10, 6);
+    }
+
+    // TODO do the same as for RankBased
     public static AcoConfig createDefaultMinMaxConfig(int problemSize) {
         return createAcoConfig(3, 1, 0.1, problemSize, 15, 60, 2);
     }
@@ -23,6 +28,18 @@ public class AcoConfigFactory {
         return new AcoConfig(heuristicImportance, pheromoneImportance,
                 pheromoneEvaporationFactor, problemSize, nearestNeighbourFactor,
                 maxStagnationCount);
+    }
+
+    public static RankedBasedConfig createRankedBasedConfig(int heuristicImportance,
+                                                            int pheromoneImportance,
+                                                            double pheromoneEvaporationFactor,
+                                                            int antsCount,
+                                                            int nearestNeighbourFactor,
+                                                            int maxStagnationCount,
+                                                            int weight) {
+        return new RankedBasedConfig(heuristicImportance, pheromoneImportance,
+                pheromoneEvaporationFactor, antsCount,
+                nearestNeighbourFactor, maxStagnationCount, weight);
     }
 
     public static AcoConfig createAcoConfig(int heuristicImportance,
