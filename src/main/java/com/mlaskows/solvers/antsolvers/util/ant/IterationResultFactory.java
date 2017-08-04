@@ -27,8 +27,7 @@ public class IterationResultFactory {
     }
 
     public IterationResult createIterationResult(double[][] choicesInfo) {
-        final List<Ant> ants = constructAntsSolution(choicesInfo);
-        final List<Ant> sortedAnts = ants.stream().sorted().collect(toList());
+        final List<Ant> sortedAnts = constructAntsSolutionSorted(choicesInfo);
         final Ant iterationBestAnt = sortedAnts.get(0);
         boolean isImprovedIteration = false;
         if (bestAntSoFar == null
@@ -39,17 +38,18 @@ public class IterationResultFactory {
         return new IterationResult(sortedAnts, bestAntSoFar, isImprovedIteration);
     }
 
-    private List<Ant> constructAntsSolution(double[][] choicesInfo) {
+    protected List<Ant> constructAntsSolutionSorted(double[][] choicesInfo) {
         AntMover antMover = new AntMover(matrices, choicesInfo);
         // Iterating should be started from 1 since every ant has already
         // visited one city during initialization.
-        return getRandomPlacedAnts(config.getAntsCount())
+        final List<Ant> ants = getRandomPlacedAnts(config.getAntsCount())
                 .parallel()
                 .peek(ant ->
                         IntStream.iterate(1, i -> i < problemSize, i -> i + 1)
                                 .forEach(i -> antMover.moveAnt(ant))
                 )
                 .collect(toList());
+        return ants.stream().sorted().collect(toList());
     }
 
     private Stream<Ant> getRandomPlacedAnts(int antCount) {

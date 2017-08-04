@@ -99,7 +99,7 @@ public class MinMaxAntSolver extends AbstractAntSolver implements Solver {
         maxPheromoneValue = (double) 1 /
                 getConfig().getPheromoneEvaporationFactor() *
                 bestSoFarAnt.getTourLength();
-        minPheromoneValue = maxPheromoneValue / getConfig().getMinPheromoneLimitDivider();
+        minPheromoneValue = maxPheromoneValue / 2;
     }
 
     private void updatePheromone(Ant ant) {

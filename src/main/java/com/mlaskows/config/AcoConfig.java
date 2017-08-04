@@ -10,7 +10,6 @@ public class AcoConfig {
     private final int antsCount;
     private final int nearestNeighbourFactor;
     private final int maxStagnationCount;
-    private final int minPheromoneLimitDivider;
 
     public AcoConfig(int heuristicImportance, int pheromoneImportance,
                      double pheromoneEvaporationFactor, int antsCount,
@@ -29,7 +28,6 @@ public class AcoConfig {
         this.antsCount = antsCount;
         this.nearestNeighbourFactor = nearestNeighbourFactor;
         this.maxStagnationCount = maxStagnationCount;
-        this.minPheromoneLimitDivider = minPheromoneLimitDivider;
     }
 
     /**
@@ -74,15 +72,6 @@ public class AcoConfig {
 
     public int getMaxStagnationCount() {
         return maxStagnationCount;
-    }
-
-    /**
-     * a
-     *
-     * @return
-     */
-    public int getMinPheromoneLimitDivider() {
-        return minPheromoneLimitDivider;
     }
 
 }

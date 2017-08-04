@@ -15,8 +15,8 @@ public class AcoConfigFactory {
     }
 
     // TODO do the same as for RankBased
-    public static AcoConfig createDefaultMinMaxConfig(int problemSize) {
-        return createAcoConfig(3, 1, 0.1, problemSize, 15, 60, 2);
+    public static MinMaxConfig createDefaultMinMaxConfig(int problemSize) {
+        return createMinMaxConfig(3, 1, 0.1, problemSize, 15, 40, 2, 30);
     }
 
     public static AcoConfig createAcoConfig(int heuristicImportance,
@@ -42,16 +42,17 @@ public class AcoConfigFactory {
                 nearestNeighbourFactor, maxStagnationCount, weight);
     }
 
-    public static AcoConfig createAcoConfig(int heuristicImportance,
-                                            int pheromoneImportance,
-                                            double pheromoneEvaporationFactor,
-                                            int problemSize,
-                                            int nearestNeighbourFactor,
-                                            int maxStagnationCount,
-                                            int minPheromoneLimitDivider) {
-        return new AcoConfig(heuristicImportance, pheromoneImportance,
+    public static MinMaxConfig createMinMaxConfig(int heuristicImportance,
+                                                  int pheromoneImportance,
+                                                  double pheromoneEvaporationFactor,
+                                                  int problemSize,
+                                                  int nearestNeighbourFactor,
+                                                  int maxStagnationCount,
+                                                  int minPheromoneLimitDivider,
+                                                  int reinitializationCount) {
+        return new MinMaxConfig(heuristicImportance, pheromoneImportance,
                 pheromoneEvaporationFactor, problemSize, nearestNeighbourFactor,
-                maxStagnationCount, minPheromoneLimitDivider);
+                maxStagnationCount, minPheromoneLimitDivider, reinitializationCount);
     }
 
 }
