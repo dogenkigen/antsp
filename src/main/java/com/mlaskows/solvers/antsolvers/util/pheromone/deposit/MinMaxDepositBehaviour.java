@@ -22,10 +22,12 @@ public class MinMaxDepositBehaviour extends DepositBehaviour {
     }
 
     @Override
-    public void deposit(PheromoneProcessor pheromoneProcessor, IterationResult iterationResult) {
+    public void deposit(PheromoneProcessor pheromoneProcessor,
+                        IterationResult iterationResult) {
         final Ant bestAntSoFar = iterationResult.getBestAntSoFar();
         final Ant iterationBestAnt = iterationResult.getIterationBestAnt();
-        if (getStagnationCount(bestAntSoFar)
+        final int stagnationCount = getStagnationCount(bestAntSoFar);
+        if (stagnationCount
                 == config.getReinitializationCount()) {
             reinitializePheromone(pheromoneProcessor, bestAntSoFar);
         }
@@ -36,7 +38,8 @@ public class MinMaxDepositBehaviour extends DepositBehaviour {
         lastBestAnt = bestAntSoFar;
     }
 
-    private void reinitializePheromone(PheromoneProcessor pheromoneProcessor, Ant bestAntSoFar) {
+    private void reinitializePheromone(PheromoneProcessor pheromoneProcessor,
+                                       Ant bestAntSoFar) {
         final double initialPheromoneValue = (double) 1 /
                 config.getPheromoneEvaporationFactor() *
                 bestAntSoFar.getTourLength();
@@ -45,8 +48,10 @@ public class MinMaxDepositBehaviour extends DepositBehaviour {
 
 
     private int getStagnationCount(Ant newBestAntSoFar) {
-        if (lastBestAnt != null
-                && newBestAntSoFar.getTourLength() == lastBestAnt.getTourLength()) {
+        if (lastBestAnt == null
+                || newBestAntSoFar.getTourLength() < lastBestAnt.getTourLength()) {
+            stagnationCount = 0;
+        } else {
             stagnationCount++;
         }
         return stagnationCount;
