@@ -6,17 +6,17 @@ import com.mlaskows.datamodel.Solution;
 import com.mlaskows.datamodel.matrices.StaticMatricesHolder;
 import com.mlaskows.solvers.Solver;
 import com.mlaskows.solvers.antsolvers.util.ant.IterationResultFactory;
-import com.mlaskows.solvers.antsolvers.util.pheromone.PheromoneBehaviour;
+import com.mlaskows.solvers.antsolvers.util.pheromone.GenericPheromoneBehaviour;
 
 public class GenericAntSolver implements Solver {
     private final StaticMatricesHolder matrices;
     private final AcoConfig config;
     private final IterationResultFactory iterationResultFactory;
-    private final PheromoneBehaviour pheromoneBehaviour;
+    private final GenericPheromoneBehaviour pheromoneBehaviour;
 
     public GenericAntSolver(StaticMatricesHolder matrices, AcoConfig config,
                             IterationResultFactory iterationResultFactory,
-                            PheromoneBehaviour pheromoneBehaviour) {
+                            GenericPheromoneBehaviour pheromoneBehaviour) {
         this.matrices = matrices;
         this.config = config;
         this.iterationResultFactory = iterationResultFactory;
