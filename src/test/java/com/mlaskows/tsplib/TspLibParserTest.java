@@ -51,10 +51,36 @@ public class TspLibParserTest {
         assertEquals(tsp.getEdgeWeightType(), EdgeWeightType.EUC_2D);
     }
 
+    @Test
+    public void testAtt532() throws IOException {
+        final Tsp tsp = getTsp("att532.tsp");
+
+        assertEquals(tsp.getName(), "att532");
+        assertEquals(tsp.getType(), Type.TSP);
+        assertEquals(tsp.getComment(), "532-city problem (Padberg/Rinaldi)");
+        assertEquals(tsp.getDimension(), 532);
+        assertEquals(tsp.getNodes().size(), 532);
+        assertEquals(tsp.getEdgeWeightType(), EdgeWeightType.ATT);
+    }
+
     private Tsp getTsp(String name) throws IOException {
         ClassLoader classLoader = getClass().getClassLoader();
         File file = new File(classLoader.getResource(name).getFile());
         return TspLibParser.parse(file.getAbsolutePath());
+    }
+
+    @Test
+    public void deleteThisTest() {
+        System.out.println(dtrunc(1.5));
+        System.out.println(dtrunc(1.4));
+        System.out.println(dtrunc(1.6));
+    }
+    static double dtrunc(double x) {
+        int k;
+
+        k = (int) x;
+        x = (double) k;
+        return x;
     }
 
 }
