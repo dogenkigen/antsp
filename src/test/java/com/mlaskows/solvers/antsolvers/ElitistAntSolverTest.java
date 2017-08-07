@@ -19,7 +19,7 @@ public class ElitistAntSolverTest implements SolverTest {
     public void testAli535Solution() throws IOException {
         final Tsp tsp = getTsp("ali535.tsp");
         final AcoConfig config =
-                AcoConfigFactory.createDefaultAntSystemConfig(tsp.getDimension());
+                AcoConfigFactory.createDefaultElitistConfig(tsp.getDimension());
         final StaticMatricesHolder matrices = new StaticMatricesBuilder(tsp)
                 .withHeuristicInformationMatrix()
                 .withNearestNeighbors(config.getNearestNeighbourFactor())

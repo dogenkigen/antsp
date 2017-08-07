@@ -10,13 +10,17 @@ public class AcoConfigFactory {
         return createAcoConfig(3, 1, 0.5, problemSize, 15, 10);
     }
 
+    public static AcoConfig createDefaultElitistConfig(int problemSize) {
+        return createAcoConfig(3, 1, 0.9, problemSize, 15, 10);
+    }
+
     public static RankedBasedConfig createDefaultRankedBasedConfig(int problemSize) {
         return createRankedBasedConfig(3, 1, 0.1, problemSize, 15, 10, 6);
     }
 
-    // TODO do the same as for RankBased
     public static MinMaxConfig createDefaultMinMaxConfig(int problemSize) {
-        return createMinMaxConfig(3, 1, 0.1, problemSize, 15, 40, 2, 30);
+        return createMinMaxConfig(3, 1, 0.02, problemSize, 15, 40, 2,
+                30);
     }
 
     public static AcoConfig createAcoConfig(int heuristicImportance,

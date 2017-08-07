@@ -8,7 +8,6 @@ import com.mlaskows.solvers.antsolvers.util.pheromone.init.ElitistInitializeBeha
 public class ElitistAntPheromoneBehaviour extends GenericPheromoneBehaviour {
 
     public ElitistAntPheromoneBehaviour(StaticMatricesHolder matrices, AcoConfig config) {
-        // TODO add init behaviour
         super(matrices, config, new ElitistDepositBehaviour(matrices
                 .getProblemSize()), new ElitistInitializeBehaviour());
     }
