@@ -1,9 +1,9 @@
 package com.mlaskows.tsplib;
 
 import com.mlaskows.tsplib.datamodel.Tsp;
-import com.mlaskows.tsplib.types.DisplayDataType;
-import com.mlaskows.tsplib.types.EdgeWeightType;
-import com.mlaskows.tsplib.types.Type;
+import com.mlaskows.tsplib.datamodel.types.DisplayDataType;
+import com.mlaskows.tsplib.datamodel.types.EdgeWeightType;
+import com.mlaskows.tsplib.datamodel.types.Type;
 import org.testng.annotations.Test;
 
 import java.io.File;
