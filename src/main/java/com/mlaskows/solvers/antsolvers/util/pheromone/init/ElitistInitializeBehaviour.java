@@ -12,9 +12,9 @@ public class ElitistInitializeBehaviour extends InitializeBehaviour {
                            StaticMatricesHolder matrices, AcoConfig config) {
         final Solution solution = getNearestNeighbourSolution(matrices);
         final double initialPheromoneValue =
-                (config.getAntsCount() + matrices.getProblemSize())
+                ((config.getAntsCount() + matrices.getProblemSize())
                 / config.getPheromoneEvaporationFactor()
-                * solution.getTourLength();
+                * solution.getTourLength());
         pheromoneProcessor.initPheromone(initialPheromoneValue);
     }
 

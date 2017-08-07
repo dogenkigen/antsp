@@ -49,9 +49,9 @@ public class AntSystemSolverTest implements SolverTest {
         final AntSystemSolver solver = new AntSystemSolver(matrices, config);
         final Solution solution = solver.getSolution();
 
-        /*List<Integer> nonImprovementPeriods = solver.getStatistics().getNonImprovementPeriods();
+        List<Integer> nonImprovementPeriods = solver.getStatistics().getNonImprovementPeriods();
         Assert.assertEquals((int) nonImprovementPeriods.get(nonImprovementPeriods.size() - 1),
-                config.getMaxStagnationCount());*/
+                config.getMaxStagnationCount());
         // We assume here that solution will be better than for nearest
         // neighbour algorithm.
         Assert.assertTrue(solution.getTourLength() < 224358);

@@ -8,7 +8,7 @@ import com.mlaskows.solvers.antsolvers.util.pheromone.RankBasedAntPheromoneBehav
 public class RankBasedAntSolver extends GenericAntSolver{
 
     public RankBasedAntSolver(StaticMatricesHolder matrices, RankedBasedConfig config) {
-        super(matrices, config, new IterationResultFactory(matrices, config),
+        super(config, new IterationResultFactory(matrices, config),
                 new RankBasedAntPheromoneBehaviour(matrices, config));
     }
 

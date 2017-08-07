@@ -69,18 +69,4 @@ public class TspLibParserTest {
         return TspLibParser.parse(file.getAbsolutePath());
     }
 
-    @Test
-    public void deleteThisTest() {
-        System.out.println(dtrunc(1.5));
-        System.out.println(dtrunc(1.4));
-        System.out.println(dtrunc(1.6));
-    }
-    static double dtrunc(double x) {
-        int k;
-
-        k = (int) x;
-        x = (double) k;
-        return x;
-    }
-
 }
