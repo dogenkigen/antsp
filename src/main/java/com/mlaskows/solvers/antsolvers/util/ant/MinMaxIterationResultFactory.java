@@ -26,5 +26,7 @@ public class MinMaxIterationResultFactory extends IterationResultFactory {
                         .getSolution())
                 .map(solution -> new Ant(solution))
                 .collect(Collectors.toList());
+        //FIXME there is a bug here because after 2 opt this list can be
+        // sorted in a wrong way
     }
 }
