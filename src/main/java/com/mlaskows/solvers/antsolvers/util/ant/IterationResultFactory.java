@@ -8,7 +8,6 @@ import com.mlaskows.datamodel.matrices.StaticMatricesHolder;
 import java.util.List;
 import java.util.SplittableRandom;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static com.mlaskows.exeptions.Reason.EMPTY_NN_MATRIX;
@@ -48,18 +47,20 @@ public class IterationResultFactory {
     protected List<Ant> constructAntsSolutionSorted(double[][] choicesInfo) {
         // Iterating should be started from 1 since every ant has already
         // visited one city during initialization.
-        final List<Ant> ants = getRandomPlacedAnts(config.getAntsCount())
-                .parallel()
-                .peek(ant ->
-                        IntStream.iterate(1, i -> i < problemSize, i -> i + 1)
-                                .forEach(i -> moveAnt(ant, choicesInfo))
+        final List<Ant> ants = getRandomPlacedParallelAnts(config.getAntsCount())
+                .peek(ant -> {
+                            for (int i = 1; i < problemSize; i++) {
+                                moveAnt(ant, choicesInfo);
+                            }
+                        }
                 )
                 .collect(toList());
         return ants.stream().sorted().collect(toList());
     }
 
-    private Stream<Ant> getRandomPlacedAnts(int antCount) {
+    private Stream<Ant> getRandomPlacedParallelAnts(int antCount) {
         return random.ints(0, antCount)
+                .parallel()
                 .limit(config.getAntsCount())
                 .mapToObj(position -> new Ant(problemSize, position));
     }
