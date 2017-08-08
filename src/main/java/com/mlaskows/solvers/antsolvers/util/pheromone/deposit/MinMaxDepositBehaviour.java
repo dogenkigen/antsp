@@ -31,11 +31,17 @@ public class MinMaxDepositBehaviour extends DepositBehaviour {
                 == config.getReinitializationCount()) {
             reinitializePheromone(pheromoneProcessor, bestAntSoFar);
         }
-        updateMinMax(iterationBestAnt);
-        final Ant ant = random.nextBoolean() ? iterationBestAnt : bestAntSoFar;
+        updateMinMax(bestAntSoFar);
+        final Ant ant = getAntToDeposit(bestAntSoFar, iterationBestAnt);
         double pheromoneDelta = getPheromoneDelta(ant);
         pheromoneProcessor.depositAntPheromone(ant, pheromoneDelta);
         lastBestAnt = bestAntSoFar;
+    }
+
+    private Ant getAntToDeposit(Ant bestAntSoFar, Ant iterationBestAnt) {
+        //return iterationBestAnt;
+        // TODO create good balance based on problemSize
+        return random.nextBoolean() ? iterationBestAnt : bestAntSoFar;
     }
 
     private void reinitializePheromone(PheromoneProcessor pheromoneProcessor,
