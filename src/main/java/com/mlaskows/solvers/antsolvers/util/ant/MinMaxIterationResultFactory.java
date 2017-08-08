@@ -6,7 +6,8 @@ import com.mlaskows.datamodel.matrices.StaticMatricesHolder;
 import com.mlaskows.solvers.heuristic.TwoOptSolver;
 
 import java.util.List;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 public class MinMaxIterationResultFactory extends IterationResultFactory {
 
@@ -19,14 +20,13 @@ public class MinMaxIterationResultFactory extends IterationResultFactory {
 
     @Override
     protected List<Ant> constructAntsSolutionSorted(double[][] choicesInfo) {
-        return super.constructAntsSolutionSorted(choicesInfo).stream()
-                .limit(Runtime.getRuntime().availableProcessors())
+        final List<Ant> ants = super.constructAntsSolutionSorted(choicesInfo).stream()
+                //.limit(Runtime.getRuntime().availableProcessors())
                 .parallel()
                 .map(ant -> new TwoOptSolver(ant.getSolution(), matrices)
                         .getSolution())
-                .map(solution -> new Ant(solution))
-                .collect(Collectors.toList());
-        //FIXME there is a bug here because after 2 opt this list can be
-        // sorted in a wrong way
+                .map(Ant::new)
+                .collect(toList());
+        return ants.stream().sorted().collect(toList());
     }
 }
