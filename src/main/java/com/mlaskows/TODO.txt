@@ -1,58 +1,8 @@
-* add tsplib utils java 8 style (calculating distances?)
-* during redesign consider GUI watching moving ants or pheromone
-    - pheromone update observer
-    - ants location observer
-* check performance on 2-opt
-    - with NN and without
-    - same for small and big instances
-
-NOTES MIN-MAX
-* only either the iteration-best ant, that is, the ant that produced the
-  best tour in the current iteration, or the best-so-far ant is allowed to deposit pheromone.
-
-  double pheromoneDelta = (double) 1 / iterationBest.getTourLength();
-  OR
-  double pheromoneDelta = (double) 1 / bestSoFar.getTourLength();
-
-    When pheromone updates are always performed by the best-so-far ant, the
-    search focuses very quickly around Tbs, whereas when it is the iteration-best ant that
-    updates pheromones, then the number of arcs that receive pheromone is larger and
-    the search is less directed.
-    Experimental results indicate that for small TSP instances it may be best to use
-    only iteration-best pheromone updates, while for large TSPs with several hundreds of
-    cities the best performance is obtained by giving an increasingly stronger emphasis to
-    the best-so-far tour. This can be achieved, for example, by gradually increasing the
-    frequency with which the best-so-far tour T bs is chosen for the trail update.
-
-    it was found that when applied without local search, a good
-    strategy is to frequently use the iteration-best ant to update pheromone trails. Yet,
-    when combined with local search a stronger emphasis of the best-so-far update
-    seemed to improve performance
-
-    page 96, box 3.3
-
-* limits the possible range of pheromone
-  trail values to the interval [τmin; τmax].
-  τmax = 1/ρ* bestSoFar.getTourLength() and τmax <= 1
-  τmin = τmax / a, where a is a param. This value is actually more important than τmax. τmin > 0
-* pheromone trails are initialized to
-  the upper pheromone trail limit, which, together with a small pheromone evaporation
-  rate, increases the exploration of tours at the start of the search.
-* pheromone trails are reinitialized each time the system approaches stagnation
-  or when no improved tour has been generated for a certain number of consecutive
-  iterations.
-  Eg if for a given number of algorithm iterations no improved tour is found
-
-
-
-  ------
-  Heuristic Information
-  It is well known that when ACO algorithms are applied to the TSP without local
-  search, the heuristic information is essential for the generation of high-quality tours.
-  In fact, in the initial phases of the search, the pheromones, being set to initial random
-  values, do not guide the artificial ants, which end up constructing (and reinforcing)
-  tours of very bad quality. The main role of the heuristic information is to avoid this,
-  by biasing ants so that they build reasonably good tours from the very beginning.
-  Once local search is added to the ACO implementation, the randomly generated
-  initial tours become good enough. It is therefore reasonable to expect that heuristic
-  information is no longer necessary.
+* Improve performance on 2opt plus add swap for the best instead of first better
+ solution
+* Clean TODO
+* Do SCA scan
+* Prepare API for external usage
+* Write more tests
+* Perform test runs and collect results
+* Create GUI
