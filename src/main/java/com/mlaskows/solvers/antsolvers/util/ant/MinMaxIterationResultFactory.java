@@ -21,7 +21,7 @@ public class MinMaxIterationResultFactory extends IterationResultFactory {
     @Override
     protected List<Ant> constructAntsSolutionSorted(double[][] choicesInfo) {
         final List<Ant> ants = super.constructAntsSolutionSorted(choicesInfo).stream()
-                //.limit(Runtime.getRuntime().availableProcessors())
+                .limit(Runtime.getRuntime().availableProcessors())
                 .parallel()
                 .map(ant -> new TwoOptSolver(ant.getSolution(), matrices)
                         .getSolution())
