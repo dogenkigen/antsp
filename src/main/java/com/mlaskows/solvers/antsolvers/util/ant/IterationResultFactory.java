@@ -15,7 +15,6 @@ import static java.util.stream.Collectors.toList;
 
 public class IterationResultFactory {
 
-    private final StaticMatricesHolder matrices;
     private final AcoConfig config;
     private final int problemSize;
     private final SplittableRandom random = new SplittableRandom();
@@ -24,7 +23,6 @@ public class IterationResultFactory {
     private final int[][] nearestNeighbors;
 
     public IterationResultFactory(StaticMatricesHolder matrices, AcoConfig config) {
-        this.matrices = matrices;
         this.config = config;
         this.problemSize = matrices.getProblemSize();
         distanceMatrix = matrices.getDistanceMatrix();
@@ -65,7 +63,7 @@ public class IterationResultFactory {
                 .mapToObj(position -> new Ant(problemSize, position));
     }
 
-    public void moveAnt(Ant ant, double[][] choicesInfo) {
+    private void moveAnt(Ant ant, double[][] choicesInfo) {
         final int currentIndex = ant.getCurrent();
         final int nextIndex = getNextIndex(ant, currentIndex, choicesInfo);
         ant.visit(nextIndex, distanceMatrix[currentIndex][nextIndex]);
@@ -108,13 +106,13 @@ public class IterationResultFactory {
         return nextIndex;
     }
 
-    private double newSumProbabilities(Ant ant, int currentIndex, int[]
-            nearestNeighbors, double[][] choicesInfo) {
+    private double newSumProbabilities(Ant ant, int currentIndex,
+                                       int[] nearestNeighbors,
+                                       double[][] choicesInfo) {
         double sumProbabilities = 0.0;
-        for (int j = 0; j < nearestNeighbors.length; j++) {
-            if (ant.notVisited(nearestNeighbors[j])) {
-                sumProbabilities +=
-                        choicesInfo[currentIndex][nearestNeighbors[j]];
+        for (int nearestNeighbour : nearestNeighbors) {
+            if (ant.notVisited(nearestNeighbour)) {
+                sumProbabilities += choicesInfo[currentIndex][nearestNeighbour];
             }
         }
         return sumProbabilities;
