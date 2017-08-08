@@ -7,9 +7,11 @@ import com.mlaskows.datamodel.matrices.StaticMatricesHolder;
 
 import java.util.List;
 import java.util.SplittableRandom;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import static com.mlaskows.exeptions.Reason.EMPTY_NN_MATRIX;
 import static java.util.stream.Collectors.toList;
 
 public class IterationResultFactory {
@@ -19,11 +21,16 @@ public class IterationResultFactory {
     private final int problemSize;
     private final SplittableRandom random = new SplittableRandom();
     private Ant bestAntSoFar;
+    private final int[][] distanceMatrix;
+    private final int[][] nearestNeighbors;
 
     public IterationResultFactory(StaticMatricesHolder matrices, AcoConfig config) {
         this.matrices = matrices;
         this.config = config;
         this.problemSize = matrices.getProblemSize();
+        distanceMatrix = matrices.getDistanceMatrix();
+        nearestNeighbors = matrices.getNearestNeighborsMatrix()
+                .orElseThrow(() -> new IllegalArgumentException(EMPTY_NN_MATRIX.toString()));
     }
 
     public IterationResult createIterationResult(double[][] choicesInfo) {
@@ -39,14 +46,13 @@ public class IterationResultFactory {
     }
 
     protected List<Ant> constructAntsSolutionSorted(double[][] choicesInfo) {
-        AntMover antMover = new AntMover(matrices, choicesInfo);
         // Iterating should be started from 1 since every ant has already
         // visited one city during initialization.
         final List<Ant> ants = getRandomPlacedAnts(config.getAntsCount())
                 .parallel()
                 .peek(ant ->
                         IntStream.iterate(1, i -> i < problemSize, i -> i + 1)
-                                .forEach(i -> antMover.moveAnt(ant))
+                                .forEach(i -> moveAnt(ant, choicesInfo))
                 )
                 .collect(toList());
         return ants.stream().sorted().collect(toList());
@@ -56,6 +62,61 @@ public class IterationResultFactory {
         return random.ints(0, antCount)
                 .limit(config.getAntsCount())
                 .mapToObj(position -> new Ant(problemSize, position));
+    }
+
+    public void moveAnt(Ant ant, double[][] choicesInfo) {
+        final int currentIndex = ant.getCurrent();
+        final int nextIndex = getNextIndex(ant, currentIndex, choicesInfo);
+        ant.visit(nextIndex, distanceMatrix[currentIndex][nextIndex]);
+    }
+
+    private int getNextIndex(Ant ant, int currentIndex, double[][] choicesInfo) {
+        //https://en.wikipedia.org/wiki/Fitness_proportionate_selection
+        double sumProbabilities = newSumProbabilities(ant, currentIndex,
+                nearestNeighbors[currentIndex], choicesInfo);
+
+        int nextIndex = 1;
+        // This is true in case when all nearest neighbours are already visited
+        if (sumProbabilities == 0.0) {
+            nextIndex = chooseBestNext(ant, currentIndex, choicesInfo);
+        } else {
+            final double randomDouble = ThreadLocalRandom.current()
+                    .nextDouble(0, sumProbabilities);
+            double selectionProbability = 0.0;
+            for (int j = 0; j < problemSize; j++) {
+                selectionProbability +=
+                        ant.isVisited(j) ? 0.0 : choicesInfo[currentIndex][j];
+                if (randomDouble < selectionProbability) {
+                    nextIndex = j;
+                    break;
+                }
+            }
+        }
+        return nextIndex;
+    }
+
+    private int chooseBestNext(Ant ant, int currentIndex, double[][] choicesInfo) {
+        int nextIndex = 1;
+        double v = 0.0;
+        for (int j = 0; j < problemSize; j++) {
+            if (ant.notVisited(j) && choicesInfo[currentIndex][j] > v) {
+                nextIndex = j;
+                v = choicesInfo[currentIndex][j];
+            }
+        }
+        return nextIndex;
+    }
+
+    private double newSumProbabilities(Ant ant, int currentIndex, int[]
+            nearestNeighbors, double[][] choicesInfo) {
+        double sumProbabilities = 0.0;
+        for (int j = 0; j < nearestNeighbors.length; j++) {
+            if (ant.notVisited(nearestNeighbors[j])) {
+                sumProbabilities +=
+                        choicesInfo[currentIndex][nearestNeighbors[j]];
+            }
+        }
+        return sumProbabilities;
     }
 
 }
