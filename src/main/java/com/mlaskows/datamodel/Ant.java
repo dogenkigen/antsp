@@ -1,7 +1,5 @@
 package com.mlaskows.datamodel;
 
-import com.mlaskows.exeptions.SolutionException;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -32,11 +30,6 @@ public class Ant implements Comparable<Ant> {
     }
 
     public void visit(int index, int stepLength) {
-        // FIXME remove this check for production version
-        if (visited[index]) {
-            throw new SolutionException("Following index already visited: " +
-                    index);
-        }
         tourLength = tourLength + stepLength;
         visited[index] = true;
         tour.add(index);
