@@ -97,19 +97,21 @@ public class TwoOptSolverTest implements SolverTest {
         Assert.assertTrue(solution.getTourLength() < solutionWithNN.getTourLength());
     }
 
-    private Solution computeSolution(List<Integer> initialTour, StaticMatrices matricesHolder, int initialDistnace) {
+    private Solution computeSolution(List<Integer> initialTour, StaticMatrices
+            matricesHolder, int initialDistnace) {
         final TwoOptSolver solver = new TwoOptSolver
                 (new Solution(initialTour, initialDistnace), matricesHolder);
         return solver.getSolution();
     }
 
-    private List<Integer> getInitialTour(int size) {
+    protected List<Integer> getInitialTour(int size) {
         final List<Integer> initialTour = new ArrayList<>(size);
         IntStream.range(0, size).forEach(index -> initialTour.add(index));
         return initialTour;
     }
 
-    private int calculateDistance(int[][] australianDistances, List<Integer> initialTour) {
+    protected int calculateDistance(int[][] australianDistances, List<Integer>
+            initialTour) {
         int distance = 0;
         for (int i = 0; i < initialTour.size() - 1; i++) {
             distance += australianDistances[initialTour.get(i)][initialTour.get(i + 1)];

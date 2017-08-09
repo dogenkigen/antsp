@@ -31,7 +31,7 @@ public class NewTwoOptSolver implements Solver {
         tour.add(tour.get(0));
         final int[] initialTour = tour.stream().mapToInt(i -> i).toArray();
         final List<Integer> ts = Arrays.stream(twoOptFirst(initialTour))
-                .mapToObj(Integer::valueOf)
+                .boxed()
                 .collect(toList());
         ts.remove(ts.size() - 1);
         return new Solution(ts, getTourLenght
@@ -91,8 +91,7 @@ public class NewTwoOptSolver implements Solver {
             for (l = 0; l < problemSize; l++) {
 
                 c1 = randomVector[l];
-                boolean dlb_flag = true;
-                if (dlb_flag && dontLookBits[c1])
+                if (dontLookBits[c1])
                     continue;
                 positionC1 = positionOfCitiesInTour[c1];
                 successorC1 = tour[positionC1 + 1];
@@ -158,63 +157,59 @@ public class NewTwoOptSolver implements Solver {
                     continue;
                 }
 
-                if (gotoExchange) {
-                    gotoExchange = false;
-                    wasImproved = true;
-                    dontLookBits[h1] = false;
-                    dontLookBits[h2] = false;
-                    dontLookBits[h3] = false;
-                    dontLookBits[h4] = false;
+                gotoExchange = false;
+                wasImproved = true;
+                dontLookBits[h1] = false;
+                dontLookBits[h2] = false;
+                dontLookBits[h3] = false;
+                dontLookBits[h4] = false;
             /* Now perform move */
-                    if (positionOfCitiesInTour[h3] < positionOfCitiesInTour[h1]) {
-                        help = h1;
-                        h1 = h3;
-                        h3 = help;
-                        help = h2;
-                        h2 = h4;
-                        h4 = help;
-                    }
-                    if (positionOfCitiesInTour[h3] - positionOfCitiesInTour[h2] < problemSize / 2 + 1) {
-			/* reverse inner part from pos[h2] to pos[h3] */
-                        i = positionOfCitiesInTour[h2];
-                        j = positionOfCitiesInTour[h3];
-                        while (i < j) {
-                            c1 = tour[i];
-                            c2 = tour[j];
-                            tour[i] = c2;
-                            tour[j] = c1;
-                            positionOfCitiesInTour[c1] = j;
-                            positionOfCitiesInTour[c2] = i;
-                            i++;
-                            j--;
-                        }
-                    } else {
-			/* reverse outer part from pos[h4] to pos[h1] */
-                        i = positionOfCitiesInTour[h1];
-                        j = positionOfCitiesInTour[h4];
-                        if (j > i)
-                            help = problemSize - (j - i) + 1;
-                        else
-                            help = (i - j) + 1;
-                        help = help / 2;
-                        for (h = 0; h < help; h++) {
-                            c1 = tour[i];
-                            c2 = tour[j];
-                            tour[i] = c2;
-                            tour[j] = c1;
-                            positionOfCitiesInTour[c1] = j;
-                            positionOfCitiesInTour[c2] = i;
-                            i--;
-                            j++;
-                            if (i < 0)
-                                i = problemSize - 1;
-                            if (j >= problemSize)
-                                j = 0;
-                        }
-                        tour[problemSize] = tour[0];
+                if (positionOfCitiesInTour[h3] < positionOfCitiesInTour[h1]) {
+                    help = h1;
+                    h1 = h3;
+                    h3 = help;
+                    help = h2;
+                    h2 = h4;
+                    h4 = help;
+                }
+                if (positionOfCitiesInTour[h3] - positionOfCitiesInTour[h2] < problemSize / 2 + 1) {
+        /* reverse inner part from pos[h2] to pos[h3] */
+                    i = positionOfCitiesInTour[h2];
+                    j = positionOfCitiesInTour[h3];
+                    while (i < j) {
+                        c1 = tour[i];
+                        c2 = tour[j];
+                        tour[i] = c2;
+                        tour[j] = c1;
+                        positionOfCitiesInTour[c1] = j;
+                        positionOfCitiesInTour[c2] = i;
+                        i++;
+                        j--;
                     }
                 } else {
-                    dontLookBits[c1] = true;
+        /* reverse outer part from pos[h4] to pos[h1] */
+                    i = positionOfCitiesInTour[h1];
+                    j = positionOfCitiesInTour[h4];
+                    if (j > i)
+                        help = problemSize - (j - i) + 1;
+                    else
+                        help = (i - j) + 1;
+                    help = help / 2;
+                    for (h = 0; h < help; h++) {
+                        c1 = tour[i];
+                        c2 = tour[j];
+                        tour[i] = c2;
+                        tour[j] = c1;
+                        positionOfCitiesInTour[c1] = j;
+                        positionOfCitiesInTour[c2] = i;
+                        i--;
+                        j++;
+                        if (i < 0)
+                            i = problemSize - 1;
+                        if (j >= problemSize)
+                            j = 0;
+                    }
+                    tour[problemSize] = tour[0];
                 }
 
             }
@@ -242,7 +237,7 @@ public class NewTwoOptSolver implements Solver {
             result[i] = i;
 
         for (int i = 0; i < n; i++) {
-	    /* find (randomly) an index for a free unit */
+        /* find (randomly) an index for a free unit */
             random = ThreadLocalRandom.current().nextDouble(0, 1);
             node = (int) (random * (n - totalAssigned));
             assert (i + node < n);

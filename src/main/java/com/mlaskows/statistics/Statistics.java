@@ -27,8 +27,7 @@ public class Statistics {
         List<Integer> result = new ArrayList<>();
         int acc = 0;
         int bestVale = Integer.MAX_VALUE;
-        for (Integer key : iterationTourLength.keySet()) {
-            Integer value = iterationTourLength.get(key);
+        for (Integer value : iterationTourLength.values()) {
             if (value >= bestVale) {
                 acc++;
             } else {
