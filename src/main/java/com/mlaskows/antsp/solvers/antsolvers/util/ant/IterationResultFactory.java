@@ -1,10 +1,11 @@
 package com.mlaskows.antsp.solvers.antsolvers.util.ant;
 
-import com.mlaskows.antsp.datamodel.matrices.StaticMatrices;
-import com.mlaskows.antsp.exeptions.Reason;
 import com.mlaskows.antsp.config.AcoConfig;
 import com.mlaskows.antsp.datamodel.Ant;
 import com.mlaskows.antsp.datamodel.IterationResult;
+import com.mlaskows.antsp.datamodel.matrices.StaticMatrices;
+import com.mlaskows.antsp.exeptions.Reason;
+import com.mlaskows.antsp.solvers.heuristic.NewTwoOptSolver;
 
 import java.util.List;
 import java.util.SplittableRandom;
@@ -15,6 +16,7 @@ import static java.util.stream.Collectors.toList;
 
 public class IterationResultFactory {
 
+    private final StaticMatrices matrices;
     private final AcoConfig config;
     private final int problemSize;
     private final SplittableRandom random = new SplittableRandom();
@@ -23,6 +25,7 @@ public class IterationResultFactory {
     private final int[][] nearestNeighbors;
 
     public IterationResultFactory(StaticMatrices matrices, AcoConfig config) {
+        this.matrices = matrices;
         this.config = config;
         this.problemSize = matrices.getProblemSize();
         distanceMatrix = matrices.getDistanceMatrix();
@@ -45,14 +48,26 @@ public class IterationResultFactory {
     protected List<Ant> constructAntsSolutionSorted(double[][] choicesInfo) {
         // Iterating should be started from 1 since every ant has already
         // visited one city during initialization.
-        final List<Ant> ants = getRandomPlacedParallelAnts(config.getAntsCount())
+        final Stream<Ant> antsStream =
+                getRandomPlacedParallelAnts(config.getAntsCount())
                 .peek(ant -> {
                             for (int i = 1; i < problemSize; i++) {
                                 moveAnt(ant, choicesInfo);
                             }
                         }
-                )
-                .collect(toList());
+                );
+        final List<Ant> ants;
+        if (config.isWithLocalSearch()) {
+            ants = antsStream
+                    //.limit(Runtime.getRuntime().availableProcessors())
+                    .map(ant -> new NewTwoOptSolver(ant.getSolution(), matrices)
+                            .getSolution())
+                    .map(Ant::new)
+                    .collect(toList());
+        } else {
+            ants = antsStream.collect(toList());
+        }
+
         return ants.stream().sorted().collect(toList());
     }
 

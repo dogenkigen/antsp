@@ -4,30 +4,26 @@ package com.mlaskows.antsp.config;
  * Created by mlaskows on 24/06/2017.
  */
 public class AcoConfig {
+
     private final int heuristicImportance;
     private final int pheromoneImportance;
     private final double pheromoneEvaporationFactor;
     private final int antsCount;
     private final int nearestNeighbourFactor;
     private final int maxStagnationCount;
-
-    public AcoConfig(int heuristicImportance, int pheromoneImportance,
-                     double pheromoneEvaporationFactor, int antsCount,
-                     int nearestNeighbourFactor, int maxStagnationCount) {
-        this(heuristicImportance, pheromoneImportance, pheromoneEvaporationFactor,
-                antsCount, nearestNeighbourFactor, maxStagnationCount, 1);
-    }
+    private final boolean withLocalSearch;
 
     public AcoConfig(int heuristicImportance, int pheromoneImportance,
                      double pheromoneEvaporationFactor, int antsCount,
                      int nearestNeighbourFactor, int maxStagnationCount,
-                     int minPheromoneLimitDivider) {
+                     boolean withLocalSearch) {
         this.heuristicImportance = heuristicImportance;
         this.pheromoneImportance = pheromoneImportance;
         this.pheromoneEvaporationFactor = pheromoneEvaporationFactor;
         this.antsCount = antsCount;
         this.nearestNeighbourFactor = nearestNeighbourFactor;
         this.maxStagnationCount = maxStagnationCount;
+        this.withLocalSearch = withLocalSearch;
     }
 
     /**
@@ -72,6 +68,10 @@ public class AcoConfig {
 
     public int getMaxStagnationCount() {
         return maxStagnationCount;
+    }
+
+    public boolean isWithLocalSearch() {
+        return withLocalSearch;
     }
 
 }

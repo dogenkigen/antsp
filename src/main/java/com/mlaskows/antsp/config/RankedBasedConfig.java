@@ -7,10 +7,10 @@ public class RankedBasedConfig extends AcoConfig {
     public RankedBasedConfig(int heuristicImportance, int pheromoneImportance,
                              double pheromoneEvaporationFactor, int antsCount,
                              int nearestNeighbourFactor, int maxStagnationCount,
-                             int weight) {
+                             int weight, boolean withLocalSearch) {
         super(heuristicImportance, pheromoneImportance,
                 pheromoneEvaporationFactor, antsCount, nearestNeighbourFactor,
-                maxStagnationCount);
+                maxStagnationCount, withLocalSearch);
         this.weight = weight;
     }
 

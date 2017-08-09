@@ -6,20 +6,21 @@ package com.mlaskows.antsp.config;
 public class AcoConfigFactory {
 
     public static AcoConfig createDefaultAntSystemConfig(int problemSize) {
-        return createAcoConfig(3, 1, 0.5, problemSize, 15, 10);
+        return createAcoConfig(3, 1, 0.5, problemSize, 15, 10, false);
     }
 
     public static AcoConfig createDefaultElitistConfig(int problemSize) {
-        return createAcoConfig(3, 1, 0.9, problemSize, 15, 10);
+        return createAcoConfig(3, 1, 0.9, problemSize, 15, 10, false);
     }
 
     public static RankedBasedConfig createDefaultRankedBasedConfig(int problemSize) {
-        return createRankedBasedConfig(3, 1, 0.1, problemSize, 15, 10, 6);
+        return createRankedBasedConfig(3, 1, 0.1, problemSize, 15, 10,
+                6, false);
     }
 
     public static MinMaxConfig createDefaultMinMaxConfig(int problemSize) {
         return createMinMaxConfig(3, 1, 0.02, problemSize, 15, 40, 2,
-                30);
+                30, true);
     }
 
     public static AcoConfig createAcoConfig(int heuristicImportance,
@@ -27,10 +28,11 @@ public class AcoConfigFactory {
                                             double pheromoneEvaporationFactor,
                                             int problemSize,
                                             int nearestNeighbourFactor,
-                                            int maxStagnationCount) {
+                                            int maxStagnationCount,
+                                            boolean withLocalSearch) {
         return new AcoConfig(heuristicImportance, pheromoneImportance,
                 pheromoneEvaporationFactor, problemSize, nearestNeighbourFactor,
-                maxStagnationCount);
+                maxStagnationCount, withLocalSearch);
     }
 
     public static RankedBasedConfig createRankedBasedConfig(int heuristicImportance,
@@ -39,10 +41,12 @@ public class AcoConfigFactory {
                                                             int antsCount,
                                                             int nearestNeighbourFactor,
                                                             int maxStagnationCount,
-                                                            int weight) {
+                                                            int weight,
+                                                            boolean withLocalSearch) {
         return new RankedBasedConfig(heuristicImportance, pheromoneImportance,
                 pheromoneEvaporationFactor, antsCount,
-                nearestNeighbourFactor, maxStagnationCount, weight);
+                nearestNeighbourFactor, maxStagnationCount, weight,
+                withLocalSearch);
     }
 
     public static MinMaxConfig createMinMaxConfig(int heuristicImportance,
@@ -52,10 +56,12 @@ public class AcoConfigFactory {
                                                   int nearestNeighbourFactor,
                                                   int maxStagnationCount,
                                                   int minPheromoneLimitDivider,
-                                                  int reinitializationCount) {
+                                                  int reinitializationCount,
+                                                  boolean withLocalSearch) {
         return new MinMaxConfig(heuristicImportance, pheromoneImportance,
                 pheromoneEvaporationFactor, problemSize, nearestNeighbourFactor,
-                maxStagnationCount, minPheromoneLimitDivider, reinitializationCount);
+                maxStagnationCount, minPheromoneLimitDivider,
+                reinitializationCount, withLocalSearch);
     }
 
 }

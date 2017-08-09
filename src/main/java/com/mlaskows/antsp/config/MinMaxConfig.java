@@ -8,10 +8,11 @@ public class MinMaxConfig extends AcoConfig{
     public MinMaxConfig(int heuristicImportance, int pheromoneImportance,
                         double pheromoneEvaporationFactor, int antsCount,
                         int nearestNeighbourFactor, int maxStagnationCount,
-                        int minPheromoneLimitDivider, int reinitializationCount) {
+                        int minPheromoneLimitDivider, int reinitializationCount,
+                        boolean withLocalSearch) {
         super(heuristicImportance, pheromoneImportance,
                 pheromoneEvaporationFactor, antsCount, nearestNeighbourFactor,
-                maxStagnationCount);
+                maxStagnationCount, withLocalSearch);
         this.minPheromoneLimitDivider = minPheromoneLimitDivider;
         this.reinitializationCount = reinitializationCount;
     }
