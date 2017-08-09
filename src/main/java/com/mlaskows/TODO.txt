@@ -1,6 +1,7 @@
 * Improve performance on 2opt plus add swap for the best instead of first better
  solution
 *
+
 * Clean TODO
 * Do SCA scan
 * Prepare API for external usage
