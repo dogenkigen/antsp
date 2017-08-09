@@ -2,7 +2,7 @@ package com.mlaskows.solvers.antsolvers.util.pheromone;
 
 import com.mlaskows.config.AcoConfig;
 import com.mlaskows.datamodel.IterationResult;
-import com.mlaskows.datamodel.matrices.StaticMatricesHolder;
+import com.mlaskows.datamodel.matrices.StaticMatrices;
 import com.mlaskows.solvers.antsolvers.util.pheromone.deposit.DepositBehaviour;
 import com.mlaskows.solvers.antsolvers.util.pheromone.init.InitializeBehaviour;
 
@@ -10,12 +10,12 @@ public class GenericPheromoneBehaviour {
 
 
     private final PheromoneProcessor pheromoneProcessor;
-    private final StaticMatricesHolder matrices;
+    private final StaticMatrices matrices;
     private final DepositBehaviour depositBehaviour;
     private final InitializeBehaviour initializeBehaviour;
     private final AcoConfig config;
 
-    public GenericPheromoneBehaviour(StaticMatricesHolder matrices,
+    public GenericPheromoneBehaviour(StaticMatrices matrices,
                                      AcoConfig config,
                                      DepositBehaviour depositBehaviour,
                                      InitializeBehaviour initializeBehaviour) {

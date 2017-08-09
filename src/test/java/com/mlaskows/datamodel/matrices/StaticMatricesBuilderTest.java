@@ -27,7 +27,7 @@ public class StaticMatricesBuilderTest {
 
     @Test
     public void testDistancesAustralia() {
-        StaticMatricesHolder matricesHolder = new StaticMatricesBuilder(tsp).build();
+        StaticMatrices matricesHolder = new StaticMatricesBuilder(tsp).build();
         int[][] distanceMatrix = matricesHolder.getDistanceMatrix();
 
         Assert.assertEquals(distanceMatrix.length, tsp.getDimension());
@@ -40,7 +40,7 @@ public class StaticMatricesBuilderTest {
 
     @Test
     public void testNNAustralia() {
-        StaticMatricesHolder matricesHolder = new StaticMatricesBuilder(tsp)
+        StaticMatrices matricesHolder = new StaticMatricesBuilder(tsp)
                 .withNearestNeighbors(NN_FACOTR)
                 .build();
         int[][] nearestNeighborList = matricesHolder.getNearestNeighborsMatrix().orElseThrow(RuntimeException::new);
@@ -52,7 +52,7 @@ public class StaticMatricesBuilderTest {
 
     @Test
     public void testHeuristicAustralia() {
-        StaticMatricesHolder matricesHolder = new StaticMatricesBuilder(tsp)
+        StaticMatrices matricesHolder = new StaticMatricesBuilder(tsp)
                 .withHeuristicInformationMatrix()
                 .build();
         double[][] heuristicInformationMatrix = matricesHolder.getHeuristicInformationMatrix().orElseThrow(RuntimeException::new);

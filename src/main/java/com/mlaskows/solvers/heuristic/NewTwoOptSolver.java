@@ -1,7 +1,7 @@
 package com.mlaskows.solvers.heuristic;
 
 import com.mlaskows.datamodel.Solution;
-import com.mlaskows.datamodel.matrices.StaticMatricesHolder;
+import com.mlaskows.datamodel.matrices.StaticMatrices;
 import com.mlaskows.solvers.Solver;
 
 import java.util.Arrays;
@@ -17,7 +17,7 @@ public class NewTwoOptSolver implements Solver {
     private final int[][] nearestNeighboursMatrix;
     private final int problemSize;
 
-    public NewTwoOptSolver(Solution initialSolution, StaticMatricesHolder matrices) {
+    public NewTwoOptSolver(Solution initialSolution, StaticMatrices matrices) {
         this.initialSolution = initialSolution;
         problemSize = matrices.getProblemSize();
         distanceMatrix = matrices.getDistanceMatrix();

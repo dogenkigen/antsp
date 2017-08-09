@@ -2,7 +2,7 @@ package com.mlaskows.solvers.antsolvers.util.pheromone;
 
 import com.mlaskows.config.AcoConfig;
 import com.mlaskows.datamodel.Ant;
-import com.mlaskows.datamodel.matrices.StaticMatricesHolder;
+import com.mlaskows.datamodel.matrices.StaticMatrices;
 
 import static com.mlaskows.exeptions.Reason.EMPTY_HEURISTIC_MATRIX;
 
@@ -14,7 +14,7 @@ public class PheromoneProcessor {
     private double[][] pheromoneMatrix;
     private double[][] choicesInfo;
 
-    public PheromoneProcessor(StaticMatricesHolder matrices, AcoConfig config) {
+    public PheromoneProcessor(StaticMatrices matrices, AcoConfig config) {
         this.config = config;
         problemSize = matrices.getProblemSize();
         heuristicInformationMatrix = matrices.getHeuristicInformationMatrix()

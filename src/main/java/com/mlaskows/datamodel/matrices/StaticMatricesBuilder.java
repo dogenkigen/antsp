@@ -45,9 +45,9 @@ public class StaticMatricesBuilder {
         return this;
     }
 
-    public StaticMatricesHolder build() {
+    public StaticMatrices build() {
         calculateMatrices();
-        return new StaticMatricesHolder(distanceMatrix, nearestNeighbors,
+        return new StaticMatrices(distanceMatrix, nearestNeighbors,
                 heuristicInformationMatrix);
     }
 

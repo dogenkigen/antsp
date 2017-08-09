@@ -2,7 +2,7 @@ package com.mlaskows.solvers;
 
 import com.mlaskows.datamodel.Solution;
 import com.mlaskows.datamodel.matrices.StaticMatricesBuilder;
-import com.mlaskows.datamodel.matrices.StaticMatricesHolder;
+import com.mlaskows.datamodel.matrices.StaticMatrices;
 import com.mlaskows.solvers.heuristic.NearestNeighbourSolver;
 import com.mlaskows.tsplib.datamodel.Tsp;
 import org.testng.annotations.Test;
@@ -44,7 +44,7 @@ public class NearestNeighbourSolverTest implements SolverTest {
 
     private Solution getSolution(String fileName) throws IOException {
         final Tsp tsp = getTsp(fileName);
-        StaticMatricesHolder matricesHolder = new StaticMatricesBuilder(tsp).build();
+        StaticMatrices matricesHolder = new StaticMatricesBuilder(tsp).build();
 
         final NearestNeighbourSolver solver = new NearestNeighbourSolver
                 (matricesHolder);

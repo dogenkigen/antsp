@@ -2,7 +2,7 @@ package com.mlaskows.solvers.antsolvers.util.ant;
 
 import com.mlaskows.config.AcoConfig;
 import com.mlaskows.datamodel.Ant;
-import com.mlaskows.datamodel.matrices.StaticMatricesHolder;
+import com.mlaskows.datamodel.matrices.StaticMatrices;
 import com.mlaskows.solvers.heuristic.TwoOptSolver;
 
 import java.util.List;
@@ -11,9 +11,9 @@ import static java.util.stream.Collectors.toList;
 
 public class MinMaxIterationResultFactory extends IterationResultFactory {
 
-    private final StaticMatricesHolder matrices;
+    private final StaticMatrices matrices;
 
-    public MinMaxIterationResultFactory(StaticMatricesHolder matrices, AcoConfig config) {
+    public MinMaxIterationResultFactory(StaticMatrices matrices, AcoConfig config) {
         super(matrices, config);
         this.matrices = matrices;
     }

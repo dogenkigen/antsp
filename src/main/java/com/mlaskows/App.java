@@ -5,7 +5,7 @@ import com.mlaskows.config.AcoConfig;
 import com.mlaskows.config.AcoConfigFactory;
 import com.mlaskows.datamodel.Solution;
 import com.mlaskows.datamodel.matrices.StaticMatricesBuilder;
-import com.mlaskows.datamodel.matrices.StaticMatricesHolder;
+import com.mlaskows.datamodel.matrices.StaticMatrices;
 import com.mlaskows.solvers.antsolvers.AntSystemSolver;
 import com.mlaskows.tsplib.datamodel.Tsp;
 import com.mlaskows.tsplib.TspLibParser;
@@ -19,7 +19,7 @@ public class App {
         final Tsp tsp = getTsp("ali535.tsp");
         final AcoConfig config =
                 AcoConfigFactory.createDefaultAntSystemConfig(tsp.getDimension());
-        final StaticMatricesHolder matrices = new StaticMatricesBuilder(tsp)
+        final StaticMatrices matrices = new StaticMatricesBuilder(tsp)
                 .withHeuristicInformationMatrix()
                 .withNearestNeighbors(config.getNearestNeighbourFactor())
                 .build();

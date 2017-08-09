@@ -4,7 +4,7 @@ import com.mlaskows.config.AcoConfig;
 import com.mlaskows.config.AcoConfigFactory;
 import com.mlaskows.datamodel.Solution;
 import com.mlaskows.datamodel.matrices.StaticMatricesBuilder;
-import com.mlaskows.datamodel.matrices.StaticMatricesHolder;
+import com.mlaskows.datamodel.matrices.StaticMatrices;
 import com.mlaskows.solvers.SolverTest;
 import com.mlaskows.tsplib.datamodel.Tsp;
 import org.testng.Assert;
@@ -20,7 +20,7 @@ public class ElitistAntSolverTest implements SolverTest {
         final Tsp tsp = getTsp("ali535.tsp");
         final AcoConfig config =
                 AcoConfigFactory.createDefaultElitistConfig(tsp.getDimension());
-        final StaticMatricesHolder matrices = new StaticMatricesBuilder(tsp)
+        final StaticMatrices matrices = new StaticMatricesBuilder(tsp)
                 .withHeuristicInformationMatrix()
                 .withNearestNeighbors(config.getNearestNeighbourFactor())
                 .build();

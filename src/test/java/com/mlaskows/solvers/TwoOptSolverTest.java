@@ -2,7 +2,7 @@ package com.mlaskows.solvers;
 
 import com.mlaskows.datamodel.Solution;
 import com.mlaskows.datamodel.matrices.StaticMatricesBuilder;
-import com.mlaskows.datamodel.matrices.StaticMatricesHolder;
+import com.mlaskows.datamodel.matrices.StaticMatrices;
 import com.mlaskows.solvers.heuristic.TwoOptSolver;
 import com.mlaskows.tsplib.datamodel.Tsp;
 import org.testng.Assert;
@@ -21,7 +21,7 @@ public class TwoOptSolverTest implements SolverTest {
     public void testAustraliaSolution() throws IOException {
         Tsp tsp = getTsp("australia.tsp");
 
-        StaticMatricesHolder matricesHolder = new StaticMatricesBuilder(tsp)
+        StaticMatrices matricesHolder = new StaticMatricesBuilder(tsp)
                 .withNearestNeighbors(5)
                 .build();
         final List<Integer> initialTour = List.of(0, 1, 2, 3, 4, 5);
@@ -39,7 +39,7 @@ public class TwoOptSolverTest implements SolverTest {
     public void testAli535Solution() throws IOException {
         final Tsp tsp = getTsp("ali535.tsp");
 
-        StaticMatricesHolder matricesHolder = new StaticMatricesBuilder(tsp)
+        StaticMatrices matricesHolder = new StaticMatricesBuilder(tsp)
                 .withNearestNeighbors(20)
                 .build();
         final List<Integer> initialTour = getInitialTour(535);
@@ -56,7 +56,7 @@ public class TwoOptSolverTest implements SolverTest {
     public void testBerlin52() throws IOException {
         Tsp tsp = getTsp("berlin52.tsp");
         List<Integer> initialTour = getInitialTour(52);
-        StaticMatricesHolder matricesHolder = new StaticMatricesBuilder(tsp)
+        StaticMatrices matricesHolder = new StaticMatricesBuilder(tsp)
                 .withNearestNeighbors(20)
                 .build();
         int initialDistnace = calculateDistance(matricesHolder.getDistanceMatrix(),
@@ -72,7 +72,7 @@ public class TwoOptSolverTest implements SolverTest {
         Tsp tsp = getTsp("usa13509.tsp");
         List<Integer> initialTour = getInitialTour(13509);
 
-        StaticMatricesHolder matricesHolderWithNN = new StaticMatricesBuilder(tsp)
+        StaticMatrices matricesHolderWithNN = new StaticMatricesBuilder(tsp)
                 .withNearestNeighbors(20)
                 .build();
         int initialDistnace = calculateDistance(matricesHolderWithNN.getDistanceMatrix(),
@@ -85,7 +85,7 @@ public class TwoOptSolverTest implements SolverTest {
         System.out.println("NN test done in " + nnTime + " ms and solution " +
                 "len " + solutionWithNN.getTourLength());
 
-        StaticMatricesHolder matricesHolder = new StaticMatricesBuilder(tsp).build();
+        StaticMatrices matricesHolder = new StaticMatricesBuilder(tsp).build();
 
         long startTime = System.currentTimeMillis();
         Solution solution = computeSolution(initialTour, matricesHolder, initialDistnace);
@@ -97,7 +97,7 @@ public class TwoOptSolverTest implements SolverTest {
         Assert.assertTrue(solution.getTourLength() < solutionWithNN.getTourLength());
     }
 
-    private Solution computeSolution(List<Integer> initialTour, StaticMatricesHolder matricesHolder, int initialDistnace) {
+    private Solution computeSolution(List<Integer> initialTour, StaticMatrices matricesHolder, int initialDistnace) {
         final TwoOptSolver solver = new TwoOptSolver
                 (new Solution(initialTour, initialDistnace), matricesHolder);
         return solver.getSolution();

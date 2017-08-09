@@ -6,4 +6,5 @@
 * Prepare API for external usage
 * Write more tests
 * Perform test runs and collect results
+ -with different NN
 * Create GUI

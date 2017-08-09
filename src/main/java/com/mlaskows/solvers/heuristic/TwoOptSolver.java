@@ -1,7 +1,7 @@
 package com.mlaskows.solvers.heuristic;
 
 import com.mlaskows.datamodel.Solution;
-import com.mlaskows.datamodel.matrices.StaticMatricesHolder;
+import com.mlaskows.datamodel.matrices.StaticMatrices;
 import com.mlaskows.solvers.Solver;
 
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ public class TwoOptSolver implements Solver {
     private final int[][] nearestNeighboursMatrix;
     private List<Integer> tour;
 
-    public TwoOptSolver(Solution initialSolution, StaticMatricesHolder matricesHolder) {
+    public TwoOptSolver(Solution initialSolution, StaticMatrices matricesHolder) {
         this.distanceMatrix = matricesHolder.getDistanceMatrix();
         if (initialSolution.getTour().size() != distanceMatrix.length) {
             throw new IllegalArgumentException("Initial solution tour size "

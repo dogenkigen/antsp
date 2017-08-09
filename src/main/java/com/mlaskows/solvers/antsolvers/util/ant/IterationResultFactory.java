@@ -3,7 +3,7 @@ package com.mlaskows.solvers.antsolvers.util.ant;
 import com.mlaskows.config.AcoConfig;
 import com.mlaskows.datamodel.Ant;
 import com.mlaskows.datamodel.IterationResult;
-import com.mlaskows.datamodel.matrices.StaticMatricesHolder;
+import com.mlaskows.datamodel.matrices.StaticMatrices;
 
 import java.util.List;
 import java.util.SplittableRandom;
@@ -22,7 +22,7 @@ public class IterationResultFactory {
     private final int[][] distanceMatrix;
     private final int[][] nearestNeighbors;
 
-    public IterationResultFactory(StaticMatricesHolder matrices, AcoConfig config) {
+    public IterationResultFactory(StaticMatrices matrices, AcoConfig config) {
         this.config = config;
         this.problemSize = matrices.getProblemSize();
         distanceMatrix = matrices.getDistanceMatrix();

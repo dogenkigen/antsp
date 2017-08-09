@@ -6,7 +6,6 @@ package com.mlaskows.config;
 public class AcoConfigFactory {
 
     public static AcoConfig createDefaultAntSystemConfig(int problemSize) {
-        // TODO NN can be between 15 and 40. Consider options
         return createAcoConfig(3, 1, 0.5, problemSize, 15, 10);
     }
 

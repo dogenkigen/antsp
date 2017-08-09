@@ -1,7 +1,5 @@
 package com.mlaskows.datamodel;
 
-//TODO consider keeping data in steps. This might be memory overhead but can
-// reduce computation time
 public class Step implements Comparable<Step> {
 
     private final int to;

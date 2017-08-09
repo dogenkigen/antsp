@@ -5,9 +5,8 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Created by mlaskows on 17/06/2017.
+ * @author Maciej Laskowski
  */
-// TODO make it thread safe
 public class Ant implements Comparable<Ant> {
 
     private int tourLength;

@@ -18,7 +18,6 @@ public class Solution {
         return tour;
     }
 
-    //TODO consider changing for long
     public int getTourLength() {
         return tourLength;
     }

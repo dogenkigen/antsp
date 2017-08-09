@@ -1,7 +1,7 @@
 package com.mlaskows.solvers.antsolvers;
 
 import com.mlaskows.config.AcoConfig;
-import com.mlaskows.datamodel.matrices.StaticMatricesHolder;
+import com.mlaskows.datamodel.matrices.StaticMatrices;
 import com.mlaskows.solvers.antsolvers.util.ant.IterationResultFactory;
 import com.mlaskows.solvers.antsolvers.util.pheromone.AntSystemPheromoneBehaviour;
 
@@ -10,7 +10,7 @@ import com.mlaskows.solvers.antsolvers.util.pheromone.AntSystemPheromoneBehaviou
  */
 public class AntSystemSolver extends GenericAntSolver {
 
-    public AntSystemSolver(StaticMatricesHolder matrices, AcoConfig config) {
+    public AntSystemSolver(StaticMatrices matrices, AcoConfig config) {
         super(config, new IterationResultFactory(matrices, config),
                 new AntSystemPheromoneBehaviour(matrices, config));
     }
