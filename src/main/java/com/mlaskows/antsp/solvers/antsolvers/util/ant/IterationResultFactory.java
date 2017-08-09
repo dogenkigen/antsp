@@ -50,12 +50,12 @@ public class IterationResultFactory {
         // visited one city during initialization.
         final Stream<Ant> antsStream =
                 getRandomPlacedParallelAnts(config.getAntsCount())
-                .peek(ant -> {
-                            for (int i = 1; i < problemSize; i++) {
-                                moveAnt(ant, choicesInfo);
+                    .peek(ant -> {
+                                for (int i = 1; i < problemSize; i++) {
+                                    moveAnt(ant, choicesInfo);
+                                }
                             }
-                        }
-                );
+                    );
         final List<Ant> ants;
         if (config.isWithLocalSearch()) {
             ants = antsStream
@@ -79,7 +79,7 @@ public class IterationResultFactory {
     }
 
     private void moveAnt(Ant ant, double[][] choicesInfo) {
-        final int currentIndex = ant.getCurrent();
+        final int currentIndex = ant.getCurrentIndex();
         final int nextIndex = getNextIndex(ant, currentIndex, choicesInfo);
         ant.visit(nextIndex, distanceMatrix[currentIndex][nextIndex]);
     }
@@ -98,8 +98,9 @@ public class IterationResultFactory {
                     .nextDouble(0, sumProbabilities);
             double selectionProbability = 0.0;
             for (int j = 0; j < problemSize; j++) {
-                selectionProbability +=
-                        ant.isVisited(j) ? 0.0 : choicesInfo[currentIndex][j];
+                if (ant.notVisited(j)) {
+                    selectionProbability += choicesInfo[currentIndex][j];
+                }
                 if (randomDouble < selectionProbability) {
                     nextIndex = j;
                     break;

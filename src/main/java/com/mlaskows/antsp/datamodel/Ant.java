@@ -46,7 +46,7 @@ public class Ant implements Comparable<Ant> {
         return tourLength;
     }
 
-    public int getCurrent() {
+    public int getCurrentIndex() {
         return tour.get(tour.size() - 1);
     }
 
