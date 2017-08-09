@@ -10,7 +10,7 @@ public class AntSystemDepositBehaviour extends DepositBehaviour {
     public void deposit(PheromoneProcessor pheromoneProcessor, IterationResult iterationResult) {
         for (Ant ant : iterationResult.getSortedAnts()) {
             pheromoneProcessor
-                    .depositAntPheromone(ant, (double) (1 / ant.getTourLength()));
+                    .depositAntPheromone(ant, (double) 1 / ant.getTourLength());
         }
     }
 }
