@@ -34,7 +34,8 @@ public class MinMaxAntSolverTest implements SolverTest {
                 config);
         final Solution solution = solver.getSolution();
 
-        List<Integer> nonImprovementPeriods = solver.getStatistics().getNonImprovementPeriods();
+        List<Integer> nonImprovementPeriods = solution.getStatistics().get()
+                .getNonImprovementPeriods();
         Assert.assertEquals((int) nonImprovementPeriods.get(nonImprovementPeriods.size() - 1),
                 config.getMaxStagnationCount());
         // We assume here that solution will be better than for nearest
@@ -57,7 +58,7 @@ public class MinMaxAntSolverTest implements SolverTest {
         final Solution solution = solver.getSolution();
         final long l1 = currentTimeMillis() - l;
 
-        final Statistics statistics = solver.getStatistics();
+        final Statistics statistics = solution.getStatistics().get();
         List<Integer> nonImprovementPeriods = statistics.getNonImprovementPeriods();
         Assert.assertEquals((int) nonImprovementPeriods.get(nonImprovementPeriods.size() - 1),
                 config.getMaxStagnationCount());

@@ -1,13 +1,15 @@
 package com.mlaskows.antsp.solvers.antsolvers;
 
 import com.mlaskows.antsp.config.AcoConfig;
+import com.mlaskows.antsp.datamodel.Ant;
 import com.mlaskows.antsp.datamodel.IterationResult;
 import com.mlaskows.antsp.datamodel.Solution;
 import com.mlaskows.antsp.solvers.Solver;
 import com.mlaskows.antsp.solvers.antsolvers.util.ant.IterationResultFactory;
 import com.mlaskows.antsp.solvers.antsolvers.util.pheromone.GenericPheromoneBehaviour;
-import com.mlaskows.antsp.statistics.Statistics;
 import com.mlaskows.antsp.statistics.StatisticsBuilder;
+
+import java.util.Optional;
 
 public class GenericAntSolver implements Solver {
     private boolean used;
@@ -47,7 +49,7 @@ public class GenericAntSolver implements Solver {
                 iterationsWithNoImprovement++;
             }
         }
-        return iterationResult.getBestAntSoFar().getSolution();
+        return buildSolutionObject(iterationResult);
     }
 
     private IterationResult getIterationResult() {
@@ -63,8 +65,10 @@ public class GenericAntSolver implements Solver {
         pheromoneBehaviour.depositPheromone(iterationResult);
     }
 
-    public Statistics getStatistics() {
-        return statisticsBuilder.build();
+    private Solution buildSolutionObject(IterationResult iterationResult) {
+        final Ant bestAntSoFar = iterationResult.getBestAntSoFar();
+        return new Solution(bestAntSoFar.getTour(), bestAntSoFar
+                .getTourLength(), Optional.of(statisticsBuilder.build()));
     }
 
 }

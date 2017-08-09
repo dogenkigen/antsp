@@ -12,10 +12,13 @@ import java.io.IOException;
 public interface SolverTest {
 
     default Tsp getTsp(String fileName) throws IOException {
+        return TspLibParser.parse(getFileAbsolutePath(fileName));
+    }
+
+    default String getFileAbsolutePath(String fileName) {
         ClassLoader classLoader = getClass().getClassLoader();
-        File file = new File(classLoader.getResource(fileName)
-                .getFile());
-        return TspLibParser.parse(file.getAbsolutePath());
+        return new File(classLoader.getResource(fileName).getFile())
+                .getAbsolutePath();
     }
 
 }

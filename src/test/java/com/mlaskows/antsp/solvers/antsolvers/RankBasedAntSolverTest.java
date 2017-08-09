@@ -27,7 +27,8 @@ public class RankBasedAntSolverTest implements SolverTest {
         final RankBasedAntSolver solver = new RankBasedAntSolver(matrices, config);
         final Solution solution = solver.getSolution();
 
-        List<Integer> nonImprovementPeriods = solver.getStatistics().getNonImprovementPeriods();
+        List<Integer> nonImprovementPeriods = solution.getStatistics().get()
+                .getNonImprovementPeriods();
         Assert.assertEquals((int) nonImprovementPeriods.get(nonImprovementPeriods.size() - 1),
                 config.getMaxStagnationCount());
         // We assume here that solution will be better than for nearest
