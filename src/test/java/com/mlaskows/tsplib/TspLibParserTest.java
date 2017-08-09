@@ -4,6 +4,7 @@ import com.mlaskows.tsplib.datamodel.Tsp;
 import com.mlaskows.tsplib.datamodel.types.DisplayDataType;
 import com.mlaskows.tsplib.datamodel.types.EdgeWeightType;
 import com.mlaskows.tsplib.datamodel.types.Type;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.io.File;
@@ -23,7 +24,7 @@ public class TspLibParserTest {
         assertEquals(tsp.getName(), "usa13509");
         assertEquals(tsp.getDimension(), 13509);
         assertEquals(tsp.getType(), Type.TSP);
-        assertEquals(tsp.getEdgeWeightType(), EdgeWeightType.EUC_2D);
+        Assert.assertEquals(tsp.getEdgeWeightType(), EdgeWeightType.EUC_2D);
         assertEquals(tsp.getNodes().size(), 13509);
     }
 
@@ -34,8 +35,8 @@ public class TspLibParserTest {
         assertEquals(tsp.getName(), "ali535");
         assertEquals(tsp.getDimension(), 535);
         assertEquals(tsp.getType(), Type.TSP);
-        assertEquals(tsp.getEdgeWeightType(), EdgeWeightType.GEO);
-        assertEquals(tsp.getDisplayDataType(), DisplayDataType.COORD_DISPLAY);
+        Assert.assertEquals(tsp.getEdgeWeightType(), EdgeWeightType.GEO);
+        Assert.assertEquals(tsp.getDisplayDataType(), DisplayDataType.COORD_DISPLAY);
         assertEquals(tsp.getNodes().size(), 535);
         assertEquals(tsp.getComment(), "535 Airports around the globe (Padberg/Rinaldi)");
     }
@@ -48,7 +49,7 @@ public class TspLibParserTest {
         assertEquals(tsp.getType(), Type.TSP);
         assertEquals(tsp.getComment(), "52 locations in Berlin (Groetschel)");
         assertEquals(tsp.getDimension(), 52);
-        assertEquals(tsp.getEdgeWeightType(), EdgeWeightType.EUC_2D);
+        Assert.assertEquals(tsp.getEdgeWeightType(), EdgeWeightType.EUC_2D);
     }
 
     @Test
@@ -60,7 +61,7 @@ public class TspLibParserTest {
         assertEquals(tsp.getComment(), "532-city problem (Padberg/Rinaldi)");
         assertEquals(tsp.getDimension(), 532);
         assertEquals(tsp.getNodes().size(), 532);
-        assertEquals(tsp.getEdgeWeightType(), EdgeWeightType.ATT);
+        Assert.assertEquals(tsp.getEdgeWeightType(), EdgeWeightType.ATT);
     }
 
     private Tsp getTsp(String name) throws IOException {
