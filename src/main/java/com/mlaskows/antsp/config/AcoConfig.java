@@ -74,4 +74,16 @@ public class AcoConfig {
         return withLocalSearch;
     }
 
+    @Override
+    public String toString() {
+        return "AcoConfig{" +
+                "heuristicImportance=" + heuristicImportance +
+                ", pheromoneImportance=" + pheromoneImportance +
+                ", pheromoneEvaporationFactor=" + pheromoneEvaporationFactor +
+                ", antsCount=" + antsCount +
+                ", nearestNeighbourFactor=" + nearestNeighbourFactor +
+                ", maxStagnationCount=" + maxStagnationCount +
+                ", withLocalSearch=" + withLocalSearch +
+                '}';
+    }
 }

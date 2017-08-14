@@ -29,4 +29,12 @@ public class MinMaxConfig extends AcoConfig{
     public int getReinitializationCount() {
         return reinitializationCount;
     }
+
+    @Override
+    public String toString() {
+        return "MinMaxConfig{" +
+                "minPheromoneLimitDivider=" + minPheromoneLimitDivider +
+                ", reinitializationCount=" + reinitializationCount +
+                "} " + super.toString();
+    }
 }

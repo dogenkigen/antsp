@@ -17,4 +17,11 @@ public class RankedBasedConfig extends AcoConfig {
     public int getWeight() {
         return weight;
     }
+
+    @Override
+    public String toString() {
+        return "RankedBasedConfig{" +
+                "weight=" + weight +
+                "} " + super.toString();
+    }
 }
