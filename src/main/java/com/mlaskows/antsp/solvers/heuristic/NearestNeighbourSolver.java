@@ -54,4 +54,10 @@ public class NearestNeighbourSolver implements Solver {
             this.index = index;
         }
     }
+
+    @Override
+    public void stop() {
+        throw new RuntimeException("Can't stop NN solver");
+    }
+
 }

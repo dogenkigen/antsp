@@ -16,6 +16,7 @@ public class NewTwoOptSolver implements Solver {
     private final int[][] distanceMatrix;
     private final int[][] nearestNeighboursMatrix;
     private final int problemSize;
+    private boolean shouldStop;
 
     public NewTwoOptSolver(Solution initialSolution, StaticMatrices matrices) {
         this.initialSolution = initialSolution;
@@ -71,7 +72,7 @@ public class NewTwoOptSolver implements Solver {
         wasImproved = true;
         randomVector = generateRandomPermutation(problemSize);
 
-        while (wasImproved) {
+        while (wasImproved && !shouldStop) {
 
             wasImproved = false;
 
@@ -259,6 +260,11 @@ public class NewTwoOptSolver implements Solver {
             distance += distanceMatrix[tour.get(i)][tour.get(i + 1)];
         }
         return distance;
+    }
+
+    @Override
+    public void stop() {
+        shouldStop = true;
     }
 
 }

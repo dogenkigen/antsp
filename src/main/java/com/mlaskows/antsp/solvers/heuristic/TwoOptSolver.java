@@ -16,6 +16,7 @@ public class TwoOptSolver implements Solver {
     private final int[][] distanceMatrix;
     private final int[][] nearestNeighboursMatrix;
     private List<Integer> tour;
+    private boolean shouldStop;
 
     public TwoOptSolver(Solution initialSolution, StaticMatrices matricesHolder) {
         this.distanceMatrix = matricesHolder.getDistanceMatrix();
@@ -32,7 +33,7 @@ public class TwoOptSolver implements Solver {
     @Override
     public Solution getSolution() {
         boolean wasImproved = true;
-        while (wasImproved) {
+        while (wasImproved && !shouldStop) {
             wasImproved = tryToImproveDistance();
         }
         return new Solution(tour, getDistance(tour));
@@ -117,6 +118,11 @@ public class TwoOptSolver implements Solver {
             distance += distanceMatrix[tour.get(i)][tour.get(i + 1)];
         }
         return distance;
+    }
+
+    @Override
+    public void stop() {
+        shouldStop = true;
     }
 
 }

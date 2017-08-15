@@ -7,4 +7,5 @@ import com.mlaskows.antsp.datamodel.Solution;
  */
 public interface Solver {
     Solution getSolution();
+    void stop();
 }

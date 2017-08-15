@@ -17,6 +17,7 @@ public class GenericAntSolver implements Solver {
     private final IterationResultFactory iterationResultFactory;
     private final GenericPheromoneBehaviour pheromoneBehaviour;
     private final StatisticsBuilder statisticsBuilder;
+    private boolean shouldStop;
 
     public GenericAntSolver(AcoConfig config,
                             IterationResultFactory iterationResultFactory,
@@ -38,7 +39,8 @@ public class GenericAntSolver implements Solver {
         IterationResult iterationResult = null;
 
         pheromoneBehaviour.initializePheromone();
-        while (iterationsWithNoImprovement < config.getMaxStagnationCount()) {
+        while (iterationsWithNoImprovement < config.getMaxStagnationCount()
+                && !shouldStop) {
             iterationResult = getIterationResult();
             statisticsBuilder.addIterationTourLength(iterationResult
                     .getIterationBestAnt().getTourLength());
@@ -69,6 +71,11 @@ public class GenericAntSolver implements Solver {
         final Ant bestAntSoFar = iterationResult.getBestAntSoFar();
         return new Solution(bestAntSoFar.getTour(), bestAntSoFar
                 .getTourLength(), Optional.of(statisticsBuilder.build()));
+    }
+
+    @Override
+    public void stop() {
+        shouldStop = true;
     }
 
 }
