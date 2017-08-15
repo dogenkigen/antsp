@@ -39,8 +39,7 @@ public class GenericAntSolver implements Solver {
         IterationResult iterationResult = null;
 
         pheromoneBehaviour.initializePheromone();
-        while (iterationsWithNoImprovement < config.getMaxStagnationCount()
-                && !shouldStop) {
+        while (shouldNotTerminate(iterationsWithNoImprovement)) {
             iterationResult = getIterationResult();
             statisticsBuilder.addIterationTourLength(iterationResult
                     .getIterationBestAnt().getTourLength());
@@ -52,6 +51,11 @@ public class GenericAntSolver implements Solver {
             }
         }
         return buildSolutionObject(iterationResult);
+    }
+
+    public boolean shouldNotTerminate(int iterationsWithNoImprovement) {
+        return !shouldStop
+                && iterationsWithNoImprovement < config.getMaxStagnationCount();
     }
 
     private IterationResult getIterationResult() {
