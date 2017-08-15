@@ -19,7 +19,7 @@ public class AcoConfigFactory {
     }
 
     public static MinMaxConfig createDefaultMinMaxConfig(int problemSize) {
-        return createMinMaxConfig(3, 1, 0.02, problemSize, 15, 400, 2,
+        return createMinMaxConfig(3, 1, 0.02, problemSize, 15, 40, 2,
                 30, true);
     }
 
