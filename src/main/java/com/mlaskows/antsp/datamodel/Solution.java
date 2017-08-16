@@ -40,8 +40,7 @@ public class Solution {
     @Override
     public String toString() {
         return "Solution{" +
-                "tour=" + tour +
-                ", tourLength=" + tourLength +
-                '}';
+                "tourLength=" + tourLength +
+                ", tour=" + tour + '}';
     }
 }
