@@ -10,6 +10,7 @@ import com.mlaskows.antsp.solvers.heuristic.NewTwoOptSolver;
 import java.util.List;
 import java.util.SplittableRandom;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
@@ -72,10 +73,9 @@ public class IterationResultFactory {
     }
 
     private Stream<Ant> getRandomPlacedParallelAnts(int antCount) {
-        return random.ints(0, antCount)
+        return IntStream.range(0, antCount)
                 .parallel()
-                .limit(config.getAntsCount())
-                .mapToObj(position -> new Ant(problemSize, position));
+                .mapToObj(i -> new Ant(problemSize, random.nextInt(problemSize)));
     }
 
     private void moveAnt(Ant ant, double[][] choicesInfo) {

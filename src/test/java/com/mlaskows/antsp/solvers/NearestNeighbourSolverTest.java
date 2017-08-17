@@ -42,6 +42,13 @@ public class NearestNeighbourSolverTest implements SolverTest {
         assertEquals(solution.getTourLength(), 33470);
     }
 
+    @Test
+    public void testBerlin52() throws IOException {
+        final Solution solution = getSolution("berlin52.tsp");
+
+        assertEquals(solution.getTourLength(), 8314);
+    }
+
     private Solution getSolution(String fileName) throws IOException {
         final Tsp tsp = getTsp(fileName);
         StaticMatrices matricesHolder = new StaticMatricesBuilder(tsp).build();
