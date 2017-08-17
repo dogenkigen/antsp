@@ -9,7 +9,12 @@ import org.testng.annotations.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
 
+import static java.util.stream.Collectors.toList;
 import static org.testng.Assert.assertEquals;
 
 /**
@@ -62,6 +67,22 @@ public class TspLibParserTest {
         assertEquals(tsp.getDimension(), 532);
         assertEquals(tsp.getNodes().size(), 532);
         Assert.assertEquals(tsp.getEdgeWeightType(), EdgeWeightType.ATT);
+    }
+
+    @Test
+    public void testAll() throws IOException {
+        final List<String> tsps = Files.list(Paths.get("./tsplib_bak"))
+                .map(path -> path.toAbsolutePath())
+                .map(Path::toString)
+                .filter(s -> s.endsWith("tsp"))
+                .collect(toList());
+        for (String path : tsps) {
+            try {
+                TspLibParser.parse(path);
+            } catch (Exception e) {
+                System.out.println(path + " " + e.getMessage());
+            }
+        }
     }
 
     private Tsp getTsp(String name) throws IOException {
