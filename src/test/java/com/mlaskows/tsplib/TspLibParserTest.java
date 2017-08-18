@@ -88,6 +88,20 @@ public class TspLibParserTest {
     }
 
     @Test
+    public void testBays29() throws IOException {
+        final Tsp tsp = getTsp("bays29.tsp");
+
+        assertEquals(tsp.getName(), "bays29");
+        assertEquals(tsp.getType(), Type.TSP);
+        assertEquals(tsp.getEdgeWeightType(), EdgeWeightType.EXPLICIT);
+        assertEquals(tsp.getEdgeWeightFormat(), EdgeWeightFormat.FULL_MATRIX);
+        assertEquals(tsp.getDisplayDataType(), DisplayDataType.TWOD_DISPLAY);
+        assertEquals(tsp.getDimension(), 29);
+        assertTrue(tsp.getEdgeWeightData().isPresent());
+        assertEquals(tsp.getNodes().size(), 29);
+    }
+
+    @Test
     public void testAll() throws IOException {
         final List<String> tsps = Files.list(Paths.get("./tsplib_bak"))
                 .map(path -> path.toAbsolutePath())
