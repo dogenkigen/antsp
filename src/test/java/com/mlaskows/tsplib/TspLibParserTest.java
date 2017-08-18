@@ -18,6 +18,7 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
+import static org.testng.internal.junit.ArrayAsserts.assertArrayEquals;
 
 /**
  * Created by mlaskows on 21/04/2017.
@@ -106,11 +107,37 @@ public class TspLibParserTest implements BaseWithTspTest {
     }
 
     @Test
+    public void testDantzig42() throws IOException {
+        final Tsp tsp = getTsp("dantzig42.tsp");
+
+        assertEquals(tsp.getName(), "dantzig42");
+        assertEquals(tsp.getType(), Type.TSP);
+        assertEquals(tsp.getEdgeWeightType(), EdgeWeightType.EXPLICIT);
+        assertEquals(tsp.getEdgeWeightFormat(), EdgeWeightFormat.LOWER_DIAG_ROW);
+        assertEquals(tsp.getDisplayDataType(), DisplayDataType.TWOD_DISPLAY);
+        assertEquals(tsp.getDimension(), 42);
+        assertTrue(tsp.getEdgeWeightData().isPresent());
+        final int[][] ints = tsp.getEdgeWeightData().get();
+        final int[] expected = {5, 12, 55, 41, 53, 64, 61, 61, 66, 84, 111, 113, 150,
+                186, 192, 166, 147, 180, 188, 167, 140, 124, 119, 90, 87, 90, 94,
+                107, 114, 77, 86, 92, 98, 80, 74, 77, 60, 48, 38, 32, 6, 0};
+        assertArrayEquals(ints[41], expected);
+        for (int i = 0; i < ints.length; i++) {
+            for (int j = 0; j < ints.length; j++) {
+                assertEquals(ints[i][j], ints[j][i]);
+            }
+        }
+        assertTrue(tsp.getNodes().isPresent());
+        assertEquals(tsp.getNodes().get().size(), 42);
+    }
+
+    @Test
     public void testAll() throws IOException {
         final List<String> tsps = Files.list(Paths.get("./tsplib_bak"))
                 .map(path -> path.toAbsolutePath())
                 .map(Path::toString)
                 .filter(s -> s.endsWith("tsp"))
+                .filter(s -> s.contains("dantzig"))
                 .collect(toList());
         for (String path : tsps) {
             try {
