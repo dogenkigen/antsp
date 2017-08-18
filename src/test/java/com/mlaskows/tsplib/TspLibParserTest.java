@@ -118,9 +118,10 @@ public class TspLibParserTest implements BaseWithTspTest {
         assertEquals(tsp.getDimension(), 42);
         assertTrue(tsp.getEdgeWeightData().isPresent());
         final int[][] ints = tsp.getEdgeWeightData().get();
-        final int[] expected = {5, 12, 55, 41, 53, 64, 61, 61, 66, 84, 111, 113, 150,
-                186, 192, 166, 147, 180, 188, 167, 140, 124, 119, 90, 87, 90, 94,
-                107, 114, 77, 86, 92, 98, 80, 74, 77, 60, 48, 38, 32, 6, 0};
+        final int[] expected = {5, 12, 55, 41, 53, 64, 61, 61, 66, 84, 111, 113,
+                150, 186, 192, 166, 147, 180, 188, 167, 140, 124, 119, 90, 87,
+                90, 94, 107, 114, 77, 86, 92, 98, 80, 74, 77, 60, 48, 38, 32,
+                6, 0};
         assertArrayEquals(ints[41], expected);
         for (int i = 0; i < ints.length; i++) {
             for (int j = 0; j < ints.length; j++) {
@@ -132,12 +133,56 @@ public class TspLibParserTest implements BaseWithTspTest {
     }
 
     @Test
+    public void testSi175() throws IOException {
+        final Tsp tsp = getTsp("si175.tsp");
+        assertEquals(tsp.getName(), "si175");
+        assertEquals(tsp.getType(), Type.TSP);
+        assertEquals(tsp.getEdgeWeightType(), EdgeWeightType.EXPLICIT);
+        assertEquals(tsp.getEdgeWeightFormat(), EdgeWeightFormat.UPPER_DIAG_ROW);
+        assertEquals(tsp.getDisplayDataType(), DisplayDataType.NO_DISPLAY);
+        assertEquals(tsp.getDimension(), 175);
+        assertTrue(tsp.getEdgeWeightData().isPresent());
+        final int[][] ints = tsp.getEdgeWeightData().get();
+        final int[] expected = {0, 113, 189, 299, 189, 177, 187, 187, 187,
+                162, 187, 162, 187, 162, 187, 177, 189, 202, 213, 234, 245,
+                256, 266, 274, 282, 289, 296, 311, 319, 326, 333, 340, 262,
+                246, 262, 246, 262, 312, 262, 262, 262, 278, 278, 278, 278,
+                278, 278, 278, 262, 246, 246, 262, 246, 262, 246, 262, 246,
+                262, 246, 262, 256, 262, 266, 272, 274, 282, 283, 289, 294,
+                296, 304, 305, 311, 316, 319, 326, 333, 314, 294, 320, 320,
+                278, 273, 287, 320, 287, 273, 287, 320, 314, 294, 312, 314,
+                314, 321, 345, 294, 314, 314, 294, 312, 294, 314, 314, 312,
+                294, 314, 314, 321, 345, 345, 370, 370, 370, 370, 370, 384,
+                384, 340, 416, 416, 416, 416, 416, 416, 416, 416, 416, 416,
+                416, 416, 416, 416, 416, 416, 416, 416, 416, 416, 416, 416,
+                416, 416, 416, 416, 416, 345, 345, 368, 368, 370, 370, 370,
+                370, 370, 370, 370, 370, 370, 370, 370, 384, 384, 384, 384,
+                384, 384, 384, 384, 384, 384, 384, 384, 384, 384};
+        assertArrayEquals(ints[0], expected);
+        for (int i = 0; i < ints.length; i++) {
+            for (int j = 0; j < ints.length; j++) {
+                assertEquals(ints[i][j], ints[j][i]);
+            }
+        }
+    }
+
+    @Test
+    public void testBrazil58() throws IOException {
+        final Tsp tsp = getTsp("brazil58.tsp");
+        assertEquals(tsp.getName(), "brazil58");
+        assertEquals(tsp.getType(), Type.TSP);
+        assertEquals(tsp.getEdgeWeightType(), EdgeWeightType.EXPLICIT);
+        assertEquals(tsp.getEdgeWeightFormat(), EdgeWeightFormat.UPPER_ROW);
+        assertEquals(tsp.getDimension(), 58);
+        assertTrue(tsp.getEdgeWeightData().isPresent());
+    }
+
+    @Test
     public void testAll() throws IOException {
         final List<String> tsps = Files.list(Paths.get("./tsplib_bak"))
                 .map(path -> path.toAbsolutePath())
                 .map(Path::toString)
                 .filter(s -> s.endsWith("tsp"))
-                .filter(s -> s.contains("dantzig"))
                 .collect(toList());
         for (String path : tsps) {
             try {
