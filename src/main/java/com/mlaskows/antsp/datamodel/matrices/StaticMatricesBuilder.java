@@ -63,7 +63,7 @@ public class StaticMatricesBuilder {
         final boolean edgeWeightDataIsPresent = tsp.getEdgeWeightData()
                 .isPresent();
         if (edgeWeightDataIsPresent) {
-            this.distanceMatrix = tsp.getEdgeWeightData().get();
+            this.distanceMatrix = getWithInfiniteIdentityDistances(tsp.getEdgeWeightData().get());
         } else {
             this.distanceMatrix = new int[this.problemSize][this.problemSize];
         }
@@ -88,6 +88,17 @@ public class StaticMatricesBuilder {
                     .forEach((i) -> nearestNeighbors[i] =
                             getNearestNeighbourRow(distanceMatrix[i]));
         }
+    }
+
+    private int[][] getWithInfiniteIdentityDistances(int[][] distances) {
+        for (int i = 0; i < distances.length; i++) {
+            for (int j = 0; j < distances.length; j++) {
+                if (i == j) {
+                    distances[i][j] = Integer.MAX_VALUE;
+                }
+            }
+        }
+        return distances;
     }
 
     private int calculateDistance(Node nodeI, Node nodeJ) {

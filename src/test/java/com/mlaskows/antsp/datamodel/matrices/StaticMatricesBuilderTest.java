@@ -74,7 +74,17 @@ public class StaticMatricesBuilderTest implements BaseWithTspTest {
                 .build();
 
         assertTrue(tsp.getEdgeWeightData().isPresent());
-        assertEquals(matrices.getDistanceMatrix(), tsp.getEdgeWeightData().get());
+        final int[][] distanceMatrix = matrices.getDistanceMatrix();
+        final int[][] edgeWeightData = tsp.getEdgeWeightData().get();
+        for (int i = 0; i < distanceMatrix.length; i++) {
+            for (int j = 0; j < distanceMatrix.length; j++) {
+                if (i != j) {
+                    assertEquals(distanceMatrix[i][j], edgeWeightData[i][j]);
+                } else {
+                    assertEquals(distanceMatrix[i][j], Integer.MAX_VALUE);
+                }
+            }
+        }
     }
 
 }
