@@ -1,4 +1,4 @@
-package com.mlaskows.antsp.solvers;
+package com.mlaskows;
 
 import com.mlaskows.tsplib.datamodel.Tsp;
 import com.mlaskows.tsplib.TspLibParser;
@@ -9,7 +9,7 @@ import java.io.IOException;
 /**
  * Created by maciej_laskowski on 05.07.2017.
  */
-public interface SolverTest {
+public interface BaseWithTspTest {
 
     default Tsp getTsp(String fileName) throws IOException {
         return TspLibParser.parse(getFileAbsolutePath(fileName));

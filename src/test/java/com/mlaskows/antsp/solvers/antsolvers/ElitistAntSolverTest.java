@@ -4,7 +4,7 @@ import com.mlaskows.antsp.config.AcoConfig;
 import com.mlaskows.antsp.datamodel.Solution;
 import com.mlaskows.antsp.datamodel.matrices.StaticMatrices;
 import com.mlaskows.antsp.datamodel.matrices.StaticMatricesBuilder;
-import com.mlaskows.antsp.solvers.SolverTest;
+import com.mlaskows.BaseWithTspTest;
 import com.mlaskows.tsplib.datamodel.Tsp;
 import com.mlaskows.antsp.config.AcoConfigFactory;
 import org.testng.Assert;
@@ -13,7 +13,7 @@ import org.testng.annotations.Test;
 import java.io.IOException;
 import java.util.List;
 
-public class ElitistAntSolverTest implements SolverTest {
+public class ElitistAntSolverTest implements BaseWithTspTest {
 
     @Test
     public void testAli535Solution() throws IOException {

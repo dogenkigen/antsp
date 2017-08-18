@@ -3,7 +3,7 @@ package com.mlaskows.antsp.solvers.antsolvers;
 import com.mlaskows.antsp.config.AcoConfig;
 import com.mlaskows.antsp.config.AcoConfigFactory;
 import com.mlaskows.antsp.datamodel.Solution;
-import com.mlaskows.antsp.solvers.SolverTest;
+import com.mlaskows.BaseWithTspTest;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
@@ -15,7 +15,7 @@ import static org.testng.Assert.assertTrue;
 /**
  * Created by mlaskows on 24/06/2017.
  */
-public class AntSystemSolverTest implements SolverTest {
+public class AntSystemSolverTest implements BaseWithTspTest {
 
     @Test
     public void testAli535Solution() throws IOException {

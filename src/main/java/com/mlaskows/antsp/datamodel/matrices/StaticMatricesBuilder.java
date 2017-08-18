@@ -1,5 +1,6 @@
 package com.mlaskows.antsp.datamodel.matrices;
 
+import com.mlaskows.tsplib.datamodel.types.EdgeWeightType;
 import com.mlaskows.tsplib.util.DistanceCalculationMethodFactory;
 import com.mlaskows.antsp.datamodel.Step;
 import com.mlaskows.tsplib.datamodel.Tsp;
@@ -23,10 +24,16 @@ public class StaticMatricesBuilder {
 
     public StaticMatricesBuilder(Tsp tsp) {
         this.problemSize = tsp.getDimension();
-        this.distanceMatrix = new int[this.problemSize][this.problemSize];
         this.tsp = tsp;
-        this.distanceCalculationMethod = DistanceCalculationMethodFactory
-                .getDistanceCalculationMethod(tsp.getEdgeWeightType());
+        final EdgeWeightType edgeWeightType = tsp.getEdgeWeightType();
+        if (EdgeWeightType.EXPLICIT.equals(edgeWeightType)) {
+            // In this case distances will not be calculated but copied from
+            // TSP edge weight data instead.
+            this.distanceCalculationMethod = null;
+        } else {
+            this.distanceCalculationMethod = DistanceCalculationMethodFactory
+                    .getDistanceCalculationMethod(edgeWeightType);
+        }
     }
 
     public StaticMatricesBuilder withNearestNeighbors(int nnFactor) {
@@ -52,13 +59,22 @@ public class StaticMatricesBuilder {
     }
 
     private void calculateMatrices() {
-        List<Node> nodes = tsp.getNodes();
+        final List<Node> nodes = tsp.getNodes().orElse(null);
+        final boolean edgeWeightDataIsPresent = tsp.getEdgeWeightData()
+                .isPresent();
+        if (edgeWeightDataIsPresent) {
+            this.distanceMatrix = tsp.getEdgeWeightData().get();
+        } else {
+            this.distanceMatrix = new int[this.problemSize][this.problemSize];
+        }
         for (int i = 0; i < problemSize; i++) {
             for (int j = i; j < problemSize; j++) {
-                int distance = getDistance(nodes.get(i), nodes.get(j));
-                fill(distanceMatrix, i, j, distance);
+                if (!edgeWeightDataIsPresent) {
+                    fill(distanceMatrix, i, j, calculateDistance(nodes.get(i), nodes.get(j)));
+                }
                 if (heuristicInformationMatrix != null) {
-                    fill(heuristicInformationMatrix, i, j, (1.0 / ((double) distance + 0.1)));
+                    fill(heuristicInformationMatrix, i, j, (1.0
+                            / ((double) distanceMatrix[i][j] + 0.1)));
                 }
             }
 
@@ -69,11 +85,12 @@ public class StaticMatricesBuilder {
             // For big instances this will make huge bust.
             IntStream.iterate(0, i -> i < problemSize, i -> i + 1)
                     .parallel()
-                    .forEach((i) -> nearestNeighbors[i] = getNearestNeighbourRow(distanceMatrix[i]));
+                    .forEach((i) -> nearestNeighbors[i] =
+                            getNearestNeighbourRow(distanceMatrix[i]));
         }
     }
 
-    private int getDistance(Node nodeI, Node nodeJ) {
+    private int calculateDistance(Node nodeI, Node nodeJ) {
         int distance;
         if (nodeI.equals(nodeJ)) {
             distance = Integer.MAX_VALUE;

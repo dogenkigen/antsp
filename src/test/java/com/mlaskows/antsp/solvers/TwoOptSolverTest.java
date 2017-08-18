@@ -1,5 +1,6 @@
 package com.mlaskows.antsp.solvers;
 
+import com.mlaskows.BaseWithTspTest;
 import com.mlaskows.antsp.datamodel.matrices.StaticMatrices;
 import com.mlaskows.antsp.datamodel.Solution;
 import com.mlaskows.antsp.datamodel.matrices.StaticMatricesBuilder;
@@ -16,7 +17,7 @@ import java.util.stream.IntStream;
 /**
  * Created by mlaskows on 01/07/2017.
  */
-public class TwoOptSolverTest implements SolverTest {
+public class TwoOptSolverTest implements BaseWithTspTest {
     @Test
     public void testAustraliaSolution() throws IOException {
         Tsp tsp = getTsp("australia.tsp");

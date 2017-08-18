@@ -1,5 +1,6 @@
 package com.mlaskows.antsp.solvers;
 
+import com.mlaskows.BaseWithTspTest;
 import com.mlaskows.antsp.datamodel.Solution;
 import com.mlaskows.antsp.datamodel.matrices.StaticMatrices;
 import com.mlaskows.antsp.datamodel.matrices.StaticMatricesBuilder;
@@ -15,7 +16,7 @@ import static org.testng.AssertJUnit.assertEquals;
 /**
  * Created by mlaskows on 18/06/2017.
  */
-public class NearestNeighbourSolverTest implements SolverTest {
+public class NearestNeighbourSolverTest implements BaseWithTspTest {
 
 
     @Test

@@ -1,65 +1,80 @@
 package com.mlaskows.antsp.datamodel.matrices;
 
+import com.mlaskows.BaseWithTspTest;
 import com.mlaskows.tsplib.datamodel.Tsp;
-import com.mlaskows.tsplib.TspLibParser;
-import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import java.io.File;
 import java.io.IOException;
+
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 
 /**
  * Created by mlaskows on 22/04/2017.
  */
-public class StaticMatricesBuilderTest {
+public class StaticMatricesBuilderTest implements BaseWithTspTest {
 
     private static final int NN_FACOTR = 5;
-    private static Tsp tsp;
+    private static Tsp australiTsp;
 
     @BeforeClass
     public void init() throws IOException {
-        ClassLoader classLoader = getClass().getClassLoader();
-        File file = new File(classLoader.getResource("australia.tsp")
-                .getFile());
-        tsp = TspLibParser.parse(file.getAbsolutePath());
+        australiTsp = getTsp("australia.tsp");
     }
 
     @Test
     public void testDistancesAustralia() {
-        StaticMatrices matricesHolder = new StaticMatricesBuilder(tsp).build();
-        int[][] distanceMatrix = matricesHolder.getDistanceMatrix();
+        StaticMatrices matrices =
+                new StaticMatricesBuilder(australiTsp).build();
+        int[][] distanceMatrix = matrices.getDistanceMatrix();
 
-        Assert.assertEquals(distanceMatrix.length, tsp.getDimension());
-        Assert.assertEquals(distanceMatrix[3][3], Integer.MAX_VALUE);
+        assertEquals(distanceMatrix.length, australiTsp.getDimension());
+        assertEquals(distanceMatrix[3][3], Integer.MAX_VALUE);
         // Brisbane - Melbourne (real 1372.50)
-        Assert.assertEquals(distanceMatrix[0][1], 1371);
+        assertEquals(distanceMatrix[0][1], 1371);
         // Sydney - Darwin (real 3144)
-        Assert.assertEquals(distanceMatrix[2][5], 2928);
+        assertEquals(distanceMatrix[2][5], 2928);
     }
 
     @Test
     public void testNNAustralia() {
-        StaticMatrices matricesHolder = new StaticMatricesBuilder(tsp)
+        StaticMatrices matrices = new StaticMatricesBuilder(australiTsp)
                 .withNearestNeighbors(NN_FACOTR)
                 .build();
-        int[][] nearestNeighborList = matricesHolder.getNearestNeighborsMatrix().orElseThrow(RuntimeException::new);
-        Assert.assertEquals(nearestNeighborList.length, tsp.getDimension());
-        Assert.assertEquals(nearestNeighborList[1].length, 5);
-        Assert.assertEquals(nearestNeighborList[0][0], 2);
-        Assert.assertEquals(nearestNeighborList[0][4], 3);
+        int[][] nearestNeighborList = matrices
+                .getNearestNeighborsMatrix()
+                .orElseThrow(RuntimeException::new);
+        assertEquals(nearestNeighborList.length, australiTsp.getDimension());
+        assertEquals(nearestNeighborList[1].length, 5);
+        assertEquals(nearestNeighborList[0][0], 2);
+        assertEquals(nearestNeighborList[0][4], 3);
     }
 
     @Test
     public void testHeuristicAustralia() {
-        StaticMatrices matricesHolder = new StaticMatricesBuilder(tsp)
+        StaticMatrices matrices = new StaticMatricesBuilder(australiTsp)
                 .withHeuristicInformationMatrix()
                 .build();
-        double[][] heuristicInformationMatrix = matricesHolder.getHeuristicInformationMatrix().orElseThrow(RuntimeException::new);
-        Assert.assertEquals(heuristicInformationMatrix.length, tsp.getDimension());
-        int i = matricesHolder.getDistanceMatrix()[1][1];
+        double[][] heuristicInformationMatrix = matrices
+                .getHeuristicInformationMatrix()
+                .orElseThrow(RuntimeException::new);
+        assertEquals(heuristicInformationMatrix.length, australiTsp.getDimension());
+        int i = matrices.getDistanceMatrix()[1][1];
         double v = 1.0 / ((double) i + 0.1);
-        Assert.assertEquals(heuristicInformationMatrix[1][1], v);
+        assertEquals(heuristicInformationMatrix[1][1], v);
+    }
+
+    @Test
+    public void testBays29() throws IOException {
+        final Tsp tsp = getTsp("bays29.tsp");
+        final StaticMatrices matrices = new StaticMatricesBuilder(tsp)
+                .withHeuristicInformationMatrix()
+                .withNearestNeighbors(15)
+                .build();
+
+        assertTrue(tsp.getEdgeWeightData().isPresent());
+        assertEquals(matrices.getDistanceMatrix(), tsp.getEdgeWeightData().get());
     }
 
 }

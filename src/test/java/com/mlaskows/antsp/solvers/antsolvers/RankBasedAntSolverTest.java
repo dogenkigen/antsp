@@ -5,7 +5,7 @@ import com.mlaskows.antsp.config.RankedBasedConfig;
 import com.mlaskows.antsp.datamodel.Solution;
 import com.mlaskows.antsp.datamodel.matrices.StaticMatricesBuilder;
 import com.mlaskows.antsp.datamodel.matrices.StaticMatrices;
-import com.mlaskows.antsp.solvers.SolverTest;
+import com.mlaskows.BaseWithTspTest;
 import com.mlaskows.tsplib.datamodel.Tsp;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -13,7 +13,7 @@ import org.testng.annotations.Test;
 import java.io.IOException;
 import java.util.List;
 
-public class RankBasedAntSolverTest implements SolverTest {
+public class RankBasedAntSolverTest implements BaseWithTspTest {
 
     @Test
     public void testAli535Solution() throws IOException {

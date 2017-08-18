@@ -4,7 +4,7 @@ import com.mlaskows.antsp.config.MinMaxConfig;
 import com.mlaskows.antsp.datamodel.Solution;
 import com.mlaskows.antsp.datamodel.matrices.StaticMatrices;
 import com.mlaskows.antsp.datamodel.matrices.StaticMatricesBuilder;
-import com.mlaskows.antsp.solvers.SolverTest;
+import com.mlaskows.BaseWithTspTest;
 import com.mlaskows.tsplib.datamodel.Tsp;
 import com.mlaskows.antsp.config.AcoConfigFactory;
 import com.mlaskows.antsp.statistics.Statistics;
@@ -19,7 +19,7 @@ import static java.lang.System.currentTimeMillis;
 /**
  * Created by mlaskows on 15/07/2017.
  */
-public class MinMaxAntSolverTest implements SolverTest {
+public class MinMaxAntSolverTest implements BaseWithTspTest {
 
     @Test
     public void testAli535Solution() throws IOException {

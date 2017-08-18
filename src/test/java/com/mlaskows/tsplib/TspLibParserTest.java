@@ -1,5 +1,6 @@
 package com.mlaskows.tsplib;
 
+import com.mlaskows.BaseWithTspTest;
 import com.mlaskows.tsplib.datamodel.Tsp;
 import com.mlaskows.tsplib.datamodel.types.DisplayDataType;
 import com.mlaskows.tsplib.datamodel.types.EdgeWeightFormat;
@@ -8,7 +9,6 @@ import com.mlaskows.tsplib.datamodel.types.Type;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -22,7 +22,7 @@ import static org.testng.Assert.assertTrue;
 /**
  * Created by mlaskows on 21/04/2017.
  */
-public class TspLibParserTest {
+public class TspLibParserTest implements BaseWithTspTest {
 
     @Test
     public void testUsa13509() throws IOException {
@@ -32,7 +32,8 @@ public class TspLibParserTest {
         assertEquals(tsp.getDimension(), 13509);
         assertEquals(tsp.getType(), Type.TSP);
         Assert.assertEquals(tsp.getEdgeWeightType(), EdgeWeightType.EUC_2D);
-        assertEquals(tsp.getNodes().size(), 13509);
+        assertTrue(tsp.getNodes().isPresent());
+        assertEquals(tsp.getNodes().get().size(), 13509);
     }
 
     @Test
@@ -44,7 +45,8 @@ public class TspLibParserTest {
         assertEquals(tsp.getType(), Type.TSP);
         Assert.assertEquals(tsp.getEdgeWeightType(), EdgeWeightType.GEO);
         Assert.assertEquals(tsp.getDisplayDataType(), DisplayDataType.COORD_DISPLAY);
-        assertEquals(tsp.getNodes().size(), 535);
+        assertTrue(tsp.getNodes().isPresent());
+        assertEquals(tsp.getNodes().get().size(), 535);
         assertEquals(tsp.getComment(), "535 Airports around the globe (Padberg/Rinaldi)");
     }
 
@@ -67,7 +69,8 @@ public class TspLibParserTest {
         assertEquals(tsp.getType(), Type.TSP);
         assertEquals(tsp.getComment(), "532-city problem (Padberg/Rinaldi)");
         assertEquals(tsp.getDimension(), 532);
-        assertEquals(tsp.getNodes().size(), 532);
+        assertTrue(tsp.getNodes().isPresent());
+        assertEquals(tsp.getNodes().get().size(), 532);
         assertEquals(tsp.getEdgeWeightType(), EdgeWeightType.ATT);
     }
 
@@ -98,7 +101,8 @@ public class TspLibParserTest {
         assertEquals(tsp.getDisplayDataType(), DisplayDataType.TWOD_DISPLAY);
         assertEquals(tsp.getDimension(), 29);
         assertTrue(tsp.getEdgeWeightData().isPresent());
-        assertEquals(tsp.getNodes().size(), 29);
+        assertTrue(tsp.getNodes().isPresent());
+        assertEquals(tsp.getNodes().get().size(), 29);
     }
 
     @Test
@@ -115,12 +119,6 @@ public class TspLibParserTest {
                 System.out.println(path + " " + e.getMessage());
             }
         }
-    }
-
-    private Tsp getTsp(String name) throws IOException {
-        ClassLoader classLoader = getClass().getClassLoader();
-        File file = new File(classLoader.getResource(name).getFile());
-        return TspLibParser.parse(file.getAbsolutePath());
     }
 
 }
