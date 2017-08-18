@@ -2,6 +2,7 @@ package com.mlaskows.tsplib;
 
 import com.mlaskows.tsplib.datamodel.Tsp;
 import com.mlaskows.tsplib.datamodel.types.DisplayDataType;
+import com.mlaskows.tsplib.datamodel.types.EdgeWeightFormat;
 import com.mlaskows.tsplib.datamodel.types.EdgeWeightType;
 import com.mlaskows.tsplib.datamodel.types.Type;
 import org.testng.Assert;
@@ -16,6 +17,7 @@ import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 
 /**
  * Created by mlaskows on 21/04/2017.
@@ -66,7 +68,23 @@ public class TspLibParserTest {
         assertEquals(tsp.getComment(), "532-city problem (Padberg/Rinaldi)");
         assertEquals(tsp.getDimension(), 532);
         assertEquals(tsp.getNodes().size(), 532);
-        Assert.assertEquals(tsp.getEdgeWeightType(), EdgeWeightType.ATT);
+        assertEquals(tsp.getEdgeWeightType(), EdgeWeightType.ATT);
+    }
+
+    @Test
+    public void testSwiss42() throws IOException {
+        final Tsp tsp = getTsp("swiss42.tsp");
+
+        assertEquals(tsp.getName(), "swiss42");
+        assertEquals(tsp.getType(), Type.TSP);
+        assertEquals(tsp.getEdgeWeightType(), EdgeWeightType.EXPLICIT);
+        assertEquals(tsp.getEdgeWeightFormat(), EdgeWeightFormat.FULL_MATRIX);
+        assertEquals(tsp.getDimension(), 42);
+        assertTrue(tsp.getEdgeWeightData().isPresent());
+        final int[][] data = tsp.getEdgeWeightData().get();
+        assertEquals(data[0][0], 0);
+        assertEquals(data[0][1], 15);
+        assertEquals(data[41][40], 81);
     }
 
     @Test
