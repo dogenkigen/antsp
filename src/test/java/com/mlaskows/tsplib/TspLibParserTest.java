@@ -2,10 +2,7 @@ package com.mlaskows.tsplib;
 
 import com.mlaskows.BaseWithTspTest;
 import com.mlaskows.tsplib.datamodel.Tsp;
-import com.mlaskows.tsplib.datamodel.types.DisplayDataType;
-import com.mlaskows.tsplib.datamodel.types.EdgeWeightFormat;
-import com.mlaskows.tsplib.datamodel.types.EdgeWeightType;
-import com.mlaskows.tsplib.datamodel.types.Type;
+import com.mlaskows.tsplib.datamodel.types.*;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -175,6 +172,19 @@ public class TspLibParserTest implements BaseWithTspTest {
         assertEquals(tsp.getEdgeWeightFormat(), EdgeWeightFormat.UPPER_ROW);
         assertEquals(tsp.getDimension(), 58);
         assertTrue(tsp.getEdgeWeightData().isPresent());
+    }
+
+    @Test
+    public void testPa561() throws IOException {
+        final Tsp tsp = getTsp("pa561.tsp");
+
+        assertEquals(tsp.getName(), "pa561.tsp");
+        assertEquals(tsp.getType(), Type.TSP);
+        assertEquals(tsp.getEdgeWeightType(), EdgeWeightType.EXPLICIT);
+        assertEquals(tsp.getEdgeWeightFormat(), EdgeWeightFormat.LOWER_DIAG_ROW);
+        assertEquals(tsp.getDimension(), 561);
+        assertTrue(tsp.getEdgeWeightData().isPresent());
+        assertEquals(NodeCoordType.NO_COORDS, tsp.getNodeCoordType());
     }
 
     @Test
