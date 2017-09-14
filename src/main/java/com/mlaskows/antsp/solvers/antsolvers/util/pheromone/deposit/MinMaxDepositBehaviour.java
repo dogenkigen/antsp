@@ -9,7 +9,6 @@ import java.util.SplittableRandom;
 
 public class MinMaxDepositBehaviour extends DepositBehaviour {
 
-
     private final SplittableRandom random = new SplittableRandom();
     private final MinMaxConfig config;
     private double minPheromoneValue;
@@ -51,7 +50,6 @@ public class MinMaxDepositBehaviour extends DepositBehaviour {
                 bestAntSoFar.getTourLength();
         pheromoneProcessor.initPheromone(initialPheromoneValue);
     }
-
 
     private int getStagnationCount(Ant newBestAntSoFar) {
         if (lastBestAnt == null
