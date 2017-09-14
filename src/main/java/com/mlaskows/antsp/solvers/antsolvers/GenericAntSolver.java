@@ -17,7 +17,7 @@ public class GenericAntSolver implements Solver {
     private final IterationResultFactory iterationResultFactory;
     private final GenericPheromoneBehaviour pheromoneBehaviour;
     private final StatisticsBuilder statisticsBuilder;
-    private boolean shouldStop;
+    private volatile boolean shouldStop;
 
     public GenericAntSolver(AcoConfig config,
                             IterationResultFactory iterationResultFactory,
