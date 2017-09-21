@@ -21,14 +21,14 @@ public class NewTwoOptSolverTest extends TwoOptSolverTest {
         StaticMatrices matricesHolder = new StaticMatricesBuilder(tsp)
                 .withNearestNeighbors(20)
                 .build();
-        int initialDistnace = calculateDistance(matricesHolder.getDistanceMatrix(),
+        int initialDistance = calculateDistance(matricesHolder.getDistanceMatrix(),
                 initialTour);
 
         final NewTwoOptSolver solver = new NewTwoOptSolver
-                (new Solution(initialTour, initialDistnace), matricesHolder);
+                (new Solution(initialTour, initialDistance), matricesHolder);
         final Solution solution = solver.getSolution();
 
-        assertTrue(solution.getTourLength() < initialDistnace);
+        assertTrue(solution.getTourLength() < initialDistance);
         assertTrue(solution.getTourLength() < 11000);
     }
 
