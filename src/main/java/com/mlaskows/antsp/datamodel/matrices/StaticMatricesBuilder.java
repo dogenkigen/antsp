@@ -3,8 +3,8 @@ package com.mlaskows.antsp.datamodel.matrices;
 import com.mlaskows.tsplib.datamodel.types.EdgeWeightType;
 import com.mlaskows.tsplib.util.DistanceCalculationMethodFactory;
 import com.mlaskows.antsp.datamodel.Step;
-import com.mlaskows.tsplib.datamodel.Tsp;
-import com.mlaskows.tsplib.datamodel.Node;
+import com.mlaskows.tsplib.datamodel.item.Tsp;
+import com.mlaskows.tsplib.datamodel.item.Node;
 
 import java.util.List;
 import java.util.function.BiFunction;

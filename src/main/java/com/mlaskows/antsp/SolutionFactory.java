@@ -5,8 +5,8 @@ import com.mlaskows.antsp.datamodel.Solution;
 import com.mlaskows.antsp.datamodel.matrices.StaticMatrices;
 import com.mlaskows.antsp.datamodel.matrices.StaticMatricesBuilder;
 import com.mlaskows.antsp.solvers.antsolvers.AntSystemSolver;
-import com.mlaskows.tsplib.TspLibParser;
-import com.mlaskows.tsplib.datamodel.Tsp;
+import com.mlaskows.tsplib.parser.TspLibParser;
+import com.mlaskows.tsplib.datamodel.item.Tsp;
 
 import java.io.IOException;
 

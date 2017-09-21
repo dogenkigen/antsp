@@ -7,8 +7,8 @@ import com.mlaskows.antsp.config.AcoConfigFactory;
 import com.mlaskows.antsp.datamodel.Solution;
 import com.mlaskows.antsp.datamodel.matrices.StaticMatricesBuilder;
 import com.mlaskows.antsp.solvers.antsolvers.AntSystemSolver;
-import com.mlaskows.tsplib.datamodel.Tsp;
-import com.mlaskows.tsplib.TspLibParser;
+import com.mlaskows.tsplib.datamodel.item.Tsp;
+import com.mlaskows.tsplib.parser.TspLibParser;
 
 import java.io.File;
 import java.io.IOException;

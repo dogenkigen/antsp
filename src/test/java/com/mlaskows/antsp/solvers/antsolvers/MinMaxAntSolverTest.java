@@ -5,7 +5,7 @@ import com.mlaskows.antsp.datamodel.Solution;
 import com.mlaskows.antsp.datamodel.matrices.StaticMatrices;
 import com.mlaskows.antsp.datamodel.matrices.StaticMatricesBuilder;
 import com.mlaskows.BaseWithTspTest;
-import com.mlaskows.tsplib.datamodel.Tsp;
+import com.mlaskows.tsplib.datamodel.item.Tsp;
 import com.mlaskows.antsp.config.AcoConfigFactory;
 import com.mlaskows.antsp.statistics.Statistics;
 import org.testng.Assert;

@@ -1,7 +1,7 @@
 package com.mlaskows.antsp.datamodel.matrices;
 
 import com.mlaskows.BaseWithTspTest;
-import com.mlaskows.tsplib.datamodel.Tsp;
+import com.mlaskows.tsplib.datamodel.item.Tsp;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
