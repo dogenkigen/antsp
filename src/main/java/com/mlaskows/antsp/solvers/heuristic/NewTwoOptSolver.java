@@ -7,6 +7,7 @@ import com.mlaskows.antsp.solvers.Solver;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 
@@ -35,8 +36,12 @@ public class NewTwoOptSolver implements Solver {
     private List<Integer> getSolutionWithTypeConversion() {
         final List<Integer> tour = initialSolution
                 .getTour();
-        tour.add(tour.get(0));
-        final int[] initialTour = tour.stream().mapToInt(i -> i).toArray();
+        final int[] initialTour =
+                // We need to add the first element on the end because this
+                // algorithm is build the way that the problem is "looped"
+                Stream.concat(tour.stream(), Stream.of(tour.get(0)))
+                .mapToInt(i -> i)
+                .toArray();
         final List<Integer> ts = Arrays.stream(twoOpt(initialTour))
                 .boxed()
                 .collect(toList());

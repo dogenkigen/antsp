@@ -2,6 +2,7 @@ package com.mlaskows.antsp.datamodel;
 
 import com.mlaskows.antsp.statistics.Statistics;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,7 +27,7 @@ public class Solution {
     }
 
     public List<Integer> getTour() {
-        return tour;
+        return Collections.unmodifiableList(tour);
     }
 
     public int getTourLength() {

@@ -2,6 +2,7 @@ package com.mlaskows.antsp.datamodel;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -51,11 +52,11 @@ public class Ant implements Comparable<Ant> {
     }
 
     public List<Integer> getTour() {
-        return tour;
+        return Collections.unmodifiableList(tour);
     }
 
     public Solution getSolution() {
-        return new Solution(new ArrayList<>(tour), tourLength);
+        return new Solution(getTour(), tourLength);
     }
 
     public boolean hasBetterSolutionThen(Ant ant) {
