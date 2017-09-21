@@ -1,5 +1,6 @@
 package com.mlaskows;
 
+import com.mlaskows.tsplib.datamodel.Tour;
 import com.mlaskows.tsplib.datamodel.Tsp;
 import com.mlaskows.tsplib.TspLibParser;
 
@@ -12,7 +13,11 @@ import java.io.IOException;
 public interface BaseWithTspTest {
 
     default Tsp getTsp(String fileName) throws IOException {
-        return TspLibParser.parse(getFileAbsolutePath(fileName));
+        return TspLibParser.parseTsp(getFileAbsolutePath(fileName));
+    }
+
+    default Tour getTour(String fileName) throws IOException {
+        return TspLibParser.parseTour(getFileAbsolutePath(fileName));
     }
 
     default String getFileAbsolutePath(String fileName) {

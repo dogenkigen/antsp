@@ -33,7 +33,7 @@ public class App {
         ClassLoader classLoader = App.class.getClassLoader();
         File file = new File(classLoader.getResource(fileName)
                 .getFile());
-        return TspLibParser.parse(file.getAbsolutePath());
+        return TspLibParser.parseTsp(file.getAbsolutePath());
     }
 
 }

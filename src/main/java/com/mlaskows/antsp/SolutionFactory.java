@@ -16,7 +16,7 @@ public class SolutionFactory {
 
     public static Solution getAntSystemSolutionWithDefaultConfig(String pathToTspLibFile)
             throws IOException {
-        final Tsp tsp = TspLibParser.parse(pathToTspLibFile);
+        final Tsp tsp = TspLibParser.parseTsp(pathToTspLibFile);
         final AcoConfig config = createDefaultAntSystemConfig(tsp.getDimension());
         return createAntSystemSolution(config, tsp);
     }
@@ -24,7 +24,7 @@ public class SolutionFactory {
     public static Solution getAntSystemSolution(String pathToTspLibFile,
                                                 AcoConfig config)
             throws IOException {
-        final Tsp tsp = TspLibParser.parse(pathToTspLibFile);
+        final Tsp tsp = TspLibParser.parseTsp(pathToTspLibFile);
         return createAntSystemSolution(config, tsp);
     }
 

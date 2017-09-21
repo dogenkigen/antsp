@@ -1,6 +1,7 @@
 package com.mlaskows.tsplib;
 
 import com.mlaskows.BaseWithTspTest;
+import com.mlaskows.tsplib.datamodel.Tour;
 import com.mlaskows.tsplib.datamodel.Tsp;
 import com.mlaskows.tsplib.datamodel.types.*;
 import org.testng.Assert;
@@ -57,6 +58,20 @@ public class TspLibParserTest implements BaseWithTspTest {
         assertEquals(tsp.getComment(), "52 locations in Berlin (Groetschel)");
         assertEquals(tsp.getDimension(), 52);
         Assert.assertEquals(tsp.getEdgeWeightType(), EdgeWeightType.EUC_2D);
+    }
+
+    @Test
+    public void testBerlin52Tour() throws IOException {
+        final Tour tour = getTour("berlin52.opt.tour");
+
+        assertEquals(tour.getName(), "berlin52.opt.tour");
+        assertEquals(tour.getType(), Type.TOUR);
+        assertEquals(tour.getDimension(), 52);
+        final int[] expectedTour = {1, 49, 32, 45, 19, 41, 8, 9, 10, 43, 33,
+                51, 11, 52, 14, 13, 47, 26, 27, 28, 12, 25, 4, 6, 15, 5, 24,
+                48, 38, 37, 40, 39, 36, 35, 34, 44, 46, 16, 29, 50, 20, 23,
+                30, 2, 7, 42, 21, 17, 3, 18, 31, 22};
+        assertArrayEquals(expectedTour, tour.getTour().get(0));
     }
 
     @Test
@@ -188,15 +203,25 @@ public class TspLibParserTest implements BaseWithTspTest {
     }
 
     @Test
+    public void testGr24Tour() throws IOException {
+        final Tour tour = getTour("gr24.opt.tour");
+
+        assertEquals(tour.getName(), "gr24.opt.tour");
+        assertEquals(tour.getType(), Type.TOUR);
+        assertEquals(tour.getDimension(), 24);
+        assertEquals(tour.getComment(), "Optimal solution for gr24 (1272)");
+    }
+
+    @Test
     public void testAll() throws IOException {
         final List<String> tsps = Files.list(Paths.get("./tsplib_bak"))
                 .map(path -> path.toAbsolutePath())
                 .map(Path::toString)
-                .filter(s -> s.endsWith("tsp"))
+                .filter(s -> s.endsWith("tsp") || s.endsWith("tour"))
                 .collect(toList());
         for (String path : tsps) {
             try {
-                TspLibParser.parse(path);
+                TspLibParser.parseTsp(path);
             } catch (Exception e) {
                 System.out.println(path + " " + e.getMessage());
             }
