@@ -20,7 +20,7 @@ public class AntSystemSolverTest implements BaseWithTspTest {
     @Test
     public void testAli535Solution() throws IOException {
         final Solution solution =
-                getAntSystemSolutionWithDefaultConfig(getFileAbsolutePath("ali535.tsp"));
+                getAntSystemSolutionWithDefaultConfig(getFileAbsolutePath("tsplib/ali535.tsp"));
         // We assume here that solution will be better than for nearest
         // neighbour algorithm.
         assertTrue(solution.getTourLength() < 224358);
@@ -29,7 +29,7 @@ public class AntSystemSolverTest implements BaseWithTspTest {
     @Test
     public void testAtt532Solution() throws IOException {
         final Solution solution =
-                getAntSystemSolutionWithDefaultConfig(getFileAbsolutePath("att532.tsp"));
+                getAntSystemSolutionWithDefaultConfig(getFileAbsolutePath("tsplib/att532.tsp"));
 
         // We assume here that solution will be better than for nearest
         // neighbour algorithm.
@@ -41,7 +41,7 @@ public class AntSystemSolverTest implements BaseWithTspTest {
         // More ants then cities
         final AcoConfig config = AcoConfigFactory
                 .createDefaultAntSystemConfig(100);
-        final Solution solution = getAntSystemSolution(getFileAbsolutePath("berlin52.tsp"), config);
+        final Solution solution = getAntSystemSolution(getFileAbsolutePath("tsplib/berlin52.tsp"), config);
 
         assertTrue(solution.getTourLength() < 8314);
     }

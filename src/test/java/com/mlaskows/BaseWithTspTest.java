@@ -1,11 +1,11 @@
 package com.mlaskows;
 
+import com.mlaskows.tsplib.TspLibParser;
 import com.mlaskows.tsplib.datamodel.Tour;
 import com.mlaskows.tsplib.datamodel.Tsp;
-import com.mlaskows.tsplib.TspLibParser;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 
 /**
  * Created by maciej_laskowski on 05.07.2017.
@@ -21,9 +21,7 @@ public interface BaseWithTspTest {
     }
 
     default String getFileAbsolutePath(String fileName) {
-        ClassLoader classLoader = getClass().getClassLoader();
-        return new File(classLoader.getResource(fileName).getFile())
-                .getAbsolutePath();
+        return Paths.get(fileName).toAbsolutePath().toString();
     }
 
 }

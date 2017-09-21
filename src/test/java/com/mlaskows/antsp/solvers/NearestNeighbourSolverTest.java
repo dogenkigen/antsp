@@ -21,7 +21,7 @@ public class NearestNeighbourSolverTest implements BaseWithTspTest {
 
     @Test
     public void testAustraliaSolution() throws IOException {
-        final Solution solution = getSolution("australia.tsp");
+        final Solution solution = getSolution("tsplib/australia.tsp");
 
         final List<Integer> expectedTour = List.of(0, 2, 1, 4, 5, 3);
 
@@ -31,21 +31,21 @@ public class NearestNeighbourSolverTest implements BaseWithTspTest {
 
     @Test
     public void testAli535Solution() throws IOException {
-        final Solution solution = getSolution("ali535.tsp");
+        final Solution solution = getSolution("tsplib/ali535.tsp");
 
         assertEquals(solution.getTourLength(), 224358);
     }
 
     @Test
     public void testAtt532() throws IOException {
-        final Solution solution = getSolution("att532.tsp");
+        final Solution solution = getSolution("tsplib/att532.tsp");
 
         assertEquals(solution.getTourLength(), 33470);
     }
 
     @Test
     public void testBerlin52() throws IOException {
-        final Solution solution = getSolution("berlin52.tsp");
+        final Solution solution = getSolution("tsplib/berlin52.tsp");
 
         assertEquals(solution.getTourLength(), 8314);
     }

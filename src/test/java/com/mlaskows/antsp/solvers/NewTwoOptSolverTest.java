@@ -16,7 +16,7 @@ public class NewTwoOptSolverTest extends TwoOptSolverTest {
 
     @Test
     public void testBerlin52() throws IOException {
-        Tsp tsp = getTsp("berlin52.tsp");
+        Tsp tsp = getTsp("tsplib/berlin52.tsp");
         List<Integer> initialTour = getInitialTour(52);
         StaticMatrices matricesHolder = new StaticMatricesBuilder(tsp)
                 .withNearestNeighbors(20)

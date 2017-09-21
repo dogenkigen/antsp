@@ -20,7 +20,7 @@ public class StaticMatricesBuilderTest implements BaseWithTspTest {
 
     @BeforeClass
     public void init() throws IOException {
-        australiTsp = getTsp("australia.tsp");
+        australiTsp = getTsp("tsplib/australia.tsp");
     }
 
     @Test
@@ -67,7 +67,7 @@ public class StaticMatricesBuilderTest implements BaseWithTspTest {
 
     @Test
     public void testBays29() throws IOException {
-        final Tsp tsp = getTsp("bays29.tsp");
+        final Tsp tsp = getTsp("tsplib/bays29.tsp");
         final StaticMatrices matrices = new StaticMatricesBuilder(tsp)
                 .withHeuristicInformationMatrix()
                 .withNearestNeighbors(15)

@@ -23,7 +23,7 @@ public class MinMaxAntSolverTest implements BaseWithTspTest {
 
     @Test
     public void testAli535Solution() throws IOException {
-        final Tsp tsp = getTsp("ali535.tsp");
+        final Tsp tsp = getTsp("tsplib/ali535.tsp");
         final MinMaxConfig config = AcoConfigFactory
                 .createDefaultMinMaxConfig(tsp.getDimension());
         final StaticMatrices matrices = new StaticMatricesBuilder(tsp)
@@ -47,7 +47,7 @@ public class MinMaxAntSolverTest implements BaseWithTspTest {
     @Test
     public void testAtt532Solution() throws IOException {
         final long l = currentTimeMillis();
-        final Tsp tsp = getTsp("att532.tsp");
+        final Tsp tsp = getTsp("tsplib/att532.tsp");
         final MinMaxConfig config =
                 AcoConfigFactory.createDefaultMinMaxConfig(tsp.getDimension());
         final StaticMatrices matrices = new StaticMatricesBuilder(tsp)

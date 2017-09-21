@@ -17,7 +17,7 @@ public class RankBasedAntSolverTest implements BaseWithTspTest {
 
     @Test
     public void testAli535Solution() throws IOException {
-        final Tsp tsp = getTsp("ali535.tsp");
+        final Tsp tsp = getTsp("tsplib/ali535.tsp");
         final RankedBasedConfig config =
                 AcoConfigFactory.createDefaultRankedBasedConfig(tsp.getDimension());
         final StaticMatrices matrices = new StaticMatricesBuilder(tsp)

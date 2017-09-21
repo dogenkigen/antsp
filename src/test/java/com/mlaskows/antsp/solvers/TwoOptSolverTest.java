@@ -20,7 +20,7 @@ import java.util.stream.IntStream;
 public class TwoOptSolverTest implements BaseWithTspTest {
     @Test
     public void testAustraliaSolution() throws IOException {
-        Tsp tsp = getTsp("australia.tsp");
+        Tsp tsp = getTsp("tsplib/australia.tsp");
 
         StaticMatrices matricesHolder = new StaticMatricesBuilder(tsp)
                 .withNearestNeighbors(5)
@@ -38,7 +38,7 @@ public class TwoOptSolverTest implements BaseWithTspTest {
 
     @Test
     public void testAli535Solution() throws IOException {
-        final Tsp tsp = getTsp("ali535.tsp");
+        final Tsp tsp = getTsp("tsplib/ali535.tsp");
 
         StaticMatrices matricesHolder = new StaticMatricesBuilder(tsp)
                 .withNearestNeighbors(20)
@@ -55,7 +55,7 @@ public class TwoOptSolverTest implements BaseWithTspTest {
 
     @Test
     public void testBerlin52() throws IOException {
-        Tsp tsp = getTsp("berlin52.tsp");
+        Tsp tsp = getTsp("tsplib/berlin52.tsp");
         List<Integer> initialTour = getInitialTour(52);
         StaticMatrices matricesHolder = new StaticMatricesBuilder(tsp)
                 .withNearestNeighbors(20)
@@ -70,7 +70,7 @@ public class TwoOptSolverTest implements BaseWithTspTest {
 
     @Test(enabled = false)
     public void testUsa13509() throws IOException {
-        Tsp tsp = getTsp("usa13509.tsp");
+        Tsp tsp = getTsp("tsplib/usa13509.tsp");
         List<Integer> initialTour = getInitialTour(13509);
 
         StaticMatrices matricesHolderWithNN = new StaticMatricesBuilder(tsp)
