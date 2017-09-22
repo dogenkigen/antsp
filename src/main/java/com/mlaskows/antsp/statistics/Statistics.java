@@ -9,25 +9,25 @@ import java.util.Map;
  */
 public class Statistics {
 
-    private final Map<Integer, Integer> iterationTourLength;
+    private final Map<Integer, Integer> iterationTourLengths;
 
     public Statistics(Map<Integer, Integer> iterationTourLength) {
-        this.iterationTourLength = iterationTourLength;
+        this.iterationTourLengths = iterationTourLength;
     }
 
-    public Map<Integer, Integer> getIterationTourLength() {
-        return iterationTourLength;
+    public Map<Integer, Integer> getIterationTourLengths() {
+        return iterationTourLengths;
     }
 
     public int getIterationsCount() {
-        return iterationTourLength.size();
+        return iterationTourLengths.size();
     }
 
     public List<Integer> getNonImprovementPeriods() {
         List<Integer> result = new ArrayList<>();
         int acc = 0;
         int bestVale = Integer.MAX_VALUE;
-        for (Integer value : iterationTourLength.values()) {
+        for (Integer value : iterationTourLengths.values()) {
             if (value >= bestVale) {
                 acc++;
             } else {
@@ -45,13 +45,13 @@ public class Statistics {
     }
 
     public int getIterationIndexForBestSolution() {
-        return iterationTourLength.keySet().stream()
+        return iterationTourLengths.keySet().stream()
                 .min((id1, id2) ->  compareToursForGivenIds(id1, id2))
                 .get();
     }
 
     private int compareToursForGivenIds(Integer id1, Integer id2) {
-        return iterationTourLength.get(id1)
-                .compareTo(iterationTourLength.get(id2));
+        return iterationTourLengths.get(id1)
+                .compareTo(iterationTourLengths.get(id2));
     }
 }
