@@ -108,18 +108,6 @@ public class IterationResultFactory {
         return nextIndex;
     }
 
-    private int chooseBestNext(Ant ant, int currentIndex, double[][] choicesInfo) {
-        int nextIndex = 1;
-        double v = 0.0;
-        for (int j = 0; j < problemSize; j++) {
-            if (ant.notVisited(j) && choicesInfo[currentIndex][j] > v) {
-                nextIndex = j;
-                v = choicesInfo[currentIndex][j];
-            }
-        }
-        return nextIndex;
-    }
-
     private double newSumProbabilities(Ant ant, int currentIndex,
                                        int[] nearestNeighbors,
                                        double[][] choicesInfo) {
@@ -130,6 +118,18 @@ public class IterationResultFactory {
             }
         }
         return sumProbabilities;
+    }
+
+    private int chooseBestNext(Ant ant, int currentIndex, double[][] choicesInfo) {
+        int nextIndex = 1;
+        double v = 0.0;
+        for (int j = 0; j < problemSize; j++) {
+            if (ant.notVisited(j) && choicesInfo[currentIndex][j] > v) {
+                nextIndex = j;
+                v = choicesInfo[currentIndex][j];
+            }
+        }
+        return nextIndex;
     }
 
     private int getRandomInt(int origin, int bound) {
