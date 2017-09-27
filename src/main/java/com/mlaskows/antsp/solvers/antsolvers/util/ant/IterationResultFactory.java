@@ -20,7 +20,6 @@ public class IterationResultFactory {
     private final StaticMatrices matrices;
     private final AcoConfig config;
     private final int problemSize;
-    private final SplittableRandom random = new SplittableRandom();
     private Ant bestAntSoFar;
     private final int[][] distanceMatrix;
     private final int[][] nearestNeighbors;
@@ -51,12 +50,12 @@ public class IterationResultFactory {
         // visited one city during initialization.
         final Stream<Ant> antsStream =
                 getRandomPlacedParallelAnts(config.getAntsCount())
-                    .peek(ant -> {
-                                for (int i = 1; i < problemSize; i++) {
-                                    moveAnt(ant, choicesInfo);
+                        .peek(ant -> {
+                                    for (int i = 1; i < problemSize; i++) {
+                                        moveAnt(ant, choicesInfo);
+                                    }
                                 }
-                            }
-                    );
+                        );
         final List<Ant> ants;
         if (config.isWithLocalSearch()) {
             ants = antsStream
@@ -75,7 +74,7 @@ public class IterationResultFactory {
     private Stream<Ant> getRandomPlacedParallelAnts(int antCount) {
         return IntStream.range(0, antCount)
                 .parallel()
-                .mapToObj(i -> new Ant(problemSize, random.nextInt(problemSize)));
+                .mapToObj(i -> new Ant(problemSize, getRandomInt(0, problemSize)));
     }
 
     private void moveAnt(Ant ant, double[][] choicesInfo) {
@@ -94,8 +93,7 @@ public class IterationResultFactory {
         if (sumProbabilities == 0.0) {
             nextIndex = chooseBestNext(ant, currentIndex, choicesInfo);
         } else {
-            final double randomDouble = ThreadLocalRandom.current()
-                    .nextDouble(0, sumProbabilities);
+            final double randomDouble = getRandomDouble(0, sumProbabilities);
             double selectionProbability = 0.0;
             for (int j = 0; j < problemSize; j++) {
                 if (ant.notVisited(j)) {
@@ -132,6 +130,14 @@ public class IterationResultFactory {
             }
         }
         return sumProbabilities;
+    }
+
+    private int getRandomInt(int origin, int bound) {
+        return ThreadLocalRandom.current().nextInt(origin, bound);
+    }
+
+    private double getRandomDouble(double origin, double bound) {
+        return ThreadLocalRandom.current().nextDouble(origin, bound);
     }
 
 }
