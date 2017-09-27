@@ -35,7 +35,7 @@ public class IterationResultFactory {
     }
 
     public IterationResult createIterationResult(double[][] choicesInfo) {
-        final List<Ant> sortedAnts = constructAntsSolutionSorted(choicesInfo);
+        final List<Ant> sortedAnts = constructAntsSolutionsSorted(choicesInfo);
         final Ant iterationBestAnt = sortedAnts.get(0);
         boolean isImprovedIteration = false;
         if (bestAntSoFar == null
@@ -46,7 +46,7 @@ public class IterationResultFactory {
         return new IterationResult(sortedAnts, bestAntSoFar, isImprovedIteration);
     }
 
-    protected List<Ant> constructAntsSolutionSorted(double[][] choicesInfo) {
+    private List<Ant> constructAntsSolutionsSorted(double[][] choicesInfo) {
         // Iterating should be started from 1 since every ant has already
         // visited one city during initialization.
         final Stream<Ant> antsStream =
