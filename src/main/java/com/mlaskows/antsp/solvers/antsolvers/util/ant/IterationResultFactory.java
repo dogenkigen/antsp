@@ -121,7 +121,7 @@ public class IterationResultFactory {
     }
 
     private int chooseBestNext(Ant ant, int currentIndex, double[][] choicesInfo) {
-        int nextIndex = 1;
+        int nextIndex = 0;
         double v = 0.0;
         for (int j = 0; j < problemSize; j++) {
             if (ant.notVisited(j) && choicesInfo[currentIndex][j] > v) {
