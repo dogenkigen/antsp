@@ -99,7 +99,7 @@ public class IterationResultFactory {
                 if (ant.notVisited(j)) {
                     selectionProbability += choicesInfo[currentIndex][j];
                 }
-                if (randomDouble < selectionProbability) {
+                if (randomDouble <= selectionProbability) {
                     nextIndex = j;
                     break;
                 }
