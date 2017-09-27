@@ -92,11 +92,7 @@ public class StaticMatricesBuilder {
 
     private int[][] getWithInfiniteIdentityDistances(int[][] distances) {
         for (int i = 0; i < distances.length; i++) {
-            for (int j = 0; j < distances.length; j++) {
-                if (i == j) {
-                    distances[i][j] = Integer.MAX_VALUE;
-                }
-            }
+            distances[i][i] = Integer.MAX_VALUE;
         }
         return distances;
     }
