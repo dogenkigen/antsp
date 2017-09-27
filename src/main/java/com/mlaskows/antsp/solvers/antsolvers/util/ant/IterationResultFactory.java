@@ -88,7 +88,7 @@ public class IterationResultFactory {
         double sumProbabilities = newSumProbabilities(ant, currentIndex,
                 nearestNeighbors[currentIndex], choicesInfo);
 
-        int nextIndex = 1;
+        int nextIndex = 0;
         // This is true in case when all nearest neighbours are already visited
         if (sumProbabilities == 0.0) {
             nextIndex = chooseBestNext(ant, currentIndex, choicesInfo);
