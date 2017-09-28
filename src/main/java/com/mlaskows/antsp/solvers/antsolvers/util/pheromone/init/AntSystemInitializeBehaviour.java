@@ -13,7 +13,7 @@ public class AntSystemInitializeBehaviour extends InitializeBehaviour {
                            AcoConfig config) {
         final Solution solution = getNearestNeighbourSolution(matrices);
         final double initialPheromoneValue =
-                (double) matrices.getProblemSize() / solution.getTourLength();
+                (double) config.getAntsCount() / solution.getTourLength();
         pheromoneProcessor.initPheromone(initialPheromoneValue);
     }
 }
