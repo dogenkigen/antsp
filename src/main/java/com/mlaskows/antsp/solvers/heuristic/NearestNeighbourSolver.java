@@ -9,13 +9,14 @@ import com.mlaskows.antsp.solvers.Solver;
 import java.util.stream.IntStream;
 
 /**
- * Created by mlaskows on 24/06/2017.
- * <p>
  * Implementation of Nearest Neighbor, O(n^2)
+ *
+ * @author Maciej Laskowski
  */
 public class NearestNeighbourSolver implements Solver {
 
     private final int[][] distanceMatrix;
+    private volatile boolean shouldStop;
 
     public NearestNeighbourSolver(StaticMatrices matricesHolder) {
         this.distanceMatrix = matricesHolder.getDistanceMatrix();
@@ -24,40 +25,28 @@ public class NearestNeighbourSolver implements Solver {
     @Override
     public Solution getSolution() {
         final int size = distanceMatrix.length;
-        final Ant ant = new Ant(size, 0);
-        final ActualIndexHolder actual = new ActualIndexHolder();
+        int index = 0;
+        final Ant ant = new Ant(size, index);
         for (int i = 0; i < size - 1; i++) {
-            final int[] row = this.distanceMatrix[actual.getIndex()];
-            IntStream.range(0, size)
-                    .mapToObj(index -> new Step(index, row[index]))
-                    .filter(step -> !ant.isVisited(step.getTo()))
-                    .sorted()
-                    .findFirst()
-                    .ifPresent(step -> moveAnt(ant, actual, step));
+            if (shouldStop) {
+                return null;
+            }
+            int distance = Integer.MAX_VALUE;
+            final int[] row = this.distanceMatrix[index];
+            for (int j = 0; j < row.length; j++) {
+                if (row[j] < distance && ant.notVisited(j)) {
+                    distance = row[j];
+                    index = j;
+                }
+            }
+            ant.visit(index, distance);
         }
         return new Solution(ant.getTour(), ant.getTourLength());
     }
 
-    private void moveAnt(Ant ant, ActualIndexHolder actual, Step step) {
-        ant.visit(step.getTo(), step.getDistance());
-        actual.setIndex(step.getTo());
-    }
-
-    private static class ActualIndexHolder {
-        private int index;
-
-        public int getIndex() {
-            return index;
-        }
-
-        public void setIndex(int index) {
-            this.index = index;
-        }
-    }
-
     @Override
     public void stop() {
-        throw new RuntimeException("Can't stop NN solver");
+        shouldStop = true;
     }
 
 }
