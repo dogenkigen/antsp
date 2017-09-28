@@ -43,9 +43,9 @@ public class PheromoneProcessor {
 
     public void depositAntPheromone(Ant ant, double pheromoneDelta) {
         for (int i = 0; i < ant.getTour().size() - 1; i++) {
-            int j = ant.getTour().get(i);
-            int l = ant.getTour().get(i + 1);
-            updatePheromoneOnEdge(j, l, pheromoneMatrix[j][l] + pheromoneDelta);
+            int from = ant.getTour().get(i);
+            int to = ant.getTour().get(i + 1);
+            updatePheromoneOnEdge(from, to, pheromoneMatrix[from][to] + pheromoneDelta);
         }
     }
 
