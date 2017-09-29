@@ -11,7 +11,7 @@ import com.mlaskows.antsp.statistics.StatisticsBuilder;
 
 import java.util.Optional;
 
-public class GenericAntSolver implements Solver {
+public abstract class GenericAntSolver implements Solver {
     private boolean used;
     private final AcoConfig config;
     private final IterationResultFactory iterationResultFactory;
@@ -19,7 +19,7 @@ public class GenericAntSolver implements Solver {
     private final StatisticsBuilder statisticsBuilder;
     private volatile boolean shouldStop;
 
-    public GenericAntSolver(AcoConfig config,
+    GenericAntSolver(AcoConfig config,
                             IterationResultFactory iterationResultFactory,
                             GenericPheromoneBehaviour pheromoneBehaviour) {
         this.config = config;
@@ -53,7 +53,7 @@ public class GenericAntSolver implements Solver {
         return buildSolutionObject(iterationResult);
     }
 
-    public boolean shouldNotTerminate(int iterationsWithNoImprovement) {
+    private boolean shouldNotTerminate(int iterationsWithNoImprovement) {
         return !shouldStop
                 && iterationsWithNoImprovement < config.getMaxStagnationCount();
     }
