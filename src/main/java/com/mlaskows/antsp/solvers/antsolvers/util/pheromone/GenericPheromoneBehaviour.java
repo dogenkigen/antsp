@@ -27,7 +27,7 @@ public class GenericPheromoneBehaviour {
     }
 
     public void initializePheromone() {
-        initializeBehaviour.initialize(pheromoneProcessor, matrices,config);
+        initializeBehaviour.initialize(pheromoneProcessor, matrices, config);
     }
 
     public double[][] getChoicesInfo() {
