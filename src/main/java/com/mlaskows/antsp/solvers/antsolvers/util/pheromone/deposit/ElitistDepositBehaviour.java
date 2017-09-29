@@ -4,7 +4,7 @@ import com.mlaskows.antsp.datamodel.IterationResult;
 import com.mlaskows.antsp.solvers.antsolvers.util.pheromone.PheromoneProcessor;
 import com.mlaskows.antsp.datamodel.Ant;
 
-public class ElitistDepositBehaviour extends DepositBehaviour {
+public class ElitistDepositBehaviour implements DepositBehaviour {
 
     private final int problemSize;
 

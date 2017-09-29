@@ -8,7 +8,7 @@ import com.mlaskows.antsp.solvers.antsolvers.util.pheromone.PheromoneProcessor;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class RankBasedDepositBehaviour extends DepositBehaviour {
+public class RankBasedDepositBehaviour implements DepositBehaviour {
     private final RankedBasedConfig config;
 
     public RankBasedDepositBehaviour(RankedBasedConfig config) {

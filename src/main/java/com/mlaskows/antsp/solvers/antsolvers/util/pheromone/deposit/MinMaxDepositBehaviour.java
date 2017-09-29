@@ -7,7 +7,7 @@ import com.mlaskows.antsp.solvers.antsolvers.util.pheromone.PheromoneProcessor;
 
 import java.util.SplittableRandom;
 
-public class MinMaxDepositBehaviour extends DepositBehaviour {
+public class MinMaxDepositBehaviour implements DepositBehaviour {
 
     private final SplittableRandom random = new SplittableRandom();
     private final MinMaxConfig config;
