@@ -6,13 +6,13 @@ import com.mlaskows.antsp.datamodel.Solution;
 import com.mlaskows.antsp.solvers.antsolvers.util.pheromone.PheromoneProcessor;
 import com.mlaskows.antsp.solvers.heuristic.NearestNeighbourSolver;
 
-public abstract class InitializeBehaviour {
+public interface InitializeBehaviour {
 
-    public abstract void initialize(PheromoneProcessor pheromoneProcessor,
+    void initialize(PheromoneProcessor pheromoneProcessor,
                                     StaticMatrices matrices,
                                     AcoConfig config);
 
-    protected Solution getNearestNeighbourSolution(StaticMatrices matrices) {
+    default Solution getNearestNeighbourSolution(StaticMatrices matrices) {
         final NearestNeighbourSolver nearestNeighbourSolver =
                 new NearestNeighbourSolver(matrices);
         return nearestNeighbourSolver.getSolution();

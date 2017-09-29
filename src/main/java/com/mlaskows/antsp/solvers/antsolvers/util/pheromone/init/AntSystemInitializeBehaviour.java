@@ -5,7 +5,7 @@ import com.mlaskows.antsp.datamodel.Solution;
 import com.mlaskows.antsp.datamodel.matrices.StaticMatrices;
 import com.mlaskows.antsp.solvers.antsolvers.util.pheromone.PheromoneProcessor;
 
-public class AntSystemInitializeBehaviour extends InitializeBehaviour {
+public class AntSystemInitializeBehaviour implements InitializeBehaviour {
 
     @Override
     public void initialize(PheromoneProcessor pheromoneProcessor,
