@@ -1,11 +1,11 @@
 package com.mlaskows.antsp.config;
 
-public class MinMaxConfig extends AcoConfig{
+public class MaxMinConfig extends AcoConfig{
 
     private final int minPheromoneLimitDivider;
     private final int reinitializationCount;
 
-    public MinMaxConfig(int heuristicImportance, int pheromoneImportance,
+    public MaxMinConfig(int heuristicImportance, int pheromoneImportance,
                         double pheromoneEvaporationFactor, int antsCount,
                         int nearestNeighbourFactor, int maxStagnationCount,
                         int minPheromoneLimitDivider, int reinitializationCount,
@@ -32,7 +32,7 @@ public class MinMaxConfig extends AcoConfig{
 
     @Override
     public String toString() {
-        return "MinMaxConfig{" +
+        return "MaxMinConfig{" +
                 "minPheromoneLimitDivider=" + minPheromoneLimitDivider +
                 ", reinitializationCount=" + reinitializationCount +
                 "} " + super.toString();

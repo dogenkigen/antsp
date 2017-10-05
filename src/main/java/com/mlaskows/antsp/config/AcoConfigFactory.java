@@ -18,7 +18,7 @@ public class AcoConfigFactory {
                 6, false);
     }
 
-    public static MinMaxConfig createDefaultMinMaxConfig(int antsCount) {
+    public static MaxMinConfig createDefaultMaxMinConfig(int antsCount) {
         return createMinMaxConfig(3, 1, 0.02, antsCount, 15, 40, 2,
                 30, true);
     }
@@ -49,7 +49,7 @@ public class AcoConfigFactory {
                 withLocalSearch);
     }
 
-    public static MinMaxConfig createMinMaxConfig(int heuristicImportance,
+    public static MaxMinConfig createMinMaxConfig(int heuristicImportance,
                                                   int pheromoneImportance,
                                                   double pheromoneEvaporationFactor,
                                                   int antsCount,
@@ -58,7 +58,7 @@ public class AcoConfigFactory {
                                                   int minPheromoneLimitDivider,
                                                   int reinitializationCount,
                                                   boolean withLocalSearch) {
-        return new MinMaxConfig(heuristicImportance, pheromoneImportance,
+        return new MaxMinConfig(heuristicImportance, pheromoneImportance,
                 pheromoneEvaporationFactor, antsCount, nearestNeighbourFactor,
                 maxStagnationCount, minPheromoneLimitDivider,
                 reinitializationCount, withLocalSearch);

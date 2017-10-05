@@ -5,7 +5,7 @@ import com.mlaskows.antsp.config.AcoConfig;
 import com.mlaskows.antsp.datamodel.Solution;
 import com.mlaskows.antsp.solvers.antsolvers.util.pheromone.PheromoneProcessor;
 
-public class MinMaxInitializeBehaviour implements InitializeBehaviour {
+public class MaxMinInitializeBehaviour implements InitializeBehaviour {
 
     @Override
     public void initialize(PheromoneProcessor pheromoneProcessor,

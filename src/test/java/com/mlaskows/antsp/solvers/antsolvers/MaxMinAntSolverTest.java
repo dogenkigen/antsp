@@ -1,6 +1,6 @@
 package com.mlaskows.antsp.solvers.antsolvers;
 
-import com.mlaskows.antsp.config.MinMaxConfig;
+import com.mlaskows.antsp.config.MaxMinConfig;
 import com.mlaskows.antsp.datamodel.Solution;
 import com.mlaskows.antsp.datamodel.matrices.StaticMatrices;
 import com.mlaskows.antsp.datamodel.matrices.StaticMatricesBuilder;
@@ -19,18 +19,18 @@ import static java.lang.System.currentTimeMillis;
 /**
  * Created by mlaskows on 15/07/2017.
  */
-public class MinMaxAntSolverTest implements BaseWithTspTest {
+public class MaxMinAntSolverTest implements BaseWithTspTest {
 
     @Test
     public void testAli535Solution() throws IOException {
         final Tsp tsp = getTsp("tsplib/ali535.tsp");
-        final MinMaxConfig config = AcoConfigFactory
-                .createDefaultMinMaxConfig(tsp.getDimension());
+        final MaxMinConfig config = AcoConfigFactory
+                .createDefaultMaxMinConfig(tsp.getDimension());
         final StaticMatrices matrices = new StaticMatricesBuilder(tsp)
                 .withHeuristicInformationMatrix()
                 .withNearestNeighbors(config.getNearestNeighbourFactor())
                 .build();
-        final MinMaxAntSolver solver = new MinMaxAntSolver(matrices,
+        final MaxMinAntSolver solver = new MaxMinAntSolver(matrices,
                 config);
         final Solution solution = solver.getSolution();
 
@@ -48,13 +48,13 @@ public class MinMaxAntSolverTest implements BaseWithTspTest {
     public void testAtt532Solution() throws IOException {
         final long l = currentTimeMillis();
         final Tsp tsp = getTsp("tsplib/att532.tsp");
-        final MinMaxConfig config =
-                AcoConfigFactory.createDefaultMinMaxConfig(tsp.getDimension());
+        final MaxMinConfig config =
+                AcoConfigFactory.createDefaultMaxMinConfig(tsp.getDimension());
         final StaticMatrices matrices = new StaticMatricesBuilder(tsp)
                 .withHeuristicInformationMatrix()
                 .withNearestNeighbors(config.getNearestNeighbourFactor())
                 .build();
-        final MinMaxAntSolver solver = new MinMaxAntSolver(matrices, config);
+        final MaxMinAntSolver solver = new MaxMinAntSolver(matrices, config);
         final Solution solution = solver.getSolution();
         final long l1 = currentTimeMillis() - l;
 

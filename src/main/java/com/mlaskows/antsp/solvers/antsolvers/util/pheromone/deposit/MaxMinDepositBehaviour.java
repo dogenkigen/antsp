@@ -1,23 +1,23 @@
 package com.mlaskows.antsp.solvers.antsolvers.util.pheromone.deposit;
 
-import com.mlaskows.antsp.config.MinMaxConfig;
+import com.mlaskows.antsp.config.MaxMinConfig;
 import com.mlaskows.antsp.datamodel.Ant;
 import com.mlaskows.antsp.datamodel.IterationResult;
 import com.mlaskows.antsp.solvers.antsolvers.util.pheromone.PheromoneProcessor;
-import com.mlaskows.antsp.solvers.antsolvers.util.pheromone.init.MinMaxInitializeBehaviour;
+import com.mlaskows.antsp.solvers.antsolvers.util.pheromone.init.MaxMinInitializeBehaviour;
 
 import java.util.SplittableRandom;
 
-public class MinMaxDepositBehaviour implements DepositBehaviour {
+public class MaxMinDepositBehaviour implements DepositBehaviour {
 
     private final SplittableRandom random = new SplittableRandom();
-    private final MinMaxConfig config;
+    private final MaxMinConfig config;
     private double minPheromoneValue;
     private double maxPheromoneValue;
     private Ant lastBestAnt;
     private int stagnationCount;
 
-    public MinMaxDepositBehaviour(MinMaxConfig config) {
+    public MaxMinDepositBehaviour(MaxMinConfig config) {
         this.config = config;
     }
 
@@ -29,7 +29,7 @@ public class MinMaxDepositBehaviour implements DepositBehaviour {
         final int stagnationCount = getStagnationCount(bestAntSoFar);
         if (stagnationCount
                 == config.getReinitializationCount()) {
-            new MinMaxInitializeBehaviour()
+            new MaxMinInitializeBehaviour()
                     .initializeForSolution(pheromoneProcessor, config, bestAntSoFar.getSolution());
         }
         updateMinMax(bestAntSoFar);
