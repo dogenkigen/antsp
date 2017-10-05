@@ -4,6 +4,7 @@ import com.mlaskows.antsp.config.MinMaxConfig;
 import com.mlaskows.antsp.datamodel.Ant;
 import com.mlaskows.antsp.datamodel.IterationResult;
 import com.mlaskows.antsp.solvers.antsolvers.util.pheromone.PheromoneProcessor;
+import com.mlaskows.antsp.solvers.antsolvers.util.pheromone.init.MinMaxInitializeBehaviour;
 
 import java.util.SplittableRandom;
 
@@ -28,7 +29,8 @@ public class MinMaxDepositBehaviour implements DepositBehaviour {
         final int stagnationCount = getStagnationCount(bestAntSoFar);
         if (stagnationCount
                 == config.getReinitializationCount()) {
-            reinitializePheromone(pheromoneProcessor, bestAntSoFar);
+            new MinMaxInitializeBehaviour()
+                    .initializeForSolution(pheromoneProcessor, config, bestAntSoFar.getSolution());
         }
         updateMinMax(bestAntSoFar);
         final Ant ant = getAntToDeposit(bestAntSoFar, iterationBestAnt);
@@ -41,14 +43,6 @@ public class MinMaxDepositBehaviour implements DepositBehaviour {
         //return iterationBestAnt;
         // TODO create good balance based on problemSize
         return random.nextBoolean() ? iterationBestAnt : bestAntSoFar;
-    }
-
-    private void reinitializePheromone(PheromoneProcessor pheromoneProcessor,
-                                       Ant bestAntSoFar) {
-        final double initialPheromoneValue = (double) 1 /
-                config.getPheromoneEvaporationFactor() *
-                bestAntSoFar.getTourLength();
-        pheromoneProcessor.initPheromone(initialPheromoneValue);
     }
 
     private int getStagnationCount(Ant newBestAntSoFar) {

@@ -11,9 +11,15 @@ public class MinMaxInitializeBehaviour implements InitializeBehaviour {
     public void initialize(PheromoneProcessor pheromoneProcessor,
                            StaticMatrices matrices, AcoConfig config) {
         final Solution solution = getNearestNeighbourSolution(matrices);
+        initializeForSolution(pheromoneProcessor, config, solution);
+    }
+
+    public void initializeForSolution(PheromoneProcessor pheromoneProcessor,
+                                      AcoConfig config, Solution solution) {
         final double initialPheromoneValue = (double) 1 /
                 config.getPheromoneEvaporationFactor() *
                 solution.getTourLength();
         pheromoneProcessor.initPheromone(initialPheromoneValue);
     }
+
 }
