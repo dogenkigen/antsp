@@ -5,7 +5,7 @@ import java.util.EnumSet;
 public enum AlgorithmType {
 
     ANT_SYSTEM("Ant System"),
-    MIN_MAX("Min Max Ant System"),
+    MIN_MAX("MAX-MIN Ant System"),
     RANK_BASED("Rank Based Ant System"),
     ELITIST("Elitist Ant System");
 
