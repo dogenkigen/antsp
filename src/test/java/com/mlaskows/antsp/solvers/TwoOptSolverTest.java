@@ -12,6 +12,7 @@ import org.testng.annotations.Test;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
@@ -106,9 +107,9 @@ public class TwoOptSolverTest implements BaseWithTspTest {
     }
 
     protected List<Integer> getInitialTour(int size) {
-        final List<Integer> initialTour = new ArrayList<>(size);
-        IntStream.range(0, size).forEach(index -> initialTour.add(index));
-        return initialTour;
+        return IntStream.range(0, size)
+                .mapToObj(Integer::valueOf)
+                .collect(Collectors.toList());
     }
 
     protected int calculateDistance(int[][] australianDistances, List<Integer>
