@@ -6,8 +6,7 @@ import com.mlaskows.antsp.datamodel.matrices.StaticMatrices;
 import com.mlaskows.antsp.solvers.antsolvers.util.pheromone.deposit.DepositBehaviour;
 import com.mlaskows.antsp.solvers.antsolvers.util.pheromone.init.InitializeBehaviour;
 
-public class GenericPheromoneBehaviour {
-
+public abstract class GenericPheromoneBehaviour {
 
     private final PheromoneProcessor pheromoneProcessor;
     private final StaticMatrices matrices;
