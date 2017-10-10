@@ -50,6 +50,13 @@ public class NearestNeighbourSolverTest implements BaseWithTspTest {
         assertEquals(8980, solution.getTourLength());
     }
 
+    @Test
+    public void testPa561() throws IOException {
+        final Solution solution = getSolution("tsplib/pa561.tsp");
+
+        assertEquals(3422, solution.getTourLength());
+    }
+
     private Solution getSolution(String fileName) throws IOException {
         final Tsp tsp = getTsp(fileName);
         StaticMatrices matricesHolder = new StaticMatricesBuilder(tsp).build();

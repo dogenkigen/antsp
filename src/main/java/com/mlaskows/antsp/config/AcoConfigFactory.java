@@ -9,6 +9,10 @@ public class AcoConfigFactory {
         return createAcoConfig(3, 1, 0.5, antsCount, 15, 10, false);
     }
 
+    public static AcoConfigBuilder createAcoConfigBuilderWithDefaults(int antsCount) {
+        return new AcoConfigBuilder(createDefaultAntSystemConfig(antsCount));
+    }
+
     public static AcoConfig createDefaultElitistConfig(int antsCount) {
         return createAcoConfig(3, 1, 0.9, antsCount, 15, 10, false);
     }
