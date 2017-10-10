@@ -1,6 +1,7 @@
 package com.mlaskows.antsp.config;
 
 public class AcoConfigBuilder {
+
     protected int heuristicImportance;
     protected int pheromoneImportance;
     protected double pheromoneEvaporationFactor;
@@ -8,6 +9,20 @@ public class AcoConfigBuilder {
     protected int nearestNeighbourFactor;
     protected int maxStagnationCount;
     protected boolean withLocalSearch;
+
+    public AcoConfigBuilder() {
+
+    }
+
+    public AcoConfigBuilder(AcoConfig config) {
+        this.heuristicImportance = config.getHeuristicImportance();
+        this.pheromoneImportance = config.getPheromoneImportance();
+        this.pheromoneEvaporationFactor = config.getPheromoneEvaporationFactor();
+        this.antsCount = config.getAntsCount();
+        this.nearestNeighbourFactor = config.getNearestNeighbourFactor();
+        this.maxStagnationCount = config.getMaxStagnationCount();
+        this.withLocalSearch = config.isWithLocalSearch();
+    }
 
     public AcoConfigBuilder withHeuristicImportance(int heuristicImportance) {
         this.heuristicImportance = heuristicImportance;
