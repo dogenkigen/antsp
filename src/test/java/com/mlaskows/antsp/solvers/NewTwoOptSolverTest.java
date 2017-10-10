@@ -12,7 +12,7 @@ import java.util.List;
 
 import static org.testng.Assert.assertTrue;
 
-public class NewTwoOptSolverTest extends TwoOptSolverTest {
+public class NewTwoOptSolverTest extends BaseOptSolverTest {
 
     @Test
     public void testBerlin52() throws IOException {

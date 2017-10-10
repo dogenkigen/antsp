@@ -23,31 +23,31 @@ public class NearestNeighbourSolverTest implements BaseWithTspTest {
     public void testAustraliaSolution() throws IOException {
         final Solution solution = getSolution("tsplib/australia.tsp");
 
-        final List<Integer> expectedTour = List.of(0, 2, 1, 4, 5, 3);
+        final List<Integer> expectedTour = List.of(0, 2, 1, 4, 5, 3, 0);
 
         assertEquals(solution.getTour(), expectedTour);
-        assertEquals(solution.getTourLength(), 6095);
+        assertEquals(10320, solution.getTourLength());
     }
 
     @Test
     public void testAli535Solution() throws IOException {
         final Solution solution = getSolution("tsplib/ali535.tsp");
 
-        assertEquals(solution.getTourLength(), 224358);
+        assertEquals(242009, solution.getTourLength());
     }
 
     @Test
     public void testAtt532() throws IOException {
         final Solution solution = getSolution("tsplib/att532.tsp");
 
-        assertEquals(solution.getTourLength(), 33470);
+        assertEquals(35516, solution.getTourLength());
     }
 
     @Test
     public void testBerlin52() throws IOException {
         final Solution solution = getSolution("tsplib/berlin52.tsp");
 
-        assertEquals(solution.getTourLength(), 8314);
+        assertEquals(8980, solution.getTourLength());
     }
 
     private Solution getSolution(String fileName) throws IOException {

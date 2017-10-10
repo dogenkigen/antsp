@@ -46,16 +46,9 @@ public class IterationResultFactory {
     }
 
     private List<Ant> constructAntsSolutionsSorted(double[][] choicesInfo) {
-        // Iterating should be started from 1 since every ant has already
-        // visited one city during initialization.
         final Stream<Ant> antsStream =
                 getRandomPlacedParallelAnts(config.getAntsCount())
-                        .peek(ant -> {
-                                    for (int i = 1; i < problemSize; i++) {
-                                        moveAnt(ant, choicesInfo);
-                                    }
-                                }
-                        );
+                        .peek(ant -> constructAntSolution(choicesInfo, ant));
         final List<Ant> ants;
         if (config.isWithLocalSearch()) {
             ants = antsStream
@@ -74,7 +67,17 @@ public class IterationResultFactory {
     private Stream<Ant> getRandomPlacedParallelAnts(int antCount) {
         return IntStream.range(0, antCount)
                 .parallel()
-                .mapToObj(i -> new Ant(problemSize, getRandomInt(0, problemSize)));
+                .mapToObj(i -> new Ant(problemSize + 1, getRandomInt(0, problemSize)));
+    }
+
+    private void constructAntSolution(double[][] choicesInfo, Ant ant) {
+        // Iterating should be started from 1 since every ant has already
+        // visited one city during initialization.
+        for (int i = 1; i < problemSize; i++) {
+            moveAnt(ant, choicesInfo);
+        }
+        final int firstIndex = ant.getFirstIndex();
+        ant.visit(firstIndex, distanceMatrix[ant.getCurrentIndex()][firstIndex]);
     }
 
     private void moveAnt(Ant ant, double[][] choicesInfo) {

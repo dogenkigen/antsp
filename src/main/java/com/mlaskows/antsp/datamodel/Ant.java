@@ -51,6 +51,10 @@ public class Ant implements Comparable<Ant> {
         return tour.get(tour.size() - 1);
     }
 
+    public int getFirstIndex() {
+        return tour.get(0);
+    }
+
     public List<Integer> getTour() {
         return Collections.unmodifiableList(tour);
     }

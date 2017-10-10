@@ -20,11 +20,6 @@ public class TwoOptSolver implements Solver {
 
     public TwoOptSolver(Solution initialSolution, StaticMatrices matricesHolder) {
         this.distanceMatrix = matricesHolder.getDistanceMatrix();
-        if (initialSolution.getTour().size() != distanceMatrix.length) {
-            throw new IllegalArgumentException("Initial solution tour size "
-                    + initialSolution.getTour().size() + " should be equal to" +
-                    " problem size " + distanceMatrix.length);
-        }
         nearestNeighboursMatrix = matricesHolder.getNearestNeighborsMatrix()
                 .orElse(null);
         tour = initialSolution.getTour();

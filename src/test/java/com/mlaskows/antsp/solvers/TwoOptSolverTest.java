@@ -18,7 +18,7 @@ import java.util.stream.IntStream;
 /**
  * Created by mlaskows on 01/07/2017.
  */
-public class TwoOptSolverTest implements BaseWithTspTest {
+public class TwoOptSolverTest extends BaseOptSolverTest {
     @Test
     public void testAustraliaSolution() throws IOException {
         Tsp tsp = getTsp("tsplib/australia.tsp");
@@ -51,7 +51,7 @@ public class TwoOptSolverTest implements BaseWithTspTest {
         final Solution solution = computeSolution(initialTour, matricesHolder, initialDistnace);
 
         Assert.assertTrue(solution.getTourLength() < initialDistnace);
-        Assert.assertEquals(solution.getTourLength(), 3669906);
+        Assert.assertEquals(solution.getTourLength(), 3680332);
     }
 
     @Test
@@ -106,18 +106,4 @@ public class TwoOptSolverTest implements BaseWithTspTest {
         return solver.getSolution();
     }
 
-    protected List<Integer> getInitialTour(int size) {
-        return IntStream.range(0, size)
-                .mapToObj(Integer::valueOf)
-                .collect(Collectors.toList());
-    }
-
-    protected int calculateDistance(int[][] australianDistances, List<Integer>
-            initialTour) {
-        int distance = 0;
-        for (int i = 0; i < initialTour.size() - 1; i++) {
-            distance += australianDistances[initialTour.get(i)][initialTour.get(i + 1)];
-        }
-        return distance;
-    }
 }

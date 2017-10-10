@@ -24,10 +24,9 @@ public class NearestNeighbourSolver implements Solver {
 
     @Override
     public Solution getSolution() {
-        final int size = distanceMatrix.length;
         int index = 0;
-        final Ant ant = new Ant(size, index);
-        for (int i = 0; i < size - 1; i++) {
+        final Ant ant = new Ant(distanceMatrix.length + 1, index);
+        for (int i = 0; i < distanceMatrix.length - 1; i++) {
             if (shouldStop) {
                 return null;
             }
@@ -41,6 +40,8 @@ public class NearestNeighbourSolver implements Solver {
             }
             ant.visit(index, distance);
         }
+        final int firstIndex = ant.getFirstIndex();
+        ant.visit(firstIndex, distanceMatrix[ant.getCurrentIndex()][firstIndex]);
         return new Solution(ant.getTour(), ant.getTourLength());
     }
 
