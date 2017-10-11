@@ -1,11 +1,13 @@
 package com.mlaskows.antsp.datamodel.matrices;
 
 import com.mlaskows.BaseWithTspTest;
+import com.mlaskows.tsplib.datamodel.item.Tour;
 import com.mlaskows.tsplib.datamodel.item.Tsp;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
+import java.util.List;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
@@ -85,6 +87,26 @@ public class StaticMatricesBuilderTest implements BaseWithTspTest {
                 }
             }
         }
+    }
+
+    @Test
+    public void testPa561Comparison() throws IOException {
+        Tsp tsp = getTsp("tsplib/pa561.tsp");
+        int[] tour = getTour("tsplib/pa561.opt.tour").getTour().get(0);
+        StaticMatrices matrices = new StaticMatricesBuilder(tsp).build();
+        int[][] distanceMatrix = matrices.getDistanceMatrix();
+
+        int tourLen = getTourLen(tour, distanceMatrix);
+
+        assertEquals(2754, tourLen);
+    }
+
+    private int getTourLen(int[] tour, int[][] distanceMatrix) {
+        int tourLen = 0;
+        for (int i = 1; i < tour.length; i++) {
+            tourLen += distanceMatrix[tour[i - 1] - 1][tour[i] - 1];
+        }
+        return tourLen;
     }
 
 }
