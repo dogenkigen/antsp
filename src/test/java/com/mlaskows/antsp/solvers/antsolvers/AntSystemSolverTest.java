@@ -25,7 +25,7 @@ import static org.testng.Assert.assertTrue;
  */
 public class AntSystemSolverTest implements BaseWithTspTest {
 
-    @Test
+    @Test(enabled = false)
     public void testAli535Solution() throws IOException {
         final Solution solution =
                 getAntSystemSolutionWithDefaultConfig(getFileAbsolutePath("tsplib/ali535.tsp"));
@@ -34,7 +34,7 @@ public class AntSystemSolverTest implements BaseWithTspTest {
         assertTrue(solution.getTourLength() < 224358);
     }
 
-    @Test
+    @Test(enabled = false)
     public void testAtt532Solution() throws IOException {
         final Solution solution =
                 getAntSystemSolutionWithDefaultConfig(getFileAbsolutePath("tsplib/att532.tsp"));
@@ -44,7 +44,7 @@ public class AntSystemSolverTest implements BaseWithTspTest {
         assertTrue(solution.getTourLength() < 33470);
     }
 
-    @Test
+    @Test(enabled = false)
     public void testBerlin52Solution() throws IOException {
         // More ants then cities
         final AcoConfig config = AcoConfigFactory
@@ -54,9 +54,9 @@ public class AntSystemSolverTest implements BaseWithTspTest {
         assertTrue(solution.getTourLength() < 8314);
     }
 
-    @Test
+    @Test(enabled = false)
     public void testStats() throws IOException {
-        boolean localSearch = true;
+        boolean localSearch = false;
         int iterations = 10;
 
         //int numberOfAnts = 100;
@@ -143,4 +143,129 @@ public class AntSystemSolverTest implements BaseWithTspTest {
         //assertTrue(solution.getTourLength() < 3422);
     }
 
+    @Test
+    public void testStats1() throws IOException {
+        boolean localSearch = false;
+        int iterations = 10;
+
+        //int numberOfAnts = 100;
+        int nnFactor = 15;
+        String name = "dsj1000";
+        StaticMatrices matrices = new StaticMatricesBuilder(TspLibParser.parseTsp("tsplib/" + name + ".tsp"))//pa561
+                .withHeuristicInformationMatrix()
+                .withNearestNeighbors(nnFactor)
+                .build();
+
+
+        StringBuilder allDataStringBuilder = new StringBuilder();
+        StringBuilder chartStringBuilder = new StringBuilder();
+        allDataStringBuilder.append("NN_FACTOR,ANT_COUNT,LOCAL_SEARCH,TOUR_LEN,SOLUTION_FOUND_IN_IT,NON_IMPROVED_PERIODS\n");
+        int maxNumberOfAnts = matrices.getProblemSize();
+        for (int numberOfAnts = 1; numberOfAnts <= maxNumberOfAnts; numberOfAnts += 200) {
+            AcoConfig config = AcoConfigFactory.createAcoConfigBuilderWithDefaults(numberOfAnts)
+                    .withMaxStagnationCount(100)
+                    .withWithLocalSearch(localSearch)
+                    .withNearestNeighbourFactor(nnFactor)
+                    .build();
+            for (int i = 0; i < iterations; i++) {
+                final Solution solution = new AntSystemSolver(matrices, config).getSolution();
+                Statistics statistics = solution.getStatistics().get();
+
+                allDataStringBuilder.append(nnFactor);
+                allDataStringBuilder.append(",");
+                allDataStringBuilder.append(numberOfAnts);
+                allDataStringBuilder.append(",");
+                allDataStringBuilder.append(localSearch);
+                allDataStringBuilder.append(",");
+                allDataStringBuilder.append(solution.getTourLength());
+                allDataStringBuilder.append(",");
+                allDataStringBuilder.append(statistics.getIterationsCount() - config.getMaxStagnationCount());
+                allDataStringBuilder.append(",");
+                statistics.getNonImprovementPeriods().stream().forEach(p -> allDataStringBuilder.append(p + ";"));
+                allDataStringBuilder.append("\n");
+
+                chartStringBuilder.append(numberOfAnts);
+                chartStringBuilder.append(",");
+                chartStringBuilder.append(solution.getTourLength());
+                chartStringBuilder.append("\n");
+
+                //System.out.println(allDataStringBuilder);
+                System.out.println(((double) (((numberOfAnts - 1) * iterations) + i) / ((maxNumberOfAnts) * iterations)) * 100 + "%");
+
+            }
+        }
+        String ls = localSearch ? "_LS_" : "";
+        Path path = Paths.get(name + ls + ".csv");
+        try (BufferedWriter writer = Files.newBufferedWriter(path)) {
+            writer.write(allDataStringBuilder.toString());
+        }
+
+        Path chartPath = Paths.get(name + ls + "_chart.csv");
+        try (BufferedWriter writer = Files.newBufferedWriter(chartPath)) {
+            writer.write(chartStringBuilder.toString());
+        }
+    }
+
+    @Test
+    public void testStats2() throws IOException {
+        boolean localSearch = true;
+        int iterations = 10;
+
+        //int numberOfAnts = 100;
+        int nnFactor = 15;
+        String name = "dsj1000";
+        StaticMatrices matrices = new StaticMatricesBuilder(TspLibParser.parseTsp("tsplib/" + name + ".tsp"))//pa561
+                .withHeuristicInformationMatrix()
+                .withNearestNeighbors(nnFactor)
+                .build();
+
+
+        StringBuilder allDataStringBuilder = new StringBuilder();
+        StringBuilder chartStringBuilder = new StringBuilder();
+        allDataStringBuilder.append("NN_FACTOR,ANT_COUNT,LOCAL_SEARCH,TOUR_LEN,SOLUTION_FOUND_IN_IT,NON_IMPROVED_PERIODS\n");
+        int maxNumberOfAnts = matrices.getProblemSize();
+        for (int numberOfAnts = 1; numberOfAnts <= maxNumberOfAnts; numberOfAnts += 200) {
+            AcoConfig config = AcoConfigFactory.createAcoConfigBuilderWithDefaults(numberOfAnts)
+                    .withMaxStagnationCount(100)
+                    .withWithLocalSearch(localSearch)
+                    .withNearestNeighbourFactor(nnFactor)
+                    .build();
+            for (int i = 0; i < iterations; i++) {
+                final Solution solution = new AntSystemSolver(matrices, config).getSolution();
+                Statistics statistics = solution.getStatistics().get();
+
+                allDataStringBuilder.append(nnFactor);
+                allDataStringBuilder.append(",");
+                allDataStringBuilder.append(numberOfAnts);
+                allDataStringBuilder.append(",");
+                allDataStringBuilder.append(localSearch);
+                allDataStringBuilder.append(",");
+                allDataStringBuilder.append(solution.getTourLength());
+                allDataStringBuilder.append(",");
+                allDataStringBuilder.append(statistics.getIterationsCount() - config.getMaxStagnationCount());
+                allDataStringBuilder.append(",");
+                statistics.getNonImprovementPeriods().stream().forEach(p -> allDataStringBuilder.append(p + ";"));
+                allDataStringBuilder.append("\n");
+
+                chartStringBuilder.append(numberOfAnts);
+                chartStringBuilder.append(",");
+                chartStringBuilder.append(solution.getTourLength());
+                chartStringBuilder.append("\n");
+
+                //System.out.println(allDataStringBuilder);
+                System.out.println(((double) (((numberOfAnts - 1) * iterations) + i) / ((maxNumberOfAnts) * iterations)) * 100 + "%");
+
+            }
+        }
+        String ls = localSearch ? "_LS_" : "";
+        Path path = Paths.get(name + ls + ".csv");
+        try (BufferedWriter writer = Files.newBufferedWriter(path)) {
+            writer.write(allDataStringBuilder.toString());
+        }
+
+        Path chartPath = Paths.get(name + ls + "_chart.csv");
+        try (BufferedWriter writer = Files.newBufferedWriter(chartPath)) {
+            writer.write(chartStringBuilder.toString());
+        }
+    }
 }
