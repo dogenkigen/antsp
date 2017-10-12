@@ -3,6 +3,7 @@ package com.mlaskows.antsp.solvers.antsolvers;
 import com.mlaskows.antsp.config.AcoConfig;
 import com.mlaskows.antsp.config.AcoConfigFactory;
 import com.mlaskows.antsp.config.MaxMinConfig;
+import com.mlaskows.antsp.config.RankedBasedConfig;
 import com.mlaskows.antsp.datamodel.Solution;
 import com.mlaskows.antsp.datamodel.matrices.StaticMatrices;
 import com.mlaskows.antsp.datamodel.matrices.StaticMatricesBuilder;
@@ -16,63 +17,165 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Objects;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
 public class StatsSolverTest {
 
     private static final int ITERATIONS = 10;
     private static final int MAX_STAGNATION_COUNT = 100;
-    private static final int DEFAULT_NN_FACTOR = 15;
+    private static final int MIN_NN_FACTOR = 15;
+    private static final int MAX_NN_FACTOR = 40;
 
     private BiFunction<StaticMatrices, AcoConfig, Solution> antSystem =
             (matrices, config) -> new AntSystemSolver(matrices, config).getSolution();
 
+    private BiFunction<StaticMatrices, AcoConfig, Solution> elitist =
+            (matrices, config) -> new ElitistAntSolver(matrices, config).getSolution();
+
+    private BiFunction<StaticMatrices, AcoConfig, Solution> rankBased =
+            (matrices, config) -> new RankBasedAntSolver(matrices, (RankedBasedConfig) config).getSolution();
+
     private BiFunction<StaticMatrices, AcoConfig, Solution> maxMin =
             (matrices, config) -> new MaxMinAntSolver(matrices, (MaxMinConfig) config).getSolution();
 
-    private BiFunction<Integer, Boolean, AcoConfig> acoConfig =
+    private BiFunction<Integer, Boolean, AcoConfig> acoConfigIncrementAnts =
             (numberOfAnts, localSearch) -> AcoConfigFactory.createAcoConfigBuilderWithDefaults(numberOfAnts)
                     .withMaxStagnationCount(MAX_STAGNATION_COUNT)
                     .withWithLocalSearch(localSearch)
-                    .withNearestNeighbourFactor(DEFAULT_NN_FACTOR)
+                    .withNearestNeighbourFactor(MIN_NN_FACTOR)
                     .build();
 
+    private BiFunction<Integer, Boolean, AcoConfig> elitistConfigIncrementAnts =
+            (numberOfAnts, localSearch) -> AcoConfigFactory.createElitistConfigBuilderWithDefaults(numberOfAnts)
+                    .withMaxStagnationCount(MAX_STAGNATION_COUNT)
+                    .withWithLocalSearch(localSearch)
+                    .withNearestNeighbourFactor(MIN_NN_FACTOR)
+                    .build();
+
+    private BiFunction<Integer, Boolean, AcoConfig> rankBasedConfigIncrementAnts =
+            (numberOfAnts, localSearch) -> AcoConfigFactory.createRankBasedConfigBuilderWithDefaults(numberOfAnts)
+                    .withMaxStagnationCount(MAX_STAGNATION_COUNT)
+                    .withWithLocalSearch(localSearch)
+                    .withNearestNeighbourFactor(MIN_NN_FACTOR)
+                    .build();
+
+    private BiFunction<Integer, Boolean, AcoConfig> maxMinConfigIncrementAnts =
+            (numberOfAnts, localSearch) -> AcoConfigFactory.createMaxMinConfigBuilderWithDefaults(numberOfAnts)
+                    .withMaxStagnationCount(MAX_STAGNATION_COUNT)
+                    .withWithLocalSearch(localSearch)
+                    .withNearestNeighbourFactor(MIN_NN_FACTOR)
+                    .build();
+
+    private TriFunction<Integer, Integer, Boolean, AcoConfig> acoConfigIncrementNN =
+            (nnFactor, numberOfAnts, localSearch) -> AcoConfigFactory.createAcoConfigBuilderWithDefaults(numberOfAnts)
+                    .withMaxStagnationCount(MAX_STAGNATION_COUNT)
+                    .withNearestNeighbourFactor(nnFactor)
+                    .withWithLocalSearch(localSearch)
+                    .build();
+
+
     @DataProvider
-    public Object[][] getData() {
+    public Object[][] incrementAntsProvider() {
         return new Object[][]{
-                {"berlin52", false, 1, antSystem, acoConfig},
-                {"berlin52", true, 1, antSystem, acoConfig},
-                /*{"gr202", false, 5, antSystem, acoConfig},
-                {"gr202", true, 5, antSystem, acoConfig},
-                {"pa561", false, 10, antSystem, acoConfig},
-                {"pa561", true, 10, antSystem, acoConfig},
-                {"dsj1000", false, 20, antSystem, acoConfig},
-                {"dsj1000", true, 20, antSystem, acoConfig},*/
+                /*{"berlin52", false, 1, antSystem, acoConfigIncrementAnts},
+                {"berlin52", true, 1, antSystem, acoConfigIncrementAnts},
+                {"gr202", false, 5, antSystem, acoConfigIncrementAnts},
+                {"gr202", true, 5, antSystem, acoConfigIncrementAnts},
+                {"pa561", false, 10, antSystem, acoConfigIncrementAnts},
+                {"pa561", true, 10, antSystem, acoConfigIncrementAnts},
+                {"dsj1000", false, 20, antSystem, acoConfigIncrementAnts},
+                {"dsj1000", true, 20, antSystem, acoConfigIncrementAnts},*/
+
+                {"berlin52", false, 1, elitist, elitistConfigIncrementAnts},
+                {"berlin52", true, 1, elitist, elitistConfigIncrementAnts},
+                {"gr202", false, 5, elitist, elitistConfigIncrementAnts},
+                {"gr202", true, 5, elitist, elitistConfigIncrementAnts},
+                {"pa561", false, 10, elitist, elitistConfigIncrementAnts},
+                {"pa561", true, 10, elitist, elitistConfigIncrementAnts},
+                /*{"dsj1000", false, 20, elitist, elitistConfigIncrementAnts},
+                {"dsj1000", true, 20, elitist, elitistConfigIncrementAnts},*/
+
+                {"berlin52", false, 1, rankBased, rankBasedConfigIncrementAnts},
+                {"berlin52", true, 1, rankBased, rankBasedConfigIncrementAnts},
+                {"gr202", false, 5, rankBased, rankBasedConfigIncrementAnts},
+                {"gr202", true, 5, rankBased, rankBasedConfigIncrementAnts},
+                {"pa561", false, 10, rankBased, rankBasedConfigIncrementAnts},
+                {"pa561", true, 10, rankBased, rankBasedConfigIncrementAnts},
+                /*{"dsj1000", false, 20, rankBased, rankBasedConfigIncrementAnts},
+                {"dsj1000", true, 20, rankBased, rankBasedConfigIncrementAnts},*/
+
+                {"berlin52", false, 1, maxMin, maxMinConfigIncrementAnts},
+                {"berlin52", true, 1, maxMin, maxMinConfigIncrementAnts},
+                {"gr202", false, 5, maxMin, maxMinConfigIncrementAnts},
+                {"gr202", true, 5, maxMin, maxMinConfigIncrementAnts},
+                {"pa561", false, 10, maxMin, maxMinConfigIncrementAnts},
+                {"pa561", true, 10, maxMin, maxMinConfigIncrementAnts},
+                /*{"dsj1000", false, 20, maxMin, maxMinConfigIncrementAnts},
+                {"dsj1000", true, 20, maxMin, maxMinConfigIncrementAnts},*/
         };
     }
 
 
-    @Test(dataProvider = "getData")
+    @Test(dataProvider = "incrementAntsProvider")
     public void testStatsIncrementAnts(String name,
                                        boolean localSearch,
                                        int step,
                                        BiFunction<StaticMatrices, AcoConfig, Solution> solving,
-                                       BiFunction<Integer, Boolean, AcoConfig> configurating) throws IOException {
-        StaticMatrices matrices = getMatrices(DEFAULT_NN_FACTOR, name);
+                                       BiFunction<Integer, Boolean, AcoConfig> configuring) throws IOException {
+        StaticMatrices matrices = getMatrices(MIN_NN_FACTOR, name);
         StringBuilder stringBuilder = initStringBuilder();
         int maxNumberOfAnts = matrices.getProblemSize();
         for (int numberOfAnts = 1; numberOfAnts <= maxNumberOfAnts; numberOfAnts += step) {
-            AcoConfig config = configurating.apply(numberOfAnts, localSearch);
+            AcoConfig config = configuring.apply(numberOfAnts, localSearch);
             for (int i = 0; i < ITERATIONS; i++) {
                 final Solution solution = solving.apply(matrices, config);
-                appendStringBuilder(localSearch, DEFAULT_NN_FACTOR, stringBuilder, numberOfAnts, config, solution);
+                appendStringBuilder(localSearch, MIN_NN_FACTOR, stringBuilder, numberOfAnts, config, solution);
                 System.out.println(((double) (((numberOfAnts - 1) * ITERATIONS) + i) / ((maxNumberOfAnts) * ITERATIONS)) * 100 + "%");
             }
         }
         writeToFile(localSearch, name, stringBuilder);
     }
 
-    private void appendStringBuilder(boolean localSearch, int nnFactor, StringBuilder stringBuilder, int numberOfAnts, AcoConfig config, Solution solution) {
+
+    @DataProvider
+    public Object[][] incrementNNProvider() {
+        return new Object[][]{
+                {"berlin52", false, antSystem, acoConfigIncrementNN},
+                {"berlin52", true, antSystem, acoConfigIncrementNN},
+                {"gr202", false, antSystem, acoConfigIncrementNN},
+                {"gr202", true, antSystem, acoConfigIncrementNN},
+                {"pa561", false, antSystem, acoConfigIncrementNN},
+                {"pa561", true, antSystem, acoConfigIncrementNN},
+                /*{"dsj1000", false, 20, antSystem, acoConfigIncrementAnts},
+                {"dsj1000", true, 20, antSystem, acoConfigIncrementAnts},*/
+        };
+    }
+
+
+    @Test(dataProvider = "incrementNNProvider")
+    public void testStatsIncrementNN(String name,
+                                     boolean localSearch,
+                                     BiFunction<StaticMatrices, AcoConfig, Solution> solving,
+                                     TriFunction<Integer, Integer, Boolean, AcoConfig> configuring) throws IOException {
+        StringBuilder stringBuilder = initStringBuilder();
+        for (int nnFactor = MIN_NN_FACTOR; nnFactor <= MAX_NN_FACTOR; nnFactor++) {
+            StaticMatrices matrices = getMatrices(nnFactor, name);
+            int antsCount = (int) (matrices.getProblemSize() * 0.6);
+            AcoConfig config = configuring.apply(nnFactor, antsCount, localSearch);
+            for (int i = 0; i < ITERATIONS; i++) {
+                final Solution solution = solving.apply(matrices, config);
+                appendStringBuilder(localSearch, nnFactor, stringBuilder, antsCount, config, solution);
+                System.out.println(((double) (((nnFactor - 15) * ITERATIONS) + i) / ((MAX_NN_FACTOR - MIN_NN_FACTOR) * ITERATIONS)) * 100 + "%");
+            }
+        }
+        writeToFile(localSearch, name + "_nn", stringBuilder);
+    }
+
+    private void appendStringBuilder(boolean localSearch, int nnFactor,
+                                     StringBuilder stringBuilder, int numberOfAnts,
+                                     AcoConfig config, Solution solution) {
         Statistics statistics = solution.getStatistics().get();
         stringBuilder.append(nnFactor);
         stringBuilder.append(",");
@@ -107,6 +210,18 @@ public class StatsSolverTest {
                 .withHeuristicInformationMatrix()
                 .withNearestNeighbors(nnFactor)
                 .build();
+    }
+
+    @FunctionalInterface
+    interface TriFunction<A, B, C, R> {
+
+        R apply(A a, B b, C c);
+
+        default <V> TriFunction<A, B, C, V> andThen(
+                Function<? super R, ? extends V> after) {
+            Objects.requireNonNull(after);
+            return (A a, B b, C c) -> after.apply(apply(a, b, c));
+        }
     }
 
 }
