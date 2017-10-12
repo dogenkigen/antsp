@@ -17,14 +17,26 @@ public class AcoConfigFactory {
         return createAcoConfig(3, 1, 0.9, antsCount, 15, 10, false);
     }
 
+    public static AcoConfigBuilder createElitistConfigBuilderWithDefaults(int antsCount) {
+        return new AcoConfigBuilder(createDefaultElitistConfig(antsCount));
+    }
+
     public static RankedBasedConfig createDefaultRankedBasedConfig(int antsCount) {
         return createRankedBasedConfig(3, 1, 0.1, antsCount, 15, 10,
                 6, false);
     }
 
+    public static RankedBasedConfigBuilder createRankBasedConfigBuilderWithDefaults(int antsCount) {
+        return new RankedBasedConfigBuilder(createDefaultRankedBasedConfig(antsCount));
+    }
+
     public static MaxMinConfig createDefaultMaxMinConfig(int antsCount) {
         return createMinMaxConfig(3, 1, 0.02, antsCount, 15, 40, 2,
                 30, true);
+    }
+
+    public static MaxMinConfigBuilder createMaxMinConfigBuilderWithDefaults(int antsCount) {
+        return new MaxMinConfigBuilder(createDefaultMaxMinConfig(antsCount));
     }
 
     public static AcoConfig createAcoConfig(int heuristicImportance,
