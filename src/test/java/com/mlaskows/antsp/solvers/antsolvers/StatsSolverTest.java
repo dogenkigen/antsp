@@ -90,28 +90,28 @@ public class StatsSolverTest {
 
                 {"berlin52", false, 1, elitist, elitistConfigIncrementAnts, "elitist"},
                 {"berlin52", true, 1, elitist, elitistConfigIncrementAnts, "elitist"},
-                /*{"gr202", false, 5, elitist, elitistConfigIncrementAnts, "elitist"},
+                {"gr202", false, 5, elitist, elitistConfigIncrementAnts, "elitist"},
                 {"gr202", true, 5, elitist, elitistConfigIncrementAnts, "elitist"},
                 {"pa561", false, 10, elitist, elitistConfigIncrementAnts, "elitist"},
-                {"pa561", true, 10, elitist, elitistConfigIncrementAnts, "elitist"},*/
+                {"pa561", true, 10, elitist, elitistConfigIncrementAnts, "elitist"},
                 /*{"dsj1000", false, 20, elitist, elitistConfigIncrementAnts, "elitist"},
                 {"dsj1000", true, 20, elitist, elitistConfigIncrementAnts, "elitist"},*/
 
                 {"berlin52", false, 1, rankBased, rankBasedConfigIncrementAnts, "rankBased"},
                 {"berlin52", true, 1, rankBased, rankBasedConfigIncrementAnts, "rankBased"},
-                /*{"gr202", false, 5, rankBased, rankBasedConfigIncrementAnts, "rankBased"},
+                {"gr202", false, 5, rankBased, rankBasedConfigIncrementAnts, "rankBased"},
                 {"gr202", true, 5, rankBased, rankBasedConfigIncrementAnts, "rankBased"},
                 {"pa561", false, 10, rankBased, rankBasedConfigIncrementAnts, "rankBased"},
-                {"pa561", true, 10, rankBased, rankBasedConfigIncrementAnts, "rankBased"},*/
+                {"pa561", true, 10, rankBased, rankBasedConfigIncrementAnts, "rankBased"},
                 /*{"dsj1000", false, 20, rankBased, rankBasedConfigIncrementAnts, "rankBased"},
                 {"dsj1000", true, 20, rankBased, rankBasedConfigIncrementAnts, "rankBased"},*/
 
                 {"berlin52", false, 1, maxMin, maxMinConfigIncrementAnts, "maxMin"},
                 {"berlin52", true, 1, maxMin, maxMinConfigIncrementAnts, "maxMin"},
-                /*{"gr202", false, 5, maxMin, maxMinConfigIncrementAnts, "maxMin"},
+                {"gr202", false, 5, maxMin, maxMinConfigIncrementAnts, "maxMin"},
                 {"gr202", true, 5, maxMin, maxMinConfigIncrementAnts, "maxMin"},
                 {"pa561", false, 10, maxMin, maxMinConfigIncrementAnts, "maxMin"},
-                {"pa561", true, 10, maxMin, maxMinConfigIncrementAnts, "maxMin"},*/
+                {"pa561", true, 10, maxMin, maxMinConfigIncrementAnts, "maxMin"},
                 /*{"dsj1000", false, 20, maxMin, maxMinConfigIncrementAnts, "maxMin"},
                 {"dsj1000", true, 20, maxMin, maxMinConfigIncrementAnts, "maxMin"},*/
         };
@@ -155,7 +155,7 @@ public class StatsSolverTest {
     }
 
 
-    @Test(dataProvider = "incrementNNProvider")
+    @Test(dataProvider = "incrementNNProvider", enabled = false)
     public void testStatsIncrementNN(String name,
                                      boolean localSearch,
                                      BiFunction<StaticMatrices, AcoConfig, Solution> solving,
