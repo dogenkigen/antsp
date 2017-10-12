@@ -25,8 +25,9 @@ public class NearestNeighbourSolver implements Solver {
     @Override
     public Solution getSolution() {
         int index = 0;
-        final Ant ant = new Ant(distanceMatrix.length + 1, index);
-        for (int i = 0; i < distanceMatrix.length - 1; i++) {
+        int problemSize = distanceMatrix.length;
+        final Ant ant = new Ant(problemSize, index);
+        for (int i = 0; i < problemSize - 1; i++) {
             if (shouldStop) {
                 return null;
             }

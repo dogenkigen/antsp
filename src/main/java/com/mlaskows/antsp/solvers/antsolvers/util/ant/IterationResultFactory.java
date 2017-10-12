@@ -67,7 +67,7 @@ public class IterationResultFactory {
     private Stream<Ant> getRandomPlacedParallelAnts(int antCount) {
         return IntStream.range(0, antCount)
                 .parallel()
-                .mapToObj(i -> new Ant(problemSize + 1, getRandomInt(0, problemSize)));
+                .mapToObj(i -> new Ant(problemSize, getRandomInt(0, problemSize)));
     }
 
     private void constructAntSolution(double[][] choicesInfo, Ant ant) {
@@ -102,7 +102,7 @@ public class IterationResultFactory {
                 if (ant.notVisited(j)) {
                     selectionProbability += choicesInfo[currentIndex][j];
                 }
-                if (randomDouble <= selectionProbability) {
+                if (randomDouble < selectionProbability) {
                     nextIndex = j;
                     break;
                 }
@@ -127,7 +127,7 @@ public class IterationResultFactory {
         int nextIndex = 0;
         double v = 0.0;
         for (int j = 0; j < problemSize; j++) {
-            if (ant.notVisited(j) && choicesInfo[currentIndex][j] > v) {
+            if (ant.notVisited(j) && choicesInfo[currentIndex][j] >= v) {
                 nextIndex = j;
                 v = choicesInfo[currentIndex][j];
             }

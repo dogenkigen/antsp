@@ -15,7 +15,7 @@ public class Ant implements Comparable<Ant> {
     private final boolean visited[];
 
     public Ant(int problemSize, int initialPosition) {
-        tour = new ArrayList<>(problemSize);
+        tour = new ArrayList<>(problemSize + 1);
         visited = new boolean[problemSize];
         visit(initialPosition, 0);
     }
