@@ -79,41 +79,41 @@ public class StatsSolverTest {
     @DataProvider
     public Object[][] incrementAntsProvider() {
         return new Object[][]{
-                /*{"berlin52", false, 1, antSystem, acoConfigIncrementAnts},
-                {"berlin52", true, 1, antSystem, acoConfigIncrementAnts},
-                {"gr202", false, 5, antSystem, acoConfigIncrementAnts},
-                {"gr202", true, 5, antSystem, acoConfigIncrementAnts},
-                {"pa561", false, 10, antSystem, acoConfigIncrementAnts},
-                {"pa561", true, 10, antSystem, acoConfigIncrementAnts},
-                {"dsj1000", false, 20, antSystem, acoConfigIncrementAnts},
-                {"dsj1000", true, 20, antSystem, acoConfigIncrementAnts},*/
+                /*{"berlin52", false, 1, antSystem, acoConfigIncrementAnts, "as"},
+                {"berlin52", true, 1, antSystem, acoConfigIncrementAnts, "as"},
+                {"gr202", false, 5, antSystem, acoConfigIncrementAnts, "as"},
+                {"gr202", true, 5, antSystem, acoConfigIncrementAnts, "as"},
+                {"pa561", false, 10, antSystem, acoConfigIncrementAnts, "as"},
+                {"pa561", true, 10, antSystem, acoConfigIncrementAnts, "as"},
+                {"dsj1000", false, 20, antSystem, acoConfigIncrementAnts, "as"},
+                {"dsj1000", true, 20, antSystem, acoConfigIncrementAnts, "as"},*/
 
-                {"berlin52", false, 1, elitist, elitistConfigIncrementAnts},
-                {"berlin52", true, 1, elitist, elitistConfigIncrementAnts},
-                {"gr202", false, 5, elitist, elitistConfigIncrementAnts},
-                {"gr202", true, 5, elitist, elitistConfigIncrementAnts},
-                {"pa561", false, 10, elitist, elitistConfigIncrementAnts},
-                {"pa561", true, 10, elitist, elitistConfigIncrementAnts},
-                /*{"dsj1000", false, 20, elitist, elitistConfigIncrementAnts},
-                {"dsj1000", true, 20, elitist, elitistConfigIncrementAnts},*/
+                {"berlin52", false, 1, elitist, elitistConfigIncrementAnts, "elitist"},
+                {"berlin52", true, 1, elitist, elitistConfigIncrementAnts, "elitist"},
+                /*{"gr202", false, 5, elitist, elitistConfigIncrementAnts, "elitist"},
+                {"gr202", true, 5, elitist, elitistConfigIncrementAnts, "elitist"},
+                {"pa561", false, 10, elitist, elitistConfigIncrementAnts, "elitist"},
+                {"pa561", true, 10, elitist, elitistConfigIncrementAnts, "elitist"},*/
+                /*{"dsj1000", false, 20, elitist, elitistConfigIncrementAnts, "elitist"},
+                {"dsj1000", true, 20, elitist, elitistConfigIncrementAnts, "elitist"},*/
 
-                {"berlin52", false, 1, rankBased, rankBasedConfigIncrementAnts},
-                {"berlin52", true, 1, rankBased, rankBasedConfigIncrementAnts},
-                {"gr202", false, 5, rankBased, rankBasedConfigIncrementAnts},
-                {"gr202", true, 5, rankBased, rankBasedConfigIncrementAnts},
-                {"pa561", false, 10, rankBased, rankBasedConfigIncrementAnts},
-                {"pa561", true, 10, rankBased, rankBasedConfigIncrementAnts},
-                /*{"dsj1000", false, 20, rankBased, rankBasedConfigIncrementAnts},
-                {"dsj1000", true, 20, rankBased, rankBasedConfigIncrementAnts},*/
+                {"berlin52", false, 1, rankBased, rankBasedConfigIncrementAnts, "rankBased"},
+                {"berlin52", true, 1, rankBased, rankBasedConfigIncrementAnts, "rankBased"},
+                /*{"gr202", false, 5, rankBased, rankBasedConfigIncrementAnts, "rankBased"},
+                {"gr202", true, 5, rankBased, rankBasedConfigIncrementAnts, "rankBased"},
+                {"pa561", false, 10, rankBased, rankBasedConfigIncrementAnts, "rankBased"},
+                {"pa561", true, 10, rankBased, rankBasedConfigIncrementAnts, "rankBased"},*/
+                /*{"dsj1000", false, 20, rankBased, rankBasedConfigIncrementAnts, "rankBased"},
+                {"dsj1000", true, 20, rankBased, rankBasedConfigIncrementAnts, "rankBased"},*/
 
-                {"berlin52", false, 1, maxMin, maxMinConfigIncrementAnts},
-                {"berlin52", true, 1, maxMin, maxMinConfigIncrementAnts},
-                {"gr202", false, 5, maxMin, maxMinConfigIncrementAnts},
-                {"gr202", true, 5, maxMin, maxMinConfigIncrementAnts},
-                {"pa561", false, 10, maxMin, maxMinConfigIncrementAnts},
-                {"pa561", true, 10, maxMin, maxMinConfigIncrementAnts},
-                /*{"dsj1000", false, 20, maxMin, maxMinConfigIncrementAnts},
-                {"dsj1000", true, 20, maxMin, maxMinConfigIncrementAnts},*/
+                {"berlin52", false, 1, maxMin, maxMinConfigIncrementAnts, "maxMin"},
+                {"berlin52", true, 1, maxMin, maxMinConfigIncrementAnts, "maxMin"},
+                /*{"gr202", false, 5, maxMin, maxMinConfigIncrementAnts, "maxMin"},
+                {"gr202", true, 5, maxMin, maxMinConfigIncrementAnts, "maxMin"},
+                {"pa561", false, 10, maxMin, maxMinConfigIncrementAnts, "maxMin"},
+                {"pa561", true, 10, maxMin, maxMinConfigIncrementAnts, "maxMin"},*/
+                /*{"dsj1000", false, 20, maxMin, maxMinConfigIncrementAnts, "maxMin"},
+                {"dsj1000", true, 20, maxMin, maxMinConfigIncrementAnts, "maxMin"},*/
         };
     }
 
@@ -123,7 +123,8 @@ public class StatsSolverTest {
                                        boolean localSearch,
                                        int step,
                                        BiFunction<StaticMatrices, AcoConfig, Solution> solving,
-                                       BiFunction<Integer, Boolean, AcoConfig> configuring) throws IOException {
+                                       BiFunction<Integer, Boolean, AcoConfig> configuring,
+                                       String algorithmName) throws IOException {
         StaticMatrices matrices = getMatrices(MIN_NN_FACTOR, name);
         StringBuilder stringBuilder = initStringBuilder();
         int maxNumberOfAnts = matrices.getProblemSize();
@@ -135,14 +136,14 @@ public class StatsSolverTest {
                 System.out.println(((double) (((numberOfAnts - 1) * ITERATIONS) + i) / ((maxNumberOfAnts) * ITERATIONS)) * 100 + "%");
             }
         }
-        writeToFile(localSearch, name, stringBuilder);
+        writeToFile(localSearch, name + "_" + algorithmName, stringBuilder);
     }
 
 
     @DataProvider
     public Object[][] incrementNNProvider() {
         return new Object[][]{
-                {"berlin52", false, antSystem, acoConfigIncrementNN},
+                {"berlin52", false, antSystem, acoConfigIncrementNN},//TODO add algo name
                 {"berlin52", true, antSystem, acoConfigIncrementNN},
                 {"gr202", false, antSystem, acoConfigIncrementNN},
                 {"gr202", true, antSystem, acoConfigIncrementNN},
@@ -214,14 +215,7 @@ public class StatsSolverTest {
 
     @FunctionalInterface
     interface TriFunction<A, B, C, R> {
-
         R apply(A a, B b, C c);
-
-        default <V> TriFunction<A, B, C, V> andThen(
-                Function<? super R, ? extends V> after) {
-            Objects.requireNonNull(after);
-            return (A a, B b, C c) -> after.apply(apply(a, b, c));
-        }
     }
 
 }
