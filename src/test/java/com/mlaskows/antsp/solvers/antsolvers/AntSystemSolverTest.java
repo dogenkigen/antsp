@@ -161,7 +161,7 @@ public class AntSystemSolverTest implements BaseWithTspTest {
         StringBuilder chartStringBuilder = new StringBuilder();
         allDataStringBuilder.append("NN_FACTOR,ANT_COUNT,LOCAL_SEARCH,TOUR_LEN,SOLUTION_FOUND_IN_IT,NON_IMPROVED_PERIODS\n");
         int maxNumberOfAnts = matrices.getProblemSize();
-        for (int numberOfAnts = 1; numberOfAnts <= maxNumberOfAnts; numberOfAnts += 200) {
+        for (int numberOfAnts = 1; numberOfAnts <= maxNumberOfAnts; numberOfAnts += 20) {
             AcoConfig config = AcoConfigFactory.createAcoConfigBuilderWithDefaults(numberOfAnts)
                     .withMaxStagnationCount(100)
                     .withWithLocalSearch(localSearch)
@@ -224,7 +224,7 @@ public class AntSystemSolverTest implements BaseWithTspTest {
         StringBuilder chartStringBuilder = new StringBuilder();
         allDataStringBuilder.append("NN_FACTOR,ANT_COUNT,LOCAL_SEARCH,TOUR_LEN,SOLUTION_FOUND_IN_IT,NON_IMPROVED_PERIODS\n");
         int maxNumberOfAnts = matrices.getProblemSize();
-        for (int numberOfAnts = 1; numberOfAnts <= maxNumberOfAnts; numberOfAnts += 200) {
+        for (int numberOfAnts = 1; numberOfAnts <= maxNumberOfAnts; numberOfAnts += 20) {
             AcoConfig config = AcoConfigFactory.createAcoConfigBuilderWithDefaults(numberOfAnts)
                     .withMaxStagnationCount(100)
                     .withWithLocalSearch(localSearch)
