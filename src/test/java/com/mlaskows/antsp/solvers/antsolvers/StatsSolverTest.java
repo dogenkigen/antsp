@@ -17,9 +17,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Objects;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 public class StatsSolverTest {
 
@@ -117,7 +115,6 @@ public class StatsSolverTest {
         };
     }
 
-
     @Test(dataProvider = "incrementAntsProvider")
     public void testStatsIncrementAnts(String name,
                                        boolean localSearch,
@@ -173,6 +170,56 @@ public class StatsSolverTest {
         }
         writeToFile(localSearch, name + "_nn", stringBuilder);
     }
+
+    @DataProvider
+    public Object[][] performanceAntsProvider() {
+        return new Object[][]{
+                {"gr202", false, 5, 202, antSystem, acoConfigIncrementAnts, "as"},
+                {"gr202", true, 5, 202, antSystem, acoConfigIncrementAnts, "as"},
+        };
+    }
+
+    @Test(dataProvider = "performanceAntsProvider")
+    public void testPerformanceForCPUCount(String name,
+                                           boolean localSearch,
+                                           int step,
+                                           double maxNumberOfAnts, BiFunction<StaticMatrices, AcoConfig, Solution> solving,
+                                           BiFunction<Integer, Boolean, AcoConfig> configuring,
+                                           String algorithmName) throws IOException {
+
+        StringBuilder stringBuilder = initPerfStringBuilder();
+        int cpuCount = Runtime.getRuntime().availableProcessors();
+        for (int numberOfAnts = 1; numberOfAnts <= maxNumberOfAnts; numberOfAnts += step) {
+            AcoConfig config = configuring.apply(numberOfAnts, localSearch);
+            for (int i = 0; i < ITERATIONS; i++) {
+                long timeMillis = System.currentTimeMillis();
+                StaticMatrices matrices = getMatrices(MIN_NN_FACTOR, name);
+                final Solution solution = solving.apply(matrices, config);
+                appendStringBuilder(localSearch, MIN_NN_FACTOR, stringBuilder, numberOfAnts, config, solution,
+                        cpuCount, System.currentTimeMillis() - timeMillis);
+                System.out.println(((double) (((numberOfAnts - 1) * ITERATIONS) + i) / ((maxNumberOfAnts) * ITERATIONS)) * 100 + "%");
+            }
+        }
+        writeToFile(localSearch, "performance_CPU_" + cpuCount + "_" + name + "_" + algorithmName, stringBuilder);
+    }
+
+    private StringBuilder initPerfStringBuilder() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("CPU_COUNT,TIME_MS,NN_FACTOR,ANT_COUNT,LOCAL_SEARCH,TOUR_LEN,SOLUTION_FOUND_IN_IT,NON_IMPROVED_PERIODS\n");
+        return stringBuilder;
+
+    }
+
+    private void appendStringBuilder(boolean localSearch, int nnFactor,
+                                     StringBuilder stringBuilder, int numberOfAnts,
+                                     AcoConfig config, Solution solution, int cpuCount, long time) {
+        stringBuilder.append(cpuCount);
+        stringBuilder.append(",");
+        stringBuilder.append(time);
+        stringBuilder.append(",");
+        appendStringBuilder(localSearch, nnFactor, stringBuilder, numberOfAnts, config, solution);
+    }
+
 
     private void appendStringBuilder(boolean localSearch, int nnFactor,
                                      StringBuilder stringBuilder, int numberOfAnts,
