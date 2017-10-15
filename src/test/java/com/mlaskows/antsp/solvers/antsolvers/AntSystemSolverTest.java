@@ -31,7 +31,7 @@ public class AntSystemSolverTest implements BaseWithTspTest {
                 getAntSystemSolutionWithDefaultConfig(getFileAbsolutePath("tsplib/ali535.tsp"));
         // We assume here that solution will be better than for nearest
         // neighbour algorithm.
-        assertTrue(solution.getTourLength() < 224358);
+        assertTrue(solution.getTourLength() < 256086);
     }
 
     @Test(enabled = false)

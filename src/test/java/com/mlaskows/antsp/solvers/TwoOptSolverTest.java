@@ -32,9 +32,9 @@ public class TwoOptSolverTest extends BaseOptSolverTest {
 
         final Solution solution = computeSolution(initialTour, matricesHolder, initialDistnace);
 
-        final List<Integer> expectedTour = List.of(0, 2, 1, 4, 5, 3);
+        final List<Integer> expectedTour = List.of(0, 2, 1, 4, 3, 5);
         Assert.assertEquals(solution.getTour(), expectedTour);
-        Assert.assertEquals(solution.getTourLength(), 6095);
+        Assert.assertEquals(solution.getTourLength(), 7194);
     }
 
     @Test
@@ -51,7 +51,7 @@ public class TwoOptSolverTest extends BaseOptSolverTest {
         final Solution solution = computeSolution(initialTour, matricesHolder, initialDistnace);
 
         Assert.assertTrue(solution.getTourLength() < initialDistnace);
-        Assert.assertEquals(solution.getTourLength(), 3680332);
+        Assert.assertEquals(solution.getTourLength(), 3360076);
     }
 
     @Test

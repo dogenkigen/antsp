@@ -34,9 +34,9 @@ public class StaticMatricesBuilderTest implements BaseWithTspTest {
         assertEquals(distanceMatrix.length, australiTsp.getDimension());
         assertEquals(distanceMatrix[3][3], Integer.MAX_VALUE);
         // Brisbane - Melbourne (real 1372.50)
-        assertEquals(distanceMatrix[0][1], 1371);
+        assertEquals(distanceMatrix[0][1], 1395);
         // Sydney - Darwin (real 3144)
-        assertEquals(distanceMatrix[2][5], 2928);
+        assertEquals(distanceMatrix[2][5], 3167);
     }
 
     @Test
