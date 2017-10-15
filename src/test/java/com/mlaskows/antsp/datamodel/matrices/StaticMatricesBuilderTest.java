@@ -98,7 +98,19 @@ public class StaticMatricesBuilderTest implements BaseWithTspTest {
 
         int tourLen = getTourLen(tour, distanceMatrix);
 
-        assertEquals(2754, tourLen);
+        assertEquals(tourLen, 2754);
+    }
+
+    @Test
+    public void testGr202Comparison() throws IOException {
+        Tsp tsp = getTsp("tsplib/gr202.tsp");
+        int[] tour = getTour("tsplib/gr202.opt.tour").getTour().get(0);
+        StaticMatrices matrices = new StaticMatricesBuilder(tsp).build();
+        int[][] distanceMatrix = matrices.getDistanceMatrix();
+
+        int tourLen = getTourLen(tour, distanceMatrix);
+
+        assertEquals(tourLen, 40215);
     }
 
     private int getTourLen(int[] tour, int[][] distanceMatrix) {
