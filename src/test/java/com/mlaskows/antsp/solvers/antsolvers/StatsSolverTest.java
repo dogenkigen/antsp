@@ -179,7 +179,7 @@ public class StatsSolverTest {
         };
     }
 
-    @Test(dataProvider = "performanceAntsProvider", enabled = false)
+    @Test(dataProvider = "performanceAntsProvider")
     public void testPerformanceForCPUCount(String name,
                                            boolean localSearch,
                                            int step,
