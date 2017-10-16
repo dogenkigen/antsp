@@ -7,6 +7,7 @@ import com.mlaskows.antsp.solvers.antsolvers.util.pheromone.PheromoneProcessor;
 import com.mlaskows.antsp.solvers.antsolvers.util.pheromone.init.MaxMinInitializeBehaviour;
 
 import java.util.SplittableRandom;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class MaxMinDepositBehaviour implements DepositBehaviour {
 
@@ -38,11 +39,11 @@ public class MaxMinDepositBehaviour implements DepositBehaviour {
     }
 
     private Ant getAntToDeposit(Ant bestAntSoFar, Ant iterationBestAnt) {
-        // TODO create good balance based on problemSize
-        if (bestAntSoFar.getTour().size() > 100) {
-            return bestAntSoFar;
-        } else {
+        if (bestAntSoFar.getTourSize() < 200) {
             return iterationBestAnt;
+        } else {
+            return ThreadLocalRandom.current().nextBoolean() ?
+                    bestAntSoFar : iterationBestAnt;
         }
     }
 
@@ -57,15 +58,19 @@ public class MaxMinDepositBehaviour implements DepositBehaviour {
     }
 
     private void updateMinMax(Ant bestSoFarAnt) {
-        maxPheromoneValue = (double) 1 /
-                config.getPheromoneEvaporationFactor() *
-                bestSoFarAnt.getTourLength();
-        minPheromoneValue = maxPheromoneValue / config
-                .getMinPheromoneLimitDivider();
+        maxPheromoneValue = 1.0 / (config.getPheromoneEvaporationFactor()) * bestSoFarAnt.getTourLength();
+        final int problemSize = bestSoFarAnt.getTourSize() - 1;
+        final double pBestRoot = root(0.05, problemSize);
+        final double avg = problemSize / 2;
+        minPheromoneValue = (maxPheromoneValue * (1.0 - pBestRoot)) / ((avg - 1.0) * pBestRoot);
+    }
+
+    private double root(double num, double root) {
+        return Math.pow(Math.E, Math.log(num) / root);
     }
 
     private double getPheromoneDelta(Ant ant) {
-        final double pheromoneDeltaCandidate = (double) 1 / ant.getTourLength();
+        final double pheromoneDeltaCandidate = 1.0 / ant.getTourLength();
         double pheromoneDelta = pheromoneDeltaCandidate > maxPheromoneValue ?
                 maxPheromoneValue : pheromoneDeltaCandidate;
         pheromoneDelta = pheromoneDelta < minPheromoneValue ?

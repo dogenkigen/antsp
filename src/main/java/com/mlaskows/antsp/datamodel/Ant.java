@@ -59,6 +59,10 @@ public class Ant implements Comparable<Ant> {
         return Collections.unmodifiableList(tour);
     }
 
+    public int getTourSize() {
+        return tour.size();
+    }
+
     public Solution getSolution() {
         return new Solution(getTour(), tourLength);
     }

@@ -61,9 +61,11 @@ public class StatsSolverTest {
 
     private BiFunction<Integer, Boolean, AcoConfig> maxMinConfigIncrementAnts =
             (numberOfAnts, localSearch) -> AcoConfigFactory.createMaxMinConfigBuilderWithDefaults(numberOfAnts)
+                    .withReinitializationCount(80)
                     .withMaxStagnationCount(MAX_STAGNATION_COUNT)
                     .withWithLocalSearch(localSearch)
                     .withNearestNeighbourFactor(MIN_NN_FACTOR)
+                    .withPheromoneEvaporationFactor(0.05)
                     .build();
 
     private TriFunction<Integer, Integer, Boolean, AcoConfig> acoConfigIncrementNN =
@@ -108,9 +110,9 @@ public class StatsSolverTest {
                 {"berlin52", true, 1, maxMin, maxMinConfigIncrementAnts, "maxMin"},
                 {"gr202", false, 5, maxMin, maxMinConfigIncrementAnts, "maxMin"},
                 {"gr202", true, 5, maxMin, maxMinConfigIncrementAnts, "maxMin"},
-                /*{"pa561", false, 10, maxMin, maxMinConfigIncrementAnts, "maxMin"},
+                {"pa561", false, 10, maxMin, maxMinConfigIncrementAnts, "maxMin"},
                 {"pa561", true, 10, maxMin, maxMinConfigIncrementAnts, "maxMin"},
-                {"dsj1000", false, 20, maxMin, maxMinConfigIncrementAnts, "maxMin"},
+                /*{"dsj1000", false, 20, maxMin, maxMinConfigIncrementAnts, "maxMin"},
                 {"dsj1000", true, 20, maxMin, maxMinConfigIncrementAnts, "maxMin"},*/
         };
     }

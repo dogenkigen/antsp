@@ -9,8 +9,7 @@ public class AntSystemDepositBehaviour implements DepositBehaviour {
     @Override
     public void deposit(PheromoneProcessor pheromoneProcessor, IterationResult iterationResult) {
         for (Ant ant : iterationResult.getSortedAnts()) {
-            pheromoneProcessor
-                    .depositAntPheromone(ant, (double) 1 / ant.getTourLength());
+            pheromoneProcessor.depositAntPheromone(ant, 1.0 / ant.getTourLength());
         }
     }
 }
