@@ -10,7 +10,6 @@ import java.util.SplittableRandom;
 
 public class MaxMinDepositBehaviour implements DepositBehaviour {
 
-    private final SplittableRandom random = new SplittableRandom();
     private final MaxMinConfig config;
     private double minPheromoneValue;
     private double maxPheromoneValue;
@@ -27,8 +26,7 @@ public class MaxMinDepositBehaviour implements DepositBehaviour {
         final Ant bestAntSoFar = iterationResult.getBestAntSoFar();
         final Ant iterationBestAnt = iterationResult.getIterationBestAnt();
         final int stagnationCount = getStagnationCount(bestAntSoFar);
-        if (stagnationCount
-                == config.getReinitializationCount()) {
+        if (stagnationCount == config.getReinitializationCount()) {
             new MaxMinInitializeBehaviour()
                     .initializeForSolution(pheromoneProcessor, config, bestAntSoFar.getSolution());
         }
@@ -40,9 +38,12 @@ public class MaxMinDepositBehaviour implements DepositBehaviour {
     }
 
     private Ant getAntToDeposit(Ant bestAntSoFar, Ant iterationBestAnt) {
-        //return iterationBestAnt;
         // TODO create good balance based on problemSize
-        return random.nextBoolean() ? iterationBestAnt : bestAntSoFar;
+        if (bestAntSoFar.getTour().size() > 100) {
+            return bestAntSoFar;
+        } else {
+            return iterationBestAnt;
+        }
     }
 
     private int getStagnationCount(Ant newBestAntSoFar) {
