@@ -34,6 +34,7 @@ public class MaxMinDepositBehaviour implements DepositBehaviour {
         if (stagnationCount == config.getReinitializationCount()) {
             new MaxMinInitializeBehaviour()
                     .initializeForSolution(pheromoneProcessor, config, bestAntSoFar.getSolution());
+            return;
         }
         updateMinMax(bestAntSoFar);
         final Ant ant = getAntToDeposit(bestAntSoFar, iterationBestAnt);
