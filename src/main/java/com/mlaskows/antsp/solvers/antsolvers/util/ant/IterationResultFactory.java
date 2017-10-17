@@ -23,8 +23,6 @@ public class IterationResultFactory {
     private Ant bestAntSoFar;
     private final int[][] distanceMatrix;
     private final int[][] nearestNeighbors;
-    private Ant lastBestAnt;
-    private int stagnationCount;
 
     public IterationResultFactory(StaticMatrices matrices, AcoConfig config) {
         this.matrices = matrices;
@@ -38,20 +36,13 @@ public class IterationResultFactory {
     public IterationResult createIterationResult(double[][] choicesInfo) {
         final List<Ant> sortedAnts = constructAntsSolutionsSorted(choicesInfo);
         final Ant iterationBestAnt = sortedAnts.get(0);
-        if (bestAntSoFar == null || iterationBestAnt.hasBetterSolutionThen(bestAntSoFar)) {
+        boolean isImprovedIteration = false;
+        if (bestAntSoFar == null
+                || iterationBestAnt.hasBetterSolutionThen(bestAntSoFar)) {
             bestAntSoFar = iterationBestAnt;
+            isImprovedIteration = true;
         }
-        return new IterationResult(sortedAnts, bestAntSoFar, getStagnationCount());
-    }
-
-    private int getStagnationCount() {
-        if (lastBestAnt == null || bestAntSoFar.hasBetterSolutionThen(lastBestAnt)) {
-            stagnationCount = 0;
-            lastBestAnt = bestAntSoFar;
-        } else {
-            stagnationCount++;
-        }
-        return stagnationCount;
+        return new IterationResult(sortedAnts, bestAntSoFar, isImprovedIteration);
     }
 
     private List<Ant> constructAntsSolutionsSorted(double[][] choicesInfo) {
@@ -150,10 +141,6 @@ public class IterationResultFactory {
 
     private double getRandomDouble(double origin, double bound) {
         return ThreadLocalRandom.current().nextDouble(origin, bound);
-    }
-
-    public void resetBestAntSoFar() {
-        bestAntSoFar = null;
     }
 
 }

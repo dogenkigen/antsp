@@ -6,15 +6,14 @@ import java.util.List;
  *
  */
 public class IterationResult {
-
     private final List<Ant> sortedAnts;
     private final Ant bestAntSoFar;
-    private final int stagnationCount;
+    private final boolean isImprovedIteration;
 
-    public IterationResult(List<Ant> sortedAnts, Ant bestAntSoFar, int stagnationCount) {
+    public IterationResult(List<Ant> sortedAnts, Ant bestAntSoFar, boolean isImprovedIteration) {
         this.sortedAnts = sortedAnts;
         this.bestAntSoFar = bestAntSoFar;
-        this.stagnationCount = stagnationCount;
+        this.isImprovedIteration = isImprovedIteration;
     }
 
     public List<Ant> getSortedAnts() {
@@ -29,8 +28,7 @@ public class IterationResult {
         return bestAntSoFar;
     }
 
-    public int getStagnationCount() {
-        return stagnationCount;
+    public boolean isImprovedIteration() {
+        return isImprovedIteration;
     }
-
 }
