@@ -117,7 +117,7 @@ public class StatsSolverTest {
         };
     }
 
-    @Test(dataProvider = "incrementAntsProvider")
+    @Test(dataProvider = "incrementAntsProvider", enabled = true)
     public void testStatsIncrementAnts(String name,
                                        boolean localSearch,
                                        int step,
@@ -181,7 +181,7 @@ public class StatsSolverTest {
         };
     }
 
-    @Test(dataProvider = "performanceAntsProvider")
+    @Test(dataProvider = "performanceAntsProvider", enabled = false)
     public void testPerformanceForCPUCount(String name,
                                            boolean localSearch,
                                            int step,

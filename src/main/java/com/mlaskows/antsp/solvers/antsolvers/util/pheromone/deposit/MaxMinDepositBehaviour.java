@@ -14,8 +14,6 @@ public class MaxMinDepositBehaviour implements DepositBehaviour {
     private final MaxMinConfig config;
     private double minPheromoneValue;
     private double maxPheromoneValue;
-    private Ant lastBestAnt;
-    private int stagnationCount;
     final double pBestRoot;
     final double avg;
 
@@ -30,7 +28,7 @@ public class MaxMinDepositBehaviour implements DepositBehaviour {
                         IterationResult iterationResult) {
         final Ant bestAntSoFar = iterationResult.getBestAntSoFar();
         final Ant iterationBestAnt = iterationResult.getIterationBestAnt();
-        final int stagnationCount = getStagnationCount(bestAntSoFar);
+        final int stagnationCount = iterationResult.getStagnationCount();
         if (stagnationCount == config.getReinitializationCount()) {
             new MaxMinInitializeBehaviour()
                     .initializeForSolution(pheromoneProcessor, config, bestAntSoFar.getSolution());
@@ -40,7 +38,6 @@ public class MaxMinDepositBehaviour implements DepositBehaviour {
         final Ant ant = getAntToDeposit(bestAntSoFar, iterationBestAnt);
         double pheromoneDelta = getPheromoneDelta(ant);
         pheromoneProcessor.depositAntPheromone(ant, pheromoneDelta);
-        lastBestAnt = bestAntSoFar;
     }
 
     private Ant getAntToDeposit(Ant bestAntSoFar, Ant iterationBestAnt) {
@@ -50,16 +47,6 @@ public class MaxMinDepositBehaviour implements DepositBehaviour {
             return ThreadLocalRandom.current().nextBoolean() ?
                     bestAntSoFar : iterationBestAnt;
         }
-    }
-
-    private int getStagnationCount(Ant newBestAntSoFar) {
-        if (lastBestAnt == null
-                || newBestAntSoFar.getTourLength() < lastBestAnt.getTourLength()) {
-            stagnationCount = 0;
-        } else {
-            stagnationCount++;
-        }
-        return stagnationCount;
     }
 
     private void updateMinMax(Ant bestSoFarAnt) {

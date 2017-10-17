@@ -5,6 +5,7 @@ import com.mlaskows.antsp.datamodel.Ant;
 import com.mlaskows.antsp.datamodel.IterationResult;
 import com.mlaskows.antsp.datamodel.Solution;
 import com.mlaskows.antsp.solvers.Solver;
+import com.mlaskows.antsp.solvers.antsolvers.util.ant.IterationResultBehaviour;
 import com.mlaskows.antsp.solvers.antsolvers.util.ant.IterationResultFactory;
 import com.mlaskows.antsp.solvers.antsolvers.util.pheromone.GenericPheromoneBehaviour;
 import com.mlaskows.antsp.statistics.StatisticsBuilder;
@@ -14,16 +15,16 @@ import java.util.Optional;
 public abstract class GenericAntSolver implements Solver {
     private boolean used;
     private final AcoConfig config;
-    private final IterationResultFactory iterationResultFactory;
+    private final IterationResultBehaviour iterationResultBehaviour;
     private final GenericPheromoneBehaviour pheromoneBehaviour;
     private final StatisticsBuilder statisticsBuilder;
     private volatile boolean shouldStop;
 
     GenericAntSolver(AcoConfig config,
-                            IterationResultFactory iterationResultFactory,
-                            GenericPheromoneBehaviour pheromoneBehaviour) {
+                     IterationResultBehaviour iterationResultBehaviour,
+                     GenericPheromoneBehaviour pheromoneBehaviour) {
         this.config = config;
-        this.iterationResultFactory = iterationResultFactory;
+        this.iterationResultBehaviour = iterationResultBehaviour;
         this.pheromoneBehaviour = pheromoneBehaviour;
         this.statisticsBuilder = new StatisticsBuilder();
     }
@@ -40,15 +41,11 @@ public abstract class GenericAntSolver implements Solver {
 
         pheromoneBehaviour.initializePheromone();
         while (shouldNotTerminate(iterationsWithNoImprovement)) {
-            iterationResult = getIterationResult();
+            iterationResult = iterationResultBehaviour.getIterationResult(pheromoneBehaviour.getChoicesInfo());
             statisticsBuilder.addIterationTourLength(iterationResult
                     .getIterationBestAnt().getTourLength());
             updatePheromone(iterationResult);
-            if (iterationResult.isImprovedIteration()) {
-                iterationsWithNoImprovement = 0;
-            } else {
-                iterationsWithNoImprovement++;
-            }
+            iterationsWithNoImprovement = iterationResult.getStagnationCount();
         }
         return buildSolutionObject(iterationResult);
     }
@@ -56,14 +53,6 @@ public abstract class GenericAntSolver implements Solver {
     private boolean shouldNotTerminate(int iterationsWithNoImprovement) {
         return !shouldStop
                 && iterationsWithNoImprovement < config.getMaxStagnationCount();
-    }
-
-    private IterationResult getIterationResult() {
-        IterationResult iterationResult;
-        final double[][] choicesInfo = pheromoneBehaviour.getChoicesInfo();
-        iterationResult =
-                iterationResultFactory.createIterationResult(choicesInfo);
-        return iterationResult;
     }
 
     private void updatePheromone(IterationResult iterationResult) {
