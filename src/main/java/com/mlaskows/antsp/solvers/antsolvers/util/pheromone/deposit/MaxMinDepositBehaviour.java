@@ -16,8 +16,12 @@ public class MaxMinDepositBehaviour implements DepositBehaviour {
     private double maxPheromoneValue;
     private Ant lastBestAnt;
     private int stagnationCount;
+    final double pBestRoot;
+    final double avg;
 
-    public MaxMinDepositBehaviour(MaxMinConfig config) {
+    public MaxMinDepositBehaviour(MaxMinConfig config, int problemSize) {
+        this.pBestRoot = root(0.05, problemSize);
+        this.avg = problemSize / 2;
         this.config = config;
     }
 
@@ -59,9 +63,6 @@ public class MaxMinDepositBehaviour implements DepositBehaviour {
 
     private void updateMinMax(Ant bestSoFarAnt) {
         maxPheromoneValue = 1.0 / (config.getPheromoneEvaporationFactor()) * bestSoFarAnt.getTourLength();
-        final int problemSize = bestSoFarAnt.getTourSize() - 1;
-        final double pBestRoot = root(0.05, problemSize);
-        final double avg = problemSize / 2;
         minPheromoneValue = (maxPheromoneValue * (1.0 - pBestRoot)) / ((avg - 1.0) * pBestRoot);
     }
 

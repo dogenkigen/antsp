@@ -9,7 +9,7 @@ public class MaxMinPheromoneBehaviour extends GenericPheromoneBehaviour {
 
     public MaxMinPheromoneBehaviour(StaticMatrices matrices,
                                     MaxMinConfig config) {
-        super(matrices, config, new MaxMinDepositBehaviour(config),
+        super(matrices, config, new MaxMinDepositBehaviour(config, matrices.getProblemSize()),
                 new MaxMinInitializeBehaviour());
     }
 
