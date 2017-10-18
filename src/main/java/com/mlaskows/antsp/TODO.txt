@@ -1,11 +1,1 @@
-* Improve performance on 2opt plus add swap for the best instead of first better
- solution
-*
-
-* Clean TODO
-* Do SCA scan
-* Prepare API for external usage
-* Write more tests
-* Perform test runs and collect results
- -with different NN
-* Create GUI
+move NN solution to static matrices
