@@ -12,8 +12,7 @@ public class AntSystemInitializeBehaviour implements InitializeBehaviour {
                            StaticData data,
                            AcoConfig config) {
         final Solution solution = getExtractHeuristicSolution(data);
-        final double initialPheromoneValue =
-                (double) config.getAntsCount() / solution.getTourLength();
+        final double initialPheromoneValue = (double) config.getAntsCount() / solution.getTourLength();
         pheromoneProcessor.initPheromone(initialPheromoneValue);
     }
 

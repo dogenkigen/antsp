@@ -16,9 +16,7 @@ public class MaxMinInitializeBehaviour implements InitializeBehaviour {
 
     public void initializeForSolution(PheromoneProcessor pheromoneProcessor,
                                       AcoConfig config, Solution solution) {
-        final double initialPheromoneValue = (double) 1 /
-                config.getPheromoneEvaporationFactor() *
-                solution.getTourLength();
+        final double initialPheromoneValue = 1.0 / (config.getPheromoneEvaporationFactor() * solution.getTourLength());
         pheromoneProcessor.initPheromone(initialPheromoneValue);
     }
 

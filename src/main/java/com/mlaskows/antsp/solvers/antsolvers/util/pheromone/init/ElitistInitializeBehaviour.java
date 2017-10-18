@@ -15,6 +15,11 @@ public class ElitistInitializeBehaviour implements InitializeBehaviour {
                 ((config.getAntsCount() + data.getProblemSize())
                 / config.getPheromoneEvaporationFactor()
                 * solution.getTourLength());
+        // TODO expression below does the calculation by the book
+        // TODO but it doesn't give the best solutions
+        /*
+        (double) (config.getAntsCount() + data.getProblemSize())
+                        / (config.getPheromoneEvaporationFactor() * solution.getTourLength());*/
         pheromoneProcessor.initPheromone(initialPheromoneValue);
     }
 

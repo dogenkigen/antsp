@@ -55,7 +55,7 @@ public class MaxMinDepositBehaviour implements DepositBehaviour {
     }
 
     private void updateMinMax(double tourLength) {
-        maxPheromoneValue = 1.0 / (config.getPheromoneEvaporationFactor()) * tourLength;
+        maxPheromoneValue = 1.0 / (config.getPheromoneEvaporationFactor() * tourLength);
         minPheromoneValue = (maxPheromoneValue * (1.0 - pBestRoot)) / ((avg - 1.0) * pBestRoot);
     }
 
