@@ -22,6 +22,7 @@ public class ElitistAntSolverTest implements BaseWithTspTest {
                 AcoConfigFactory.createDefaultElitistConfig(tsp.getDimension());
         final StaticData data = new StaticDataBuilder(tsp)
                 .withHeuristicInformationMatrix()
+                .withHeuristicSolution()
                 .withNearestNeighbors(config.getNearestNeighbourFactor())
                 .build();
         final ElitistAntSolver solver = new ElitistAntSolver(data, config);

@@ -9,7 +9,7 @@ public class MaxMinPheromoneBehaviour extends GenericPheromoneBehaviour {
 
     public MaxMinPheromoneBehaviour(StaticData data,
                                     MaxMinConfig config) {
-        super(data, config, new MaxMinDepositBehaviour(config, data.getProblemSize()),
+        super(data, config, new MaxMinDepositBehaviour(data, config),
                 new MaxMinInitializeBehaviour());
     }
 

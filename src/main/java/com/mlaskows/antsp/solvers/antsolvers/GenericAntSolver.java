@@ -4,24 +4,28 @@ import com.mlaskows.antsp.config.AcoConfig;
 import com.mlaskows.antsp.datamodel.Ant;
 import com.mlaskows.antsp.datamodel.IterationResult;
 import com.mlaskows.antsp.datamodel.Solution;
+import com.mlaskows.antsp.datamodel.data.StaticData;
 import com.mlaskows.antsp.solvers.Solver;
 import com.mlaskows.antsp.solvers.antsolvers.util.ant.IterationResultFactory;
 import com.mlaskows.antsp.solvers.antsolvers.util.pheromone.GenericPheromoneBehaviour;
 import com.mlaskows.antsp.statistics.StatisticsBuilder;
 
+import java.util.List;
 import java.util.Optional;
 
 public abstract class GenericAntSolver implements Solver {
     private boolean used;
+    private final StaticData data;
     private final AcoConfig config;
     private final IterationResultFactory iterationResultFactory;
     private final GenericPheromoneBehaviour pheromoneBehaviour;
     private final StatisticsBuilder statisticsBuilder;
     private volatile boolean shouldStop;
 
-    GenericAntSolver(AcoConfig config,
-                            IterationResultFactory iterationResultFactory,
-                            GenericPheromoneBehaviour pheromoneBehaviour) {
+    GenericAntSolver(StaticData data, AcoConfig config,
+                     IterationResultFactory iterationResultFactory,
+                     GenericPheromoneBehaviour pheromoneBehaviour) {
+        this.data = data;
         this.config = config;
         this.iterationResultFactory = iterationResultFactory;
         this.pheromoneBehaviour = pheromoneBehaviour;
@@ -49,7 +53,7 @@ public abstract class GenericAntSolver implements Solver {
 
     private boolean shouldNotTerminate(IterationResult iterationResult) {
         return !shouldStop && (iterationResult == null || iterationResult != null
-                        && iterationResult.getIterationsWithNoImprovement() < config.getMaxStagnationCount());
+                && iterationResult.getIterationsWithNoImprovement() < config.getMaxStagnationCount());
     }
 
     private IterationResult getIterationResult() {
@@ -67,8 +71,17 @@ public abstract class GenericAntSolver implements Solver {
 
     private Solution buildSolutionObject(IterationResult iterationResult) {
         final Ant bestAntSoFar = iterationResult.getBestAntSoFar();
-        return new Solution(bestAntSoFar.getTour(), bestAntSoFar
-                .getTourLength(), Optional.of(statisticsBuilder.build()));
+        Solution heuristicSolution = data.getHeuristicSolution().get();
+        List<Integer> tour;
+        int tourLength;
+        if (heuristicSolution.getTourLength() <= bestAntSoFar.getTourLength()) {
+            tour = heuristicSolution.getTour();
+            tourLength = heuristicSolution.getTourLength();
+        } else {
+            tour = bestAntSoFar.getTour();
+            tourLength = bestAntSoFar.getTourLength();
+        }
+        return new Solution(tour, tourLength, Optional.of(statisticsBuilder.build()));
     }
 
     @Override

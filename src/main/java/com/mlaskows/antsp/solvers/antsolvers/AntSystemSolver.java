@@ -11,7 +11,7 @@ import com.mlaskows.antsp.solvers.antsolvers.util.pheromone.AntSystemPheromoneBe
 public class AntSystemSolver extends GenericAntSolver {
 
     public AntSystemSolver(StaticData data, AcoConfig config) {
-        super(config, new IterationResultFactory(data, config),
+        super(data, config, new IterationResultFactory(data, config),
                 new AntSystemPheromoneBehaviour(data, config));
     }
 

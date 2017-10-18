@@ -10,7 +10,7 @@ public class MaxMinInitializeBehaviour implements InitializeBehaviour {
     @Override
     public void initialize(PheromoneProcessor pheromoneProcessor,
                            StaticData data, AcoConfig config) {
-        final Solution solution = getNearestNeighbourSolution(data);
+        final Solution solution = getExtractHeuristicSolution(data);
         initializeForSolution(pheromoneProcessor, config, solution);
     }
 

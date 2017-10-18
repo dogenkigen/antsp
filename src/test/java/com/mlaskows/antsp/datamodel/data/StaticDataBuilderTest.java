@@ -113,11 +113,10 @@ public class StaticDataBuilderTest implements BaseWithTspTest {
     }
 
     @Test
-    public void testGr202NNSolution() throws IOException {
+    public void testGr202HeuristicSolution() throws IOException {
         Tsp tsp = getTsp("tsplib/gr202.tsp");
-        int[] tour = getTour("tsplib/gr202.opt.tour").getTour().get(0);
-        StaticData data = new StaticDataBuilder(tsp).withNearestNeighbourSolution().build();
-        Solution solution = data.getNearestNeighbourSolution().orElseThrow(RuntimeException::new);
+        StaticData data = new StaticDataBuilder(tsp).withHeuristicSolution().build();
+        Solution solution = data.getHeuristicSolution().orElseThrow(RuntimeException::new);
 
         assertEquals(solution.getTourLength(), 49719);
     }

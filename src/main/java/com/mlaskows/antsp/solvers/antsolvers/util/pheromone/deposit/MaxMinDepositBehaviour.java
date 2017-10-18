@@ -3,25 +3,29 @@ package com.mlaskows.antsp.solvers.antsolvers.util.pheromone.deposit;
 import com.mlaskows.antsp.config.MaxMinConfig;
 import com.mlaskows.antsp.datamodel.Ant;
 import com.mlaskows.antsp.datamodel.IterationResult;
+import com.mlaskows.antsp.datamodel.Solution;
+import com.mlaskows.antsp.datamodel.data.StaticData;
+import com.mlaskows.antsp.exeptions.Reason;
+import com.mlaskows.antsp.exeptions.SolutionException;
 import com.mlaskows.antsp.solvers.antsolvers.util.pheromone.PheromoneProcessor;
 import com.mlaskows.antsp.solvers.antsolvers.util.pheromone.init.MaxMinInitializeBehaviour;
 
-import java.util.SplittableRandom;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class MaxMinDepositBehaviour implements DepositBehaviour {
 
     private final MaxMinConfig config;
+    private final Solution heuristicSolution;
     private double minPheromoneValue;
     private double maxPheromoneValue;
-    private Ant lastBestAnt;
-    private int stagnationCount;
     final double pBestRoot;
     final double avg;
 
-    public MaxMinDepositBehaviour(MaxMinConfig config, int problemSize) {
-        this.pBestRoot = root(0.05, problemSize);
-        this.avg = problemSize / 2;
+    public MaxMinDepositBehaviour(StaticData data, MaxMinConfig config) {
+        this.pBestRoot = root(0.05, data.getProblemSize());
+        this.avg = data.getProblemSize() / 2;
+        heuristicSolution = data.getHeuristicSolution()
+                .orElseThrow(() -> new SolutionException(Reason.NO_HEURISTIC_SOLUTION));
         this.config = config;
     }
 
@@ -35,11 +39,10 @@ public class MaxMinDepositBehaviour implements DepositBehaviour {
                     .initializeForSolution(pheromoneProcessor, config, bestAntSoFar.getSolution());
             return;
         }
-        updateMinMax(bestAntSoFar);
+        updateMinMax(Math.min(heuristicSolution.getTourLength(), bestAntSoFar.getTourLength()));
         final Ant ant = getAntToDeposit(bestAntSoFar, iterationBestAnt);
         double pheromoneDelta = getPheromoneDelta(ant);
         pheromoneProcessor.depositAntPheromone(ant, pheromoneDelta);
-        lastBestAnt = bestAntSoFar;
     }
 
     private Ant getAntToDeposit(Ant bestAntSoFar, Ant iterationBestAnt) {
@@ -51,8 +54,8 @@ public class MaxMinDepositBehaviour implements DepositBehaviour {
         }
     }
 
-    private void updateMinMax(Ant bestSoFarAnt) {
-        maxPheromoneValue = 1.0 / (config.getPheromoneEvaporationFactor()) * bestSoFarAnt.getTourLength();
+    private void updateMinMax(double tourLength) {
+        maxPheromoneValue = 1.0 / (config.getPheromoneEvaporationFactor()) * tourLength;
         minPheromoneValue = (maxPheromoneValue * (1.0 - pBestRoot)) / ((avg - 1.0) * pBestRoot);
     }
 

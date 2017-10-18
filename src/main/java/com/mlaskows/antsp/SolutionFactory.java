@@ -29,13 +29,14 @@ public class SolutionFactory {
     }
 
     public static Solution createAntSystemSolution(AcoConfig config, Tsp tsp) {
-        return new AntSystemSolver(getAllMatrices(config, tsp), config)
+        return new AntSystemSolver(getAllData(config, tsp), config)
                 .getSolution();
     }
 
-    private static StaticData getAllMatrices(AcoConfig config, Tsp tsp) {
+    private static StaticData getAllData(AcoConfig config, Tsp tsp) {
         return new StaticDataBuilder(tsp)
                 .withHeuristicInformationMatrix()
+                .withHeuristicSolution()
                 .withNearestNeighbors(config.getNearestNeighbourFactor())
                 .build();
     }

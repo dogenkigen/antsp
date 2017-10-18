@@ -22,6 +22,7 @@ public class RankBasedAntSolverTest implements BaseWithTspTest {
                 AcoConfigFactory.createDefaultRankedBasedConfig(tsp.getDimension());
         final StaticData data = new StaticDataBuilder(tsp)
                 .withHeuristicInformationMatrix()
+                .withHeuristicSolution()
                 .withNearestNeighbors(config.getNearestNeighbourFactor())
                 .build();
         final RankBasedAntSolver solver = new RankBasedAntSolver(data, config);

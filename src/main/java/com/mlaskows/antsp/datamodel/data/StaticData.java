@@ -15,14 +15,14 @@ public class StaticData {
     private final int distanceMatrix[][];
     private final Optional<int[][]> nearestNeighborsMatrix;
     private final Optional<double[][]> heuristicInformationMatrix;
-    private final Optional<Solution> nearestNeighbourSolution;
+    private final Optional<Solution> heuristicSolution;
 
     public StaticData(int[][] distanceMatrix, int[][] nearestNeighborsMatrix, double[][] heuristicInformationMatrix,
-                      Solution nearestNeighbourSolution) {
+                      Solution heuristicSolution) {
         this.distanceMatrix = distanceMatrix;
         this.nearestNeighborsMatrix = Optional.ofNullable(nearestNeighborsMatrix);
         this.heuristicInformationMatrix = Optional.ofNullable(heuristicInformationMatrix);
-        this.nearestNeighbourSolution = Optional.ofNullable(nearestNeighbourSolution);
+        this.heuristicSolution = Optional.ofNullable(heuristicSolution);
     }
 
     public int[][] getDistanceMatrix() {
@@ -70,7 +70,7 @@ public class StaticData {
         return distanceMatrix.length;
     }
 
-    public Optional<Solution> getNearestNeighbourSolution() {
-        return nearestNeighbourSolution;
+    public Optional<Solution> getHeuristicSolution() {
+        return heuristicSolution;
     }
 }

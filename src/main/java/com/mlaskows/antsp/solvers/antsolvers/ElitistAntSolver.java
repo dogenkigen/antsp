@@ -8,7 +8,7 @@ import com.mlaskows.antsp.solvers.antsolvers.util.pheromone.ElitistAntPheromoneB
 public class ElitistAntSolver extends GenericAntSolver {
 
     public ElitistAntSolver(StaticData data, AcoConfig config) {
-        super(config, new IterationResultFactory(data, config),
+        super(data, config, new IterationResultFactory(data, config),
                 new ElitistAntPheromoneBehaviour(data, config));
     }
 

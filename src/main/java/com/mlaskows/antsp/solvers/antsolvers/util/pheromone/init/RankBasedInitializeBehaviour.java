@@ -26,7 +26,7 @@ public class RankBasedInitializeBehaviour implements InitializeBehaviour {
     @Override
     public void initialize(PheromoneProcessor pheromoneProcessor,
                            StaticData data, AcoConfig config) {
-        final Solution solution = getNearestNeighbourSolution(data);
+        final Solution solution = getExtractHeuristicSolution(data);
         final int weight = ((RankedBasedConfig) config).getWeight();
         final double initialPheromoneValue =
                 (0.5 * weight * (weight - 1)) /

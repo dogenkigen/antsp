@@ -28,6 +28,7 @@ public class MaxMinAntSolverTest implements BaseWithTspTest {
                 .createDefaultMaxMinConfig(tsp.getDimension());
         final StaticData data = new StaticDataBuilder(tsp)
                 .withHeuristicInformationMatrix()
+                .withHeuristicSolution()
                 .withNearestNeighbors(config.getNearestNeighbourFactor())
                 .build();
         final MaxMinAntSolver solver = new MaxMinAntSolver(data,
@@ -52,6 +53,7 @@ public class MaxMinAntSolverTest implements BaseWithTspTest {
                 AcoConfigFactory.createDefaultMaxMinConfig(tsp.getDimension());
         final StaticData data = new StaticDataBuilder(tsp)
                 .withHeuristicInformationMatrix()
+                .withHeuristicSolution()
                 .withNearestNeighbors(config.getNearestNeighbourFactor())
                 .build();
         final MaxMinAntSolver solver = new MaxMinAntSolver(data, config);

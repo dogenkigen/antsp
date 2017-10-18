@@ -19,12 +19,12 @@ public class StaticDataBuilder {
     private int[][] distanceMatrix;
     private int[][] nearestNeighbors;
     private int nnFactor;
-    private boolean shouldCalculateNNSolution;
+    private boolean shouldCalculateHeuristicSolution;
     private double[][] heuristicInformationMatrix;
     private final int problemSize;
     private final Tsp tsp;
     private final BiFunction<Node, Node, Integer> distanceCalculationMethod;
-    private Solution nearestNeighbourSolution;
+    private Solution heuristicSolution;
 
     public StaticDataBuilder(Tsp tsp) {
         this.problemSize = tsp.getDimension();
@@ -56,15 +56,15 @@ public class StaticDataBuilder {
         return this;
     }
 
-    public StaticDataBuilder withNearestNeighbourSolution() {
-        shouldCalculateNNSolution = true;
+    public StaticDataBuilder withHeuristicSolution() {
+        shouldCalculateHeuristicSolution = true;
         return this;
     }
 
     public StaticData build() {
         calculateData();
         return new StaticData(distanceMatrix, nearestNeighbors,
-                heuristicInformationMatrix, nearestNeighbourSolution);
+                heuristicInformationMatrix, heuristicSolution);
     }
 
     private void calculateData() {
@@ -91,8 +91,8 @@ public class StaticDataBuilder {
         if (nearestNeighbors != null) {
             calculateNearestNeighbours();
         }
-        if (shouldCalculateNNSolution) {
-            nearestNeighbourSolution = new NearestNeighbourSolver(distanceMatrix).getSolution();
+        if (shouldCalculateHeuristicSolution) {
+            heuristicSolution = new NearestNeighbourSolver(distanceMatrix).getSolution();
         }
     }
 

@@ -128,7 +128,7 @@ public class StatsSolverTest {
                                        BiFunction<StaticData, AcoConfig, Solution> solving,
                                        BiFunction<Integer, Boolean, AcoConfig> configuring,
                                        String algorithmName) throws IOException {
-        StaticData data = getMatrices(MIN_NN_FACTOR, name);
+        StaticData data = getData(MIN_NN_FACTOR, name);
         StringBuilder stringBuilder = initStringBuilder();
         int maxNumberOfAnts = data.getProblemSize();
         for (int numberOfAnts = 1; numberOfAnts <= maxNumberOfAnts; numberOfAnts += step) {
@@ -165,7 +165,7 @@ public class StatsSolverTest {
                                      TriFunction<Integer, Integer, Boolean, AcoConfig> configuring) throws IOException {
         StringBuilder stringBuilder = initStringBuilder();
         for (int nnFactor = MIN_NN_FACTOR; nnFactor <= MAX_NN_FACTOR; nnFactor++) {
-            StaticData data = getMatrices(nnFactor, name);
+            StaticData data = getData(nnFactor, name);
             int antsCount = (int) (data.getProblemSize() * 0.6);
             AcoConfig config = configuring.apply(nnFactor, antsCount, localSearch);
             for (int i = 0; i < ITERATIONS; i++) {
@@ -199,7 +199,7 @@ public class StatsSolverTest {
             AcoConfig config = configuring.apply(numberOfAnts, localSearch);
             for (int i = 0; i < ITERATIONS; i++) {
                 long timeMillis = System.currentTimeMillis();
-                StaticData data = getMatrices(MIN_NN_FACTOR, name);
+                StaticData data = getData(MIN_NN_FACTOR, name);
                 final Solution solution = solving.apply(data, config);
                 appendStringBuilder(localSearch, MIN_NN_FACTOR, stringBuilder, numberOfAnts, config, solution,
                         cpuCount, System.currentTimeMillis() - timeMillis);
@@ -259,9 +259,10 @@ public class StatsSolverTest {
         return stringBuilder;
     }
 
-    private StaticData getMatrices(int nnFactor, String name) throws IOException {
+    private StaticData getData(int nnFactor, String name) throws IOException {
         return new StaticDataBuilder(TspLibParser.parseTsp("tsplib/" + name + ".tsp"))
                 .withHeuristicInformationMatrix()
+                .withHeuristicSolution()
                 .withNearestNeighbors(nnFactor)
                 .build();
     }

@@ -7,7 +7,8 @@ public enum Reason {
 
     NO_BEST_ANT("Couldn't find best ant to construct solution!"),
     EMPTY_HEURISTIC_MATRIX("Heuristic matrix can't be empty!"),
-    EMPTY_NN_MATRIX("Nearest neighbors matrix can't be empty!");
+    EMPTY_NN_MATRIX("Nearest neighbors matrix can't be empty!"),
+    NO_HEURISTIC_SOLUTION("Heuristic solution should be included in static data");
 
     private final String text;
 

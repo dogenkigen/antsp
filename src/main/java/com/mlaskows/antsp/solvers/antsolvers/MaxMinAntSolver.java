@@ -8,7 +8,7 @@ import com.mlaskows.antsp.solvers.antsolvers.util.pheromone.MaxMinPheromoneBehav
 public class MaxMinAntSolver extends GenericAntSolver {
 
     public MaxMinAntSolver(StaticData data, MaxMinConfig config) {
-        super(config, new IterationResultFactory(data, config),
+        super(data, config, new IterationResultFactory(data, config),
                 new MaxMinPheromoneBehaviour(data, config));
     }
 

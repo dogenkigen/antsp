@@ -11,9 +11,10 @@ public class AntSystemInitializeBehaviour implements InitializeBehaviour {
     public void initialize(PheromoneProcessor pheromoneProcessor,
                            StaticData data,
                            AcoConfig config) {
-        final Solution solution = getNearestNeighbourSolution(data);
+        final Solution solution = getExtractHeuristicSolution(data);
         final double initialPheromoneValue =
                 (double) config.getAntsCount() / solution.getTourLength();
         pheromoneProcessor.initPheromone(initialPheromoneValue);
     }
+
 }
