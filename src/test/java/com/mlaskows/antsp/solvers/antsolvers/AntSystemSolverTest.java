@@ -4,17 +4,9 @@ import com.mlaskows.antsp.config.AcoConfig;
 import com.mlaskows.antsp.config.AcoConfigFactory;
 import com.mlaskows.antsp.datamodel.Solution;
 import com.mlaskows.BaseWithTspTest;
-import com.mlaskows.antsp.datamodel.matrices.StaticMatrices;
-import com.mlaskows.antsp.datamodel.matrices.StaticMatricesBuilder;
-import com.mlaskows.antsp.statistics.Statistics;
-import com.mlaskows.tsplib.parser.TspLibParser;
 import org.testng.annotations.Test;
 
-import java.io.BufferedWriter;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import static com.mlaskows.antsp.SolutionFactory.getAntSystemSolution;
 import static com.mlaskows.antsp.SolutionFactory.getAntSystemSolutionWithDefaultConfig;

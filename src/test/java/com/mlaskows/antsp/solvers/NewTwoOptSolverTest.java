@@ -1,8 +1,8 @@
 package com.mlaskows.antsp.solvers;
 
 import com.mlaskows.antsp.datamodel.Solution;
-import com.mlaskows.antsp.datamodel.matrices.StaticMatrices;
-import com.mlaskows.antsp.datamodel.matrices.StaticMatricesBuilder;
+import com.mlaskows.antsp.datamodel.data.StaticData;
+import com.mlaskows.antsp.datamodel.data.StaticDataBuilder;
 import com.mlaskows.antsp.solvers.heuristic.NewTwoOptSolver;
 import com.mlaskows.tsplib.datamodel.item.Tsp;
 import org.testng.annotations.Test;
@@ -18,14 +18,14 @@ public class NewTwoOptSolverTest extends BaseOptSolverTest {
     public void testBerlin52() throws IOException {
         Tsp tsp = getTsp("tsplib/berlin52.tsp");
         List<Integer> initialTour = getInitialTour(52);
-        StaticMatrices matricesHolder = new StaticMatricesBuilder(tsp)
+        StaticData dataHolder = new StaticDataBuilder(tsp)
                 .withNearestNeighbors(20)
                 .build();
-        int initialDistance = calculateDistance(matricesHolder.getDistanceMatrix(),
+        int initialDistance = calculateDistance(dataHolder.getDistanceMatrix(),
                 initialTour);
 
         final NewTwoOptSolver solver = new NewTwoOptSolver
-                (new Solution(initialTour, initialDistance), matricesHolder);
+                (new Solution(initialTour, initialDistance), dataHolder);
         final Solution solution = solver.getSolution();
 
         assertTrue(solution.getTourLength() < initialDistance);

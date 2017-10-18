@@ -1,12 +1,9 @@
 package com.mlaskows.antsp.solvers.heuristic;
 
 import com.mlaskows.antsp.datamodel.Solution;
-import com.mlaskows.antsp.datamodel.Step;
-import com.mlaskows.antsp.datamodel.matrices.StaticMatrices;
+import com.mlaskows.antsp.datamodel.data.StaticData;
 import com.mlaskows.antsp.datamodel.Ant;
 import com.mlaskows.antsp.solvers.Solver;
-
-import java.util.stream.IntStream;
 
 /**
  * Implementation of Nearest Neighbor, O(n^2)
@@ -18,8 +15,12 @@ public class NearestNeighbourSolver implements Solver {
     private final int[][] distanceMatrix;
     private volatile boolean shouldStop;
 
-    public NearestNeighbourSolver(StaticMatrices matricesHolder) {
-        this.distanceMatrix = matricesHolder.getDistanceMatrix();
+    public NearestNeighbourSolver(StaticData data) {
+        this.distanceMatrix = data.getDistanceMatrix();
+    }
+
+    public NearestNeighbourSolver(int[][] distanceMatrix) {
+        this.distanceMatrix = distanceMatrix;
     }
 
     @Override

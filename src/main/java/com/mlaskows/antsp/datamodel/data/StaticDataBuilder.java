@@ -1,5 +1,7 @@
-package com.mlaskows.antsp.datamodel.matrices;
+package com.mlaskows.antsp.datamodel.data;
 
+import com.mlaskows.antsp.datamodel.Solution;
+import com.mlaskows.antsp.solvers.heuristic.NearestNeighbourSolver;
 import com.mlaskows.tsplib.datamodel.types.EdgeWeightType;
 import com.mlaskows.tsplib.util.DistanceCalculationMethodFactory;
 import com.mlaskows.antsp.datamodel.Step;
@@ -13,16 +15,18 @@ import java.util.stream.IntStream;
 /**
  * Created by maciej_laskowski on 05.07.2017.
  */
-public class StaticMatricesBuilder {
+public class StaticDataBuilder {
     private int[][] distanceMatrix;
     private int[][] nearestNeighbors;
     private int nnFactor;
+    private boolean shouldCalculateNNSolution;
     private double[][] heuristicInformationMatrix;
     private final int problemSize;
     private final Tsp tsp;
     private final BiFunction<Node, Node, Integer> distanceCalculationMethod;
+    private Solution nearestNeighbourSolution;
 
-    public StaticMatricesBuilder(Tsp tsp) {
+    public StaticDataBuilder(Tsp tsp) {
         this.problemSize = tsp.getDimension();
         this.tsp = tsp;
         final EdgeWeightType edgeWeightType = tsp.getEdgeWeightType();
@@ -36,7 +40,7 @@ public class StaticMatricesBuilder {
         }
     }
 
-    public StaticMatricesBuilder withNearestNeighbors(int nnFactor) {
+    public StaticDataBuilder withNearestNeighbors(int nnFactor) {
         this.nnFactor = nnFactor;
         nearestNeighbors = new int[problemSize][nnFactor];
         return this;
@@ -47,18 +51,23 @@ public class StaticMatricesBuilder {
      * the distance between cities i and j, a straightforward choice being
      * nij = 1/dij
      */
-    public StaticMatricesBuilder withHeuristicInformationMatrix() {
+    public StaticDataBuilder withHeuristicInformationMatrix() {
         heuristicInformationMatrix = new double[problemSize][problemSize];
         return this;
     }
 
-    public StaticMatrices build() {
-        calculateMatrices();
-        return new StaticMatrices(distanceMatrix, nearestNeighbors,
-                heuristicInformationMatrix);
+    public StaticDataBuilder withNearestNeighbourSolution() {
+        shouldCalculateNNSolution = true;
+        return this;
     }
 
-    private void calculateMatrices() {
+    public StaticData build() {
+        calculateData();
+        return new StaticData(distanceMatrix, nearestNeighbors,
+                heuristicInformationMatrix, nearestNeighbourSolution);
+    }
+
+    private void calculateData() {
         final List<Node> nodes = tsp.getNodes().orElse(null);
         final boolean edgeWeightDataIsPresent = tsp.getEdgeWeightData()
                 .isPresent();
@@ -80,14 +89,30 @@ public class StaticMatricesBuilder {
 
         }
         if (nearestNeighbors != null) {
-            // Parallel NN calculation will be slower for small instances
-            // which are calculated fast anyway, so it will make no difference.
-            // For big instances this will make huge bust.
-            IntStream.iterate(0, i -> i < problemSize, i -> i + 1)
-                    .parallel()
-                    .forEach((i) -> nearestNeighbors[i] =
-                            getNearestNeighbourRow(distanceMatrix[i]));
+            calculateNearestNeighbours();
         }
+        if (shouldCalculateNNSolution) {
+            nearestNeighbourSolution = new NearestNeighbourSolver(distanceMatrix).getSolution();
+        }
+    }
+
+    private void calculateNearestNeighbours() {
+        // Parallel NN calculation will be slower for small instances
+        // which are calculated fast anyway, so it will make no difference.
+        // For big instances this will make huge bust.
+        IntStream.iterate(0, i -> i < problemSize, i -> i + 1)
+                .parallel()
+                .forEach((i) -> nearestNeighbors[i] =
+                        getNearestNeighbourRow(distanceMatrix[i]));
+    }
+
+    private int[] getNearestNeighbourRow(int[] distances) {
+        return IntStream.range(0, problemSize)
+                .mapToObj(index -> new Step(index, distances[index]))
+                .sorted()
+                .limit(nnFactor)
+                .mapToInt(step -> step.getTo())
+                .toArray();
     }
 
     private int[][] getWithInfiniteIdentityDistances(int[][] distances) {
@@ -115,15 +140,6 @@ public class StaticMatricesBuilder {
     private void fill(double[][] matrix, int i, int j, double value) {
         matrix[i][j] = value;
         matrix[j][i] = value;
-    }
-
-    private int[] getNearestNeighbourRow(int[] distances) {
-        return IntStream.range(0, problemSize)
-                .mapToObj(index -> new Step(index, distances[index]))
-                .sorted()
-                .limit(nnFactor)
-                .mapToInt(step -> step.getTo())
-                .toArray();
     }
 
 }

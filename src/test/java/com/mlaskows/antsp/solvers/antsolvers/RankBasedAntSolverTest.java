@@ -3,8 +3,8 @@ package com.mlaskows.antsp.solvers.antsolvers;
 import com.mlaskows.antsp.config.AcoConfigFactory;
 import com.mlaskows.antsp.config.RankedBasedConfig;
 import com.mlaskows.antsp.datamodel.Solution;
-import com.mlaskows.antsp.datamodel.matrices.StaticMatricesBuilder;
-import com.mlaskows.antsp.datamodel.matrices.StaticMatrices;
+import com.mlaskows.antsp.datamodel.data.StaticDataBuilder;
+import com.mlaskows.antsp.datamodel.data.StaticData;
 import com.mlaskows.BaseWithTspTest;
 import com.mlaskows.tsplib.datamodel.item.Tsp;
 import org.testng.Assert;
@@ -20,11 +20,11 @@ public class RankBasedAntSolverTest implements BaseWithTspTest {
         final Tsp tsp = getTsp("tsplib/ali535.tsp");
         final RankedBasedConfig config =
                 AcoConfigFactory.createDefaultRankedBasedConfig(tsp.getDimension());
-        final StaticMatrices matrices = new StaticMatricesBuilder(tsp)
+        final StaticData data = new StaticDataBuilder(tsp)
                 .withHeuristicInformationMatrix()
                 .withNearestNeighbors(config.getNearestNeighbourFactor())
                 .build();
-        final RankBasedAntSolver solver = new RankBasedAntSolver(matrices, config);
+        final RankBasedAntSolver solver = new RankBasedAntSolver(data, config);
         final Solution solution = solver.getSolution();
 
         List<Integer> nonImprovementPeriods = solution.getStatistics().get()

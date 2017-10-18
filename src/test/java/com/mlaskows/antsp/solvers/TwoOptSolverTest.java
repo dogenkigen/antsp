@@ -1,19 +1,15 @@
 package com.mlaskows.antsp.solvers;
 
-import com.mlaskows.BaseWithTspTest;
-import com.mlaskows.antsp.datamodel.matrices.StaticMatrices;
+import com.mlaskows.antsp.datamodel.data.StaticData;
 import com.mlaskows.antsp.datamodel.Solution;
-import com.mlaskows.antsp.datamodel.matrices.StaticMatricesBuilder;
+import com.mlaskows.antsp.datamodel.data.StaticDataBuilder;
 import com.mlaskows.antsp.solvers.heuristic.TwoOptSolver;
 import com.mlaskows.tsplib.datamodel.item.Tsp;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 /**
  * Created by mlaskows on 01/07/2017.
@@ -23,14 +19,14 @@ public class TwoOptSolverTest extends BaseOptSolverTest {
     public void testAustraliaSolution() throws IOException {
         Tsp tsp = getTsp("tsplib/australia.tsp");
 
-        StaticMatrices matricesHolder = new StaticMatricesBuilder(tsp)
+        StaticData dataHolder = new StaticDataBuilder(tsp)
                 .withNearestNeighbors(5)
                 .build();
         final List<Integer> initialTour = List.of(0, 1, 2, 3, 4, 5);
-        int initialDistnace = calculateDistance(matricesHolder.getDistanceMatrix(),
+        int initialDistnace = calculateDistance(dataHolder.getDistanceMatrix(),
                 initialTour);
 
-        final Solution solution = computeSolution(initialTour, matricesHolder, initialDistnace);
+        final Solution solution = computeSolution(initialTour, dataHolder, initialDistnace);
 
         final List<Integer> expectedTour = List.of(0, 2, 1, 4, 3, 5);
         Assert.assertEquals(solution.getTour(), expectedTour);
@@ -41,14 +37,14 @@ public class TwoOptSolverTest extends BaseOptSolverTest {
     public void testAli535Solution() throws IOException {
         final Tsp tsp = getTsp("tsplib/ali535.tsp");
 
-        StaticMatrices matricesHolder = new StaticMatricesBuilder(tsp)
+        StaticData dataHolder = new StaticDataBuilder(tsp)
                 .withNearestNeighbors(20)
                 .build();
         final List<Integer> initialTour = getInitialTour(535);
-        int initialDistnace = calculateDistance(matricesHolder.getDistanceMatrix(),
+        int initialDistnace = calculateDistance(dataHolder.getDistanceMatrix(),
                 initialTour);
 
-        final Solution solution = computeSolution(initialTour, matricesHolder, initialDistnace);
+        final Solution solution = computeSolution(initialTour, dataHolder, initialDistnace);
 
         Assert.assertTrue(solution.getTourLength() < initialDistnace);
         Assert.assertEquals(solution.getTourLength(), 3360076);
@@ -58,13 +54,13 @@ public class TwoOptSolverTest extends BaseOptSolverTest {
     public void testBerlin52() throws IOException {
         Tsp tsp = getTsp("tsplib/berlin52.tsp");
         List<Integer> initialTour = getInitialTour(52);
-        StaticMatrices matricesHolder = new StaticMatricesBuilder(tsp)
+        StaticData dataHolder = new StaticDataBuilder(tsp)
                 .withNearestNeighbors(20)
                 .build();
-        int initialDistnace = calculateDistance(matricesHolder.getDistanceMatrix(),
+        int initialDistnace = calculateDistance(dataHolder.getDistanceMatrix(),
                 initialTour);
 
-        final Solution solution = computeSolution(initialTour, matricesHolder, initialDistnace);
+        final Solution solution = computeSolution(initialTour, dataHolder, initialDistnace);
 
         Assert.assertTrue(solution.getTourLength() < initialDistnace);
     }
@@ -74,23 +70,23 @@ public class TwoOptSolverTest extends BaseOptSolverTest {
         Tsp tsp = getTsp("tsplib/usa13509.tsp");
         List<Integer> initialTour = getInitialTour(13509);
 
-        StaticMatrices matricesHolderWithNN = new StaticMatricesBuilder(tsp)
+        StaticData dataHolderWithNN = new StaticDataBuilder(tsp)
                 .withNearestNeighbors(20)
                 .build();
-        int initialDistnace = calculateDistance(matricesHolderWithNN.getDistanceMatrix(),
+        int initialDistnace = calculateDistance(dataHolderWithNN.getDistanceMatrix(),
                 initialTour);
 
         long nnStartTime = System.currentTimeMillis();
-        final Solution solutionWithNN = computeSolution(initialTour, matricesHolderWithNN, initialDistnace);
+        final Solution solutionWithNN = computeSolution(initialTour, dataHolderWithNN, initialDistnace);
         long nnTime = System.currentTimeMillis() - nnStartTime;
 
         System.out.println("NN test done in " + nnTime + " ms and solution " +
                 "len " + solutionWithNN.getTourLength());
 
-        StaticMatrices matricesHolder = new StaticMatricesBuilder(tsp).build();
+        StaticData dataHolder = new StaticDataBuilder(tsp).build();
 
         long startTime = System.currentTimeMillis();
-        Solution solution = computeSolution(initialTour, matricesHolder, initialDistnace);
+        Solution solution = computeSolution(initialTour, dataHolder, initialDistnace);
         long time = System.currentTimeMillis() - startTime;
 
         System.out.println("no NN test done in " + time + " ms and solution" +
@@ -99,10 +95,10 @@ public class TwoOptSolverTest extends BaseOptSolverTest {
         Assert.assertTrue(solution.getTourLength() < solutionWithNN.getTourLength());
     }
 
-    private Solution computeSolution(List<Integer> initialTour, StaticMatrices
-            matricesHolder, int initialDistnace) {
+    private Solution computeSolution(List<Integer> initialTour, StaticData
+            dataHolder, int initialDistnace) {
         final TwoOptSolver solver = new TwoOptSolver
-                (new Solution(initialTour, initialDistnace), matricesHolder);
+                (new Solution(initialTour, initialDistnace), dataHolder);
         return solver.getSolution();
     }
 

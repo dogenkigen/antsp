@@ -3,12 +3,11 @@ package com.mlaskows.antsp.solvers.antsolvers.util.ant;
 import com.mlaskows.antsp.config.AcoConfig;
 import com.mlaskows.antsp.datamodel.Ant;
 import com.mlaskows.antsp.datamodel.IterationResult;
-import com.mlaskows.antsp.datamodel.matrices.StaticMatrices;
+import com.mlaskows.antsp.datamodel.data.StaticData;
 import com.mlaskows.antsp.exeptions.Reason;
 import com.mlaskows.antsp.solvers.heuristic.NewTwoOptSolver;
 
 import java.util.List;
-import java.util.SplittableRandom;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -17,7 +16,7 @@ import static java.util.stream.Collectors.toList;
 
 public class IterationResultFactory {
 
-    private final StaticMatrices matrices;
+    private final StaticData data;
     private final AcoConfig config;
     private final int problemSize;
     private final int[][] distanceMatrix;
@@ -25,12 +24,12 @@ public class IterationResultFactory {
     private Ant bestAntSoFar;
     private int iterationsWithNoImprovement;
 
-    public IterationResultFactory(StaticMatrices matrices, AcoConfig config) {
-        this.matrices = matrices;
+    public IterationResultFactory(StaticData data, AcoConfig config) {
+        this.data = data;
         this.config = config;
-        this.problemSize = matrices.getProblemSize();
-        distanceMatrix = matrices.getDistanceMatrix();
-        nearestNeighbors = matrices.getNearestNeighborsMatrix()
+        this.problemSize = data.getProblemSize();
+        distanceMatrix = data.getDistanceMatrix();
+        nearestNeighbors = data.getNearestNeighborsMatrix()
                 .orElseThrow(() -> new IllegalArgumentException(Reason.EMPTY_NN_MATRIX.toString()));
     }
 
@@ -55,7 +54,7 @@ public class IterationResultFactory {
         if (config.isWithLocalSearch()) {
             ants = antsStream
                     //.limit(Runtime.getRuntime().availableProcessors())
-                    .map(ant -> new NewTwoOptSolver(ant.getSolution(), matrices)
+                    .map(ant -> new NewTwoOptSolver(ant.getSolution(), data)
                             .getSolution())
                     .map(Ant::new)
                     .collect(toList());

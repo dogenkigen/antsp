@@ -2,8 +2,8 @@ package com.mlaskows.antsp.solvers.antsolvers;
 
 import com.mlaskows.antsp.config.AcoConfig;
 import com.mlaskows.antsp.datamodel.Solution;
-import com.mlaskows.antsp.datamodel.matrices.StaticMatrices;
-import com.mlaskows.antsp.datamodel.matrices.StaticMatricesBuilder;
+import com.mlaskows.antsp.datamodel.data.StaticData;
+import com.mlaskows.antsp.datamodel.data.StaticDataBuilder;
 import com.mlaskows.BaseWithTspTest;
 import com.mlaskows.tsplib.datamodel.item.Tsp;
 import com.mlaskows.antsp.config.AcoConfigFactory;
@@ -20,11 +20,11 @@ public class ElitistAntSolverTest implements BaseWithTspTest {
         final Tsp tsp = getTsp("tsplib/ali535.tsp");
         final AcoConfig config =
                 AcoConfigFactory.createDefaultElitistConfig(tsp.getDimension());
-        final StaticMatrices matrices = new StaticMatricesBuilder(tsp)
+        final StaticData data = new StaticDataBuilder(tsp)
                 .withHeuristicInformationMatrix()
                 .withNearestNeighbors(config.getNearestNeighbourFactor())
                 .build();
-        final ElitistAntSolver solver = new ElitistAntSolver(matrices, config);
+        final ElitistAntSolver solver = new ElitistAntSolver(data, config);
         final Solution solution = solver.getSolution();
 
         List<Integer> nonImprovementPeriods = solution.getStatistics().get()

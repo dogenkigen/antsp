@@ -1,6 +1,6 @@
 package com.mlaskows.antsp.solvers.antsolvers.util.pheromone;
 
-import com.mlaskows.antsp.datamodel.matrices.StaticMatrices;
+import com.mlaskows.antsp.datamodel.data.StaticData;
 import com.mlaskows.antsp.exeptions.Reason;
 import com.mlaskows.antsp.config.AcoConfig;
 import com.mlaskows.antsp.datamodel.Ant;
@@ -13,10 +13,10 @@ public class PheromoneProcessor {
     private double[][] pheromoneMatrix;
     private double[][] choicesInfo;
 
-    public PheromoneProcessor(StaticMatrices matrices, AcoConfig config) {
+    public PheromoneProcessor(StaticData data, AcoConfig config) {
         this.config = config;
-        problemSize = matrices.getProblemSize();
-        heuristicInformationMatrix = matrices.getHeuristicInformationMatrix()
+        problemSize = data.getProblemSize();
+        heuristicInformationMatrix = data.getHeuristicInformationMatrix()
                 .orElseThrow(() -> new IllegalArgumentException(Reason.EMPTY_HEURISTIC_MATRIX.toString()));
         pheromoneMatrix = new double[problemSize][problemSize];
         choicesInfo = new double[problemSize][problemSize];

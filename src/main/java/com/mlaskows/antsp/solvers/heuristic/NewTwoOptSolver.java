@@ -1,13 +1,12 @@
 package com.mlaskows.antsp.solvers.heuristic;
 
 import com.mlaskows.antsp.datamodel.Solution;
-import com.mlaskows.antsp.datamodel.matrices.StaticMatrices;
+import com.mlaskows.antsp.datamodel.data.StaticData;
 import com.mlaskows.antsp.solvers.Solver;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 
@@ -19,11 +18,11 @@ public class NewTwoOptSolver implements Solver {
     private final int problemSize;
     private boolean shouldStop;
 
-    public NewTwoOptSolver(Solution initialSolution, StaticMatrices matrices) {
+    public NewTwoOptSolver(Solution initialSolution, StaticData data) {
         this.initialSolution = initialSolution;
-        problemSize = matrices.getProblemSize();
-        distanceMatrix = matrices.getDistanceMatrix();
-        nearestNeighboursMatrix = matrices.getNearestNeighborsMatrix()
+        problemSize = data.getProblemSize();
+        distanceMatrix = data.getDistanceMatrix();
+        nearestNeighboursMatrix = data.getNearestNeighborsMatrix()
                 .orElseThrow(IllegalArgumentException::new);
     }
 

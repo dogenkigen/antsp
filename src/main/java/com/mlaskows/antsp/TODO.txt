@@ -1,1 +1,1 @@
-move NN solution to static matrices
+move NN solution to static data

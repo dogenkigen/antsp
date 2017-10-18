@@ -1,23 +1,28 @@
-package com.mlaskows.antsp.datamodel.matrices;
+package com.mlaskows.antsp.datamodel.data;
+
+import com.mlaskows.antsp.datamodel.Solution;
 
 import java.util.Optional;
 
 /**
- * Contains matrices needed to calculate optimal route. Values of those
- * matrices shouldn't be changed during run.
+ * Contains data needed to calculate optimal route. Values of those
+ * data shouldn't be changed during run.
  *
  * @author Maciej Laskowski
  */
-public class StaticMatrices {
+public class StaticData {
 
     private final int distanceMatrix[][];
     private final Optional<int[][]> nearestNeighborsMatrix;
     private final Optional<double[][]> heuristicInformationMatrix;
+    private final Optional<Solution> nearestNeighbourSolution;
 
-    public StaticMatrices(int[][] distanceMatrix, int[][] nearestNeighborsMatrix, double[][] heuristicInformationMatrix) {
+    public StaticData(int[][] distanceMatrix, int[][] nearestNeighborsMatrix, double[][] heuristicInformationMatrix,
+                      Solution nearestNeighbourSolution) {
         this.distanceMatrix = distanceMatrix;
         this.nearestNeighborsMatrix = Optional.ofNullable(nearestNeighborsMatrix);
         this.heuristicInformationMatrix = Optional.ofNullable(heuristicInformationMatrix);
+        this.nearestNeighbourSolution = Optional.ofNullable(nearestNeighbourSolution);
     }
 
     public int[][] getDistanceMatrix() {
@@ -65,4 +70,7 @@ public class StaticMatrices {
         return distanceMatrix.length;
     }
 
+    public Optional<Solution> getNearestNeighbourSolution() {
+        return nearestNeighbourSolution;
+    }
 }

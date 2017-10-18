@@ -2,8 +2,8 @@ package com.mlaskows.antsp;
 
 import com.mlaskows.antsp.config.AcoConfig;
 import com.mlaskows.antsp.datamodel.Solution;
-import com.mlaskows.antsp.datamodel.matrices.StaticMatrices;
-import com.mlaskows.antsp.datamodel.matrices.StaticMatricesBuilder;
+import com.mlaskows.antsp.datamodel.data.StaticData;
+import com.mlaskows.antsp.datamodel.data.StaticDataBuilder;
 import com.mlaskows.antsp.solvers.antsolvers.AntSystemSolver;
 import com.mlaskows.tsplib.parser.TspLibParser;
 import com.mlaskows.tsplib.datamodel.item.Tsp;
@@ -33,8 +33,8 @@ public class SolutionFactory {
                 .getSolution();
     }
 
-    private static StaticMatrices getAllMatrices(AcoConfig config, Tsp tsp) {
-        return new StaticMatricesBuilder(tsp)
+    private static StaticData getAllMatrices(AcoConfig config, Tsp tsp) {
+        return new StaticDataBuilder(tsp)
                 .withHeuristicInformationMatrix()
                 .withNearestNeighbors(config.getNearestNeighbourFactor())
                 .build();

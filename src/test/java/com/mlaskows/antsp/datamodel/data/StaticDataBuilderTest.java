@@ -1,13 +1,12 @@
-package com.mlaskows.antsp.datamodel.matrices;
+package com.mlaskows.antsp.datamodel.data;
 
 import com.mlaskows.BaseWithTspTest;
-import com.mlaskows.tsplib.datamodel.item.Tour;
+import com.mlaskows.antsp.datamodel.Solution;
 import com.mlaskows.tsplib.datamodel.item.Tsp;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
-import java.util.List;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
@@ -15,7 +14,7 @@ import static org.testng.Assert.assertTrue;
 /**
  * Created by mlaskows on 22/04/2017.
  */
-public class StaticMatricesBuilderTest implements BaseWithTspTest {
+public class StaticDataBuilderTest implements BaseWithTspTest {
 
     private static final int NN_FACOTR = 5;
     private static Tsp australiTsp;
@@ -27,9 +26,9 @@ public class StaticMatricesBuilderTest implements BaseWithTspTest {
 
     @Test
     public void testDistancesAustralia() {
-        StaticMatrices matrices =
-                new StaticMatricesBuilder(australiTsp).build();
-        int[][] distanceMatrix = matrices.getDistanceMatrix();
+        StaticData data =
+                new StaticDataBuilder(australiTsp).build();
+        int[][] distanceMatrix = data.getDistanceMatrix();
 
         assertEquals(distanceMatrix.length, australiTsp.getDimension());
         assertEquals(distanceMatrix[3][3], Integer.MAX_VALUE);
@@ -41,10 +40,10 @@ public class StaticMatricesBuilderTest implements BaseWithTspTest {
 
     @Test
     public void testNNAustralia() {
-        StaticMatrices matrices = new StaticMatricesBuilder(australiTsp)
+        StaticData data = new StaticDataBuilder(australiTsp)
                 .withNearestNeighbors(NN_FACOTR)
                 .build();
-        int[][] nearestNeighborList = matrices
+        int[][] nearestNeighborList = data
                 .getNearestNeighborsMatrix()
                 .orElseThrow(RuntimeException::new);
         assertEquals(nearestNeighborList.length, australiTsp.getDimension());
@@ -55,14 +54,14 @@ public class StaticMatricesBuilderTest implements BaseWithTspTest {
 
     @Test
     public void testHeuristicAustralia() {
-        StaticMatrices matrices = new StaticMatricesBuilder(australiTsp)
+        StaticData data = new StaticDataBuilder(australiTsp)
                 .withHeuristicInformationMatrix()
                 .build();
-        double[][] heuristicInformationMatrix = matrices
+        double[][] heuristicInformationMatrix = data
                 .getHeuristicInformationMatrix()
                 .orElseThrow(RuntimeException::new);
         assertEquals(heuristicInformationMatrix.length, australiTsp.getDimension());
-        int i = matrices.getDistanceMatrix()[1][1];
+        int i = data.getDistanceMatrix()[1][1];
         double v = 1.0 / ((double) i + 0.1);
         assertEquals(heuristicInformationMatrix[1][1], v);
     }
@@ -70,13 +69,13 @@ public class StaticMatricesBuilderTest implements BaseWithTspTest {
     @Test
     public void testBays29() throws IOException {
         final Tsp tsp = getTsp("tsplib/bays29.tsp");
-        final StaticMatrices matrices = new StaticMatricesBuilder(tsp)
+        final StaticData data = new StaticDataBuilder(tsp)
                 .withHeuristicInformationMatrix()
                 .withNearestNeighbors(15)
                 .build();
 
         assertTrue(tsp.getEdgeWeightData().isPresent());
-        final int[][] distanceMatrix = matrices.getDistanceMatrix();
+        final int[][] distanceMatrix = data.getDistanceMatrix();
         final int[][] edgeWeightData = tsp.getEdgeWeightData().get();
         for (int i = 0; i < distanceMatrix.length; i++) {
             for (int j = 0; j < distanceMatrix.length; j++) {
@@ -93,8 +92,8 @@ public class StaticMatricesBuilderTest implements BaseWithTspTest {
     public void testPa561Comparison() throws IOException {
         Tsp tsp = getTsp("tsplib/pa561.tsp");
         int[] tour = getTour("tsplib/pa561.opt.tour").getTour().get(0);
-        StaticMatrices matrices = new StaticMatricesBuilder(tsp).build();
-        int[][] distanceMatrix = matrices.getDistanceMatrix();
+        StaticData data = new StaticDataBuilder(tsp).build();
+        int[][] distanceMatrix = data.getDistanceMatrix();
 
         int tourLen = getTourLen(tour, distanceMatrix);
 
@@ -105,12 +104,22 @@ public class StaticMatricesBuilderTest implements BaseWithTspTest {
     public void testGr202Comparison() throws IOException {
         Tsp tsp = getTsp("tsplib/gr202.tsp");
         int[] tour = getTour("tsplib/gr202.opt.tour").getTour().get(0);
-        StaticMatrices matrices = new StaticMatricesBuilder(tsp).build();
-        int[][] distanceMatrix = matrices.getDistanceMatrix();
+        StaticData data = new StaticDataBuilder(tsp).build();
+        int[][] distanceMatrix = data.getDistanceMatrix();
 
         int tourLen = getTourLen(tour, distanceMatrix);
 
         assertEquals(tourLen, 40215);
+    }
+
+    @Test
+    public void testGr202NNSolution() throws IOException {
+        Tsp tsp = getTsp("tsplib/gr202.tsp");
+        int[] tour = getTour("tsplib/gr202.opt.tour").getTour().get(0);
+        StaticData data = new StaticDataBuilder(tsp).withNearestNeighbourSolution().build();
+        Solution solution = data.getNearestNeighbourSolution().orElseThrow(RuntimeException::new);
+
+        assertEquals(solution.getTourLength(), 49719);
     }
 
     private int getTourLen(int[] tour, int[][] distanceMatrix) {

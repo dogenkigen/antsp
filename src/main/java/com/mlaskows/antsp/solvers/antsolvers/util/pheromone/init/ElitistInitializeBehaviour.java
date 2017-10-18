@@ -1,6 +1,6 @@
 package com.mlaskows.antsp.solvers.antsolvers.util.pheromone.init;
 
-import com.mlaskows.antsp.datamodel.matrices.StaticMatrices;
+import com.mlaskows.antsp.datamodel.data.StaticData;
 import com.mlaskows.antsp.config.AcoConfig;
 import com.mlaskows.antsp.datamodel.Solution;
 import com.mlaskows.antsp.solvers.antsolvers.util.pheromone.PheromoneProcessor;
@@ -9,10 +9,10 @@ public class ElitistInitializeBehaviour implements InitializeBehaviour {
 
     @Override
     public void initialize(PheromoneProcessor pheromoneProcessor,
-                           StaticMatrices matrices, AcoConfig config) {
-        final Solution solution = getNearestNeighbourSolution(matrices);
+                           StaticData data, AcoConfig config) {
+        final Solution solution = getNearestNeighbourSolution(data);
         final double initialPheromoneValue =
-                ((config.getAntsCount() + matrices.getProblemSize())
+                ((config.getAntsCount() + data.getProblemSize())
                 / config.getPheromoneEvaporationFactor()
                 * solution.getTourLength());
         pheromoneProcessor.initPheromone(initialPheromoneValue);

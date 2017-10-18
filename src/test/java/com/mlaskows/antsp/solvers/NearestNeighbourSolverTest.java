@@ -2,8 +2,8 @@ package com.mlaskows.antsp.solvers;
 
 import com.mlaskows.BaseWithTspTest;
 import com.mlaskows.antsp.datamodel.Solution;
-import com.mlaskows.antsp.datamodel.matrices.StaticMatrices;
-import com.mlaskows.antsp.datamodel.matrices.StaticMatricesBuilder;
+import com.mlaskows.antsp.datamodel.data.StaticData;
+import com.mlaskows.antsp.datamodel.data.StaticDataBuilder;
 import com.mlaskows.antsp.solvers.heuristic.NearestNeighbourSolver;
 import com.mlaskows.tsplib.datamodel.item.Tsp;
 import org.testng.annotations.Test;
@@ -66,10 +66,10 @@ public class NearestNeighbourSolverTest implements BaseWithTspTest {
 
     private Solution getSolution(String fileName) throws IOException {
         final Tsp tsp = getTsp(fileName);
-        StaticMatrices matricesHolder = new StaticMatricesBuilder(tsp).build();
+        StaticData dataHolder = new StaticDataBuilder(tsp).build();
 
         final NearestNeighbourSolver solver = new NearestNeighbourSolver
-                (matricesHolder);
+                (dataHolder);
         return solver.getSolution();
     }
 

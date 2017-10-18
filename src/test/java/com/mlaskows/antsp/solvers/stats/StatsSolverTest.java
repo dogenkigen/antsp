@@ -1,12 +1,16 @@
-package com.mlaskows.antsp.solvers.antsolvers;
+package com.mlaskows.antsp.solvers.stats;
 
 import com.mlaskows.antsp.config.AcoConfig;
 import com.mlaskows.antsp.config.AcoConfigFactory;
 import com.mlaskows.antsp.config.MaxMinConfig;
 import com.mlaskows.antsp.config.RankedBasedConfig;
 import com.mlaskows.antsp.datamodel.Solution;
-import com.mlaskows.antsp.datamodel.matrices.StaticMatrices;
-import com.mlaskows.antsp.datamodel.matrices.StaticMatricesBuilder;
+import com.mlaskows.antsp.datamodel.data.StaticData;
+import com.mlaskows.antsp.datamodel.data.StaticDataBuilder;
+import com.mlaskows.antsp.solvers.antsolvers.AntSystemSolver;
+import com.mlaskows.antsp.solvers.antsolvers.ElitistAntSolver;
+import com.mlaskows.antsp.solvers.antsolvers.MaxMinAntSolver;
+import com.mlaskows.antsp.solvers.antsolvers.RankBasedAntSolver;
 import com.mlaskows.antsp.statistics.Statistics;
 import com.mlaskows.tsplib.parser.TspLibParser;
 import org.testng.annotations.DataProvider;
@@ -26,17 +30,17 @@ public class StatsSolverTest {
     private static final int MIN_NN_FACTOR = 15;
     private static final int MAX_NN_FACTOR = 40;
 
-    private BiFunction<StaticMatrices, AcoConfig, Solution> antSystem =
-            (matrices, config) -> new AntSystemSolver(matrices, config).getSolution();
+    private BiFunction<StaticData, AcoConfig, Solution> antSystem =
+            (data, config) -> new AntSystemSolver(data, config).getSolution();
 
-    private BiFunction<StaticMatrices, AcoConfig, Solution> elitist =
-            (matrices, config) -> new ElitistAntSolver(matrices, config).getSolution();
+    private BiFunction<StaticData, AcoConfig, Solution> elitist =
+            (data, config) -> new ElitistAntSolver(data, config).getSolution();
 
-    private BiFunction<StaticMatrices, AcoConfig, Solution> rankBased =
-            (matrices, config) -> new RankBasedAntSolver(matrices, (RankedBasedConfig) config).getSolution();
+    private BiFunction<StaticData, AcoConfig, Solution> rankBased =
+            (data, config) -> new RankBasedAntSolver(data, (RankedBasedConfig) config).getSolution();
 
-    private BiFunction<StaticMatrices, AcoConfig, Solution> maxMin =
-            (matrices, config) -> new MaxMinAntSolver(matrices, (MaxMinConfig) config).getSolution();
+    private BiFunction<StaticData, AcoConfig, Solution> maxMin =
+            (data, config) -> new MaxMinAntSolver(data, (MaxMinConfig) config).getSolution();
 
     private BiFunction<Integer, Boolean, AcoConfig> acoConfigIncrementAnts =
             (numberOfAnts, localSearch) -> AcoConfigFactory.createAcoConfigBuilderWithDefaults(numberOfAnts)
@@ -121,16 +125,16 @@ public class StatsSolverTest {
     public void testStatsIncrementAnts(String name,
                                        boolean localSearch,
                                        int step,
-                                       BiFunction<StaticMatrices, AcoConfig, Solution> solving,
+                                       BiFunction<StaticData, AcoConfig, Solution> solving,
                                        BiFunction<Integer, Boolean, AcoConfig> configuring,
                                        String algorithmName) throws IOException {
-        StaticMatrices matrices = getMatrices(MIN_NN_FACTOR, name);
+        StaticData data = getMatrices(MIN_NN_FACTOR, name);
         StringBuilder stringBuilder = initStringBuilder();
-        int maxNumberOfAnts = matrices.getProblemSize();
+        int maxNumberOfAnts = data.getProblemSize();
         for (int numberOfAnts = 1; numberOfAnts <= maxNumberOfAnts; numberOfAnts += step) {
             AcoConfig config = configuring.apply(numberOfAnts, localSearch);
             for (int i = 0; i < ITERATIONS; i++) {
-                final Solution solution = solving.apply(matrices, config);
+                final Solution solution = solving.apply(data, config);
                 appendStringBuilder(localSearch, MIN_NN_FACTOR, stringBuilder, numberOfAnts, config, solution);
                 System.out.println(((double) (((numberOfAnts - 1) * ITERATIONS) + i) / ((maxNumberOfAnts) * ITERATIONS)) * 100 + "%");
             }
@@ -157,15 +161,15 @@ public class StatsSolverTest {
     @Test(dataProvider = "incrementNNProvider", enabled = false)
     public void testStatsIncrementNN(String name,
                                      boolean localSearch,
-                                     BiFunction<StaticMatrices, AcoConfig, Solution> solving,
+                                     BiFunction<StaticData, AcoConfig, Solution> solving,
                                      TriFunction<Integer, Integer, Boolean, AcoConfig> configuring) throws IOException {
         StringBuilder stringBuilder = initStringBuilder();
         for (int nnFactor = MIN_NN_FACTOR; nnFactor <= MAX_NN_FACTOR; nnFactor++) {
-            StaticMatrices matrices = getMatrices(nnFactor, name);
-            int antsCount = (int) (matrices.getProblemSize() * 0.6);
+            StaticData data = getMatrices(nnFactor, name);
+            int antsCount = (int) (data.getProblemSize() * 0.6);
             AcoConfig config = configuring.apply(nnFactor, antsCount, localSearch);
             for (int i = 0; i < ITERATIONS; i++) {
-                final Solution solution = solving.apply(matrices, config);
+                final Solution solution = solving.apply(data, config);
                 appendStringBuilder(localSearch, nnFactor, stringBuilder, antsCount, config, solution);
                 System.out.println(((double) (((nnFactor - 15) * ITERATIONS) + i) / ((MAX_NN_FACTOR - MIN_NN_FACTOR) * ITERATIONS)) * 100 + "%");
             }
@@ -185,7 +189,7 @@ public class StatsSolverTest {
     public void testPerformanceForCPUCount(String name,
                                            boolean localSearch,
                                            int step,
-                                           double maxNumberOfAnts, BiFunction<StaticMatrices, AcoConfig, Solution> solving,
+                                           double maxNumberOfAnts, BiFunction<StaticData, AcoConfig, Solution> solving,
                                            BiFunction<Integer, Boolean, AcoConfig> configuring,
                                            String algorithmName) throws IOException {
 
@@ -195,8 +199,8 @@ public class StatsSolverTest {
             AcoConfig config = configuring.apply(numberOfAnts, localSearch);
             for (int i = 0; i < ITERATIONS; i++) {
                 long timeMillis = System.currentTimeMillis();
-                StaticMatrices matrices = getMatrices(MIN_NN_FACTOR, name);
-                final Solution solution = solving.apply(matrices, config);
+                StaticData data = getMatrices(MIN_NN_FACTOR, name);
+                final Solution solution = solving.apply(data, config);
                 appendStringBuilder(localSearch, MIN_NN_FACTOR, stringBuilder, numberOfAnts, config, solution,
                         cpuCount, System.currentTimeMillis() - timeMillis);
                 System.out.println(((double) (((numberOfAnts - 1) * ITERATIONS) + i) / ((maxNumberOfAnts) * ITERATIONS)) * 100 + "%");
@@ -255,8 +259,8 @@ public class StatsSolverTest {
         return stringBuilder;
     }
 
-    private StaticMatrices getMatrices(int nnFactor, String name) throws IOException {
-        return new StaticMatricesBuilder(TspLibParser.parseTsp("tsplib/" + name + ".tsp"))
+    private StaticData getMatrices(int nnFactor, String name) throws IOException {
+        return new StaticDataBuilder(TspLibParser.parseTsp("tsplib/" + name + ".tsp"))
                 .withHeuristicInformationMatrix()
                 .withNearestNeighbors(nnFactor)
                 .build();

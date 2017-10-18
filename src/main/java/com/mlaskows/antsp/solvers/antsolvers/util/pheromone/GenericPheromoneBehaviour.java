@@ -2,31 +2,31 @@ package com.mlaskows.antsp.solvers.antsolvers.util.pheromone;
 
 import com.mlaskows.antsp.config.AcoConfig;
 import com.mlaskows.antsp.datamodel.IterationResult;
-import com.mlaskows.antsp.datamodel.matrices.StaticMatrices;
+import com.mlaskows.antsp.datamodel.data.StaticData;
 import com.mlaskows.antsp.solvers.antsolvers.util.pheromone.deposit.DepositBehaviour;
 import com.mlaskows.antsp.solvers.antsolvers.util.pheromone.init.InitializeBehaviour;
 
 public abstract class GenericPheromoneBehaviour {
 
     private final PheromoneProcessor pheromoneProcessor;
-    private final StaticMatrices matrices;
+    private final StaticData data;
     private final DepositBehaviour depositBehaviour;
     private final InitializeBehaviour initializeBehaviour;
     private final AcoConfig config;
 
-    public GenericPheromoneBehaviour(StaticMatrices matrices,
+    public GenericPheromoneBehaviour(StaticData data,
                                      AcoConfig config,
                                      DepositBehaviour depositBehaviour,
                                      InitializeBehaviour initializeBehaviour) {
-        this.pheromoneProcessor = new PheromoneProcessor(matrices, config);
-        this.matrices = matrices;
+        this.pheromoneProcessor = new PheromoneProcessor(data, config);
+        this.data = data;
         this.config = config;
         this.depositBehaviour = depositBehaviour;
         this.initializeBehaviour = initializeBehaviour;
     }
 
     public void initializePheromone() {
-        initializeBehaviour.initialize(pheromoneProcessor, matrices, config);
+        initializeBehaviour.initialize(pheromoneProcessor, data, config);
     }
 
     public double[][] getChoicesInfo() {

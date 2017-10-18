@@ -2,8 +2,8 @@ package com.mlaskows.antsp.solvers.antsolvers;
 
 import com.mlaskows.antsp.config.MaxMinConfig;
 import com.mlaskows.antsp.datamodel.Solution;
-import com.mlaskows.antsp.datamodel.matrices.StaticMatrices;
-import com.mlaskows.antsp.datamodel.matrices.StaticMatricesBuilder;
+import com.mlaskows.antsp.datamodel.data.StaticData;
+import com.mlaskows.antsp.datamodel.data.StaticDataBuilder;
 import com.mlaskows.BaseWithTspTest;
 import com.mlaskows.tsplib.datamodel.item.Tsp;
 import com.mlaskows.antsp.config.AcoConfigFactory;
@@ -26,11 +26,11 @@ public class MaxMinAntSolverTest implements BaseWithTspTest {
         final Tsp tsp = getTsp("tsplib/ali535.tsp");
         final MaxMinConfig config = AcoConfigFactory
                 .createDefaultMaxMinConfig(tsp.getDimension());
-        final StaticMatrices matrices = new StaticMatricesBuilder(tsp)
+        final StaticData data = new StaticDataBuilder(tsp)
                 .withHeuristicInformationMatrix()
                 .withNearestNeighbors(config.getNearestNeighbourFactor())
                 .build();
-        final MaxMinAntSolver solver = new MaxMinAntSolver(matrices,
+        final MaxMinAntSolver solver = new MaxMinAntSolver(data,
                 config);
         final Solution solution = solver.getSolution();
 
@@ -50,11 +50,11 @@ public class MaxMinAntSolverTest implements BaseWithTspTest {
         final Tsp tsp = getTsp("tsplib/att532.tsp");
         final MaxMinConfig config =
                 AcoConfigFactory.createDefaultMaxMinConfig(tsp.getDimension());
-        final StaticMatrices matrices = new StaticMatricesBuilder(tsp)
+        final StaticData data = new StaticDataBuilder(tsp)
                 .withHeuristicInformationMatrix()
                 .withNearestNeighbors(config.getNearestNeighbourFactor())
                 .build();
-        final MaxMinAntSolver solver = new MaxMinAntSolver(matrices, config);
+        final MaxMinAntSolver solver = new MaxMinAntSolver(data, config);
         final Solution solution = solver.getSolution();
         final long l1 = currentTimeMillis() - l;
 

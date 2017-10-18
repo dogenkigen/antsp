@@ -1,7 +1,7 @@
 package com.mlaskows.antsp.solvers.heuristic;
 
 import com.mlaskows.antsp.datamodel.Solution;
-import com.mlaskows.antsp.datamodel.matrices.StaticMatrices;
+import com.mlaskows.antsp.datamodel.data.StaticData;
 import com.mlaskows.antsp.solvers.Solver;
 
 import java.util.ArrayList;
@@ -18,9 +18,9 @@ public class TwoOptSolver implements Solver {
     private List<Integer> tour;
     private boolean shouldStop;
 
-    public TwoOptSolver(Solution initialSolution, StaticMatrices matricesHolder) {
-        this.distanceMatrix = matricesHolder.getDistanceMatrix();
-        nearestNeighboursMatrix = matricesHolder.getNearestNeighborsMatrix()
+    public TwoOptSolver(Solution initialSolution, StaticData dataHolder) {
+        this.distanceMatrix = dataHolder.getDistanceMatrix();
+        nearestNeighboursMatrix = dataHolder.getNearestNeighborsMatrix()
                 .orElse(null);
         tour = initialSolution.getTour();
     }

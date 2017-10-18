@@ -18,15 +18,15 @@ package com.mlaskows.antsp.solvers.antsolvers.util.pheromone.init;
 import com.mlaskows.antsp.config.AcoConfig;
 import com.mlaskows.antsp.config.RankedBasedConfig;
 import com.mlaskows.antsp.datamodel.Solution;
-import com.mlaskows.antsp.datamodel.matrices.StaticMatrices;
+import com.mlaskows.antsp.datamodel.data.StaticData;
 import com.mlaskows.antsp.solvers.antsolvers.util.pheromone.PheromoneProcessor;
 
 public class RankBasedInitializeBehaviour implements InitializeBehaviour {
 
     @Override
     public void initialize(PheromoneProcessor pheromoneProcessor,
-                           StaticMatrices matrices, AcoConfig config) {
-        final Solution solution = getNearestNeighbourSolution(matrices);
+                           StaticData data, AcoConfig config) {
+        final Solution solution = getNearestNeighbourSolution(data);
         final int weight = ((RankedBasedConfig) config).getWeight();
         final double initialPheromoneValue =
                 (0.5 * weight * (weight - 1)) /
