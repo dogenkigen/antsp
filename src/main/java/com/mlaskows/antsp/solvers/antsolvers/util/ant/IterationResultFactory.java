@@ -20,9 +20,10 @@ public class IterationResultFactory {
     private final StaticMatrices matrices;
     private final AcoConfig config;
     private final int problemSize;
-    private Ant bestAntSoFar;
     private final int[][] distanceMatrix;
     private final int[][] nearestNeighbors;
+    private Ant bestAntSoFar;
+    private int iterationsWithNoImprovement;
 
     public IterationResultFactory(StaticMatrices matrices, AcoConfig config) {
         this.matrices = matrices;
@@ -36,13 +37,14 @@ public class IterationResultFactory {
     public IterationResult createIterationResult(double[][] choicesInfo) {
         final List<Ant> sortedAnts = constructAntsSolutionsSorted(choicesInfo);
         final Ant iterationBestAnt = sortedAnts.get(0);
-        boolean isImprovedIteration = false;
         if (bestAntSoFar == null
                 || iterationBestAnt.hasBetterSolutionThen(bestAntSoFar)) {
             bestAntSoFar = iterationBestAnt;
-            isImprovedIteration = true;
+            iterationsWithNoImprovement = 0;
+        } else {
+            iterationsWithNoImprovement++;
         }
-        return new IterationResult(sortedAnts, bestAntSoFar, isImprovedIteration);
+        return new IterationResult(sortedAnts, bestAntSoFar, iterationsWithNoImprovement);
     }
 
     private List<Ant> constructAntsSolutionsSorted(double[][] choicesInfo) {

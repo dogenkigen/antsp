@@ -35,27 +35,21 @@ public abstract class GenericAntSolver implements Solver {
         }
 
         used = true;
-        int iterationsWithNoImprovement = 0;
         IterationResult iterationResult = null;
 
         pheromoneBehaviour.initializePheromone();
-        while (shouldNotTerminate(iterationsWithNoImprovement)) {
+        while (shouldNotTerminate(iterationResult)) {
             iterationResult = getIterationResult();
             statisticsBuilder.addIterationTourLength(iterationResult
                     .getIterationBestAnt().getTourLength());
             updatePheromone(iterationResult);
-            if (iterationResult.isImprovedIteration()) {
-                iterationsWithNoImprovement = 0;
-            } else {
-                iterationsWithNoImprovement++;
-            }
         }
         return buildSolutionObject(iterationResult);
     }
 
-    private boolean shouldNotTerminate(int iterationsWithNoImprovement) {
-        return !shouldStop
-                && iterationsWithNoImprovement < config.getMaxStagnationCount();
+    private boolean shouldNotTerminate(IterationResult iterationResult) {
+        return !shouldStop && (iterationResult == null || iterationResult != null
+                        && iterationResult.getIterationsWithNoImprovement() < config.getMaxStagnationCount());
     }
 
     private IterationResult getIterationResult() {
