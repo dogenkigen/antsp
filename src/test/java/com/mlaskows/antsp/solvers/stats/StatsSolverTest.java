@@ -110,9 +110,9 @@ public class StatsSolverTest {
                 {"dsj1000", false, 20, rankBased, rankBasedConfigIncrementAnts, "rankBased"},
                 {"dsj1000", true, 20, rankBased, rankBasedConfigIncrementAnts, "rankBased"},*/
 
-                {"berlin52", false, 1, maxMin, maxMinConfigIncrementAnts, "maxMin"},
+                /*{"berlin52", false, 1, maxMin, maxMinConfigIncrementAnts, "maxMin"},
                 {"berlin52", true, 1, maxMin, maxMinConfigIncrementAnts, "maxMin"},
-                {"gr202", false, 5, maxMin, maxMinConfigIncrementAnts, "maxMin"},
+                {"gr202", false, 5, maxMin, maxMinConfigIncrementAnts, "maxMin"},*/
                 {"gr202", true, 5, maxMin, maxMinConfigIncrementAnts, "maxMin"},
                 {"pa561", false, 10, maxMin, maxMinConfigIncrementAnts, "maxMin"},
                 {"pa561", true, 10, maxMin, maxMinConfigIncrementAnts, "maxMin"},
