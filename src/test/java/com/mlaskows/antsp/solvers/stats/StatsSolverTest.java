@@ -17,18 +17,21 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.OptionalDouble;
 import java.util.function.BiFunction;
 
 public class StatsSolverTest {
 
     private static final int ITERATIONS = 10;
     private static final int MAX_STAGNATION_COUNT = 100;
-    private static final int MIN_NN_FACTOR = 15;
-    private static final int MAX_NN_FACTOR = 40;
+    private static final int MIN_NN_FACTOR = 2;
+    private static final int MAX_NN_FACTOR = 60;
 
     private BiFunction<StaticData, AcoConfig, Solution> antSystem =
             (data, config) -> new AntSystemSolver(data, config).getSolution();
@@ -54,6 +57,7 @@ public class StatsSolverTest {
                     .withMaxStagnationCount(MAX_STAGNATION_COUNT)
                     .withWithLocalSearch(localSearch)
                     .withNearestNeighbourFactor(MIN_NN_FACTOR)
+                    .withPheromoneEvaporationFactor(0.5)
                     .build();
 
     private BiFunction<Integer, Boolean, AcoConfig> rankBasedConfigIncrementAnts =
@@ -83,45 +87,45 @@ public class StatsSolverTest {
     @DataProvider
     public Object[][] incrementAntsProvider() {
         return new Object[][]{
-                /*{"berlin52", false, 1, antSystem, acoConfigIncrementAnts, "as"},
+                {"berlin52", false, 1, antSystem, acoConfigIncrementAnts, "as"},
                 {"berlin52", true, 1, antSystem, acoConfigIncrementAnts, "as"},
                 {"gr202", false, 5, antSystem, acoConfigIncrementAnts, "as"},
                 {"gr202", true, 5, antSystem, acoConfigIncrementAnts, "as"},
                 {"pa561", false, 10, antSystem, acoConfigIncrementAnts, "as"},
                 {"pa561", true, 10, antSystem, acoConfigIncrementAnts, "as"},
                 {"dsj1000", false, 20, antSystem, acoConfigIncrementAnts, "as"},
-                {"dsj1000", true, 20, antSystem, acoConfigIncrementAnts, "as"},*/
+                {"dsj1000", true, 20, antSystem, acoConfigIncrementAnts, "as"},
 
-                /*{"berlin52", false, 1, elitist, elitistConfigIncrementAnts, "elitist"},
+                {"berlin52", false, 1, elitist, elitistConfigIncrementAnts, "elitist"},
                 {"berlin52", true, 1, elitist, elitistConfigIncrementAnts, "elitist"},
                 {"gr202", false, 5, elitist, elitistConfigIncrementAnts, "elitist"},
                 {"gr202", true, 5, elitist, elitistConfigIncrementAnts, "elitist"},
                 {"pa561", false, 10, elitist, elitistConfigIncrementAnts, "elitist"},
                 {"pa561", true, 10, elitist, elitistConfigIncrementAnts, "elitist"},
                 {"dsj1000", false, 20, elitist, elitistConfigIncrementAnts, "elitist"},
-                {"dsj1000", true, 20, elitist, elitistConfigIncrementAnts, "elitist"},*/
+                {"dsj1000", true, 20, elitist, elitistConfigIncrementAnts, "elitist"},
 
-                /*{"berlin52", false, 1, rankBased, rankBasedConfigIncrementAnts, "rankBased"},
+                {"berlin52", false, 1, rankBased, rankBasedConfigIncrementAnts, "rankBased"},
                 {"berlin52", true, 1, rankBased, rankBasedConfigIncrementAnts, "rankBased"},
                 {"gr202", false, 5, rankBased, rankBasedConfigIncrementAnts, "rankBased"},
                 {"gr202", true, 5, rankBased, rankBasedConfigIncrementAnts, "rankBased"},
                 {"pa561", false, 10, rankBased, rankBasedConfigIncrementAnts, "rankBased"},
                 {"pa561", true, 10, rankBased, rankBasedConfigIncrementAnts, "rankBased"},
                 {"dsj1000", false, 20, rankBased, rankBasedConfigIncrementAnts, "rankBased"},
-                {"dsj1000", true, 20, rankBased, rankBasedConfigIncrementAnts, "rankBased"},*/
+                {"dsj1000", true, 20, rankBased, rankBasedConfigIncrementAnts, "rankBased"},
 
-                /*{"berlin52", false, 1, maxMin, maxMinConfigIncrementAnts, "maxMin"},
+                {"berlin52", false, 1, maxMin, maxMinConfigIncrementAnts, "maxMin"},
                 {"berlin52", true, 1, maxMin, maxMinConfigIncrementAnts, "maxMin"},
-                {"gr202", false, 5, maxMin, maxMinConfigIncrementAnts, "maxMin"},*/
+                {"gr202", false, 5, maxMin, maxMinConfigIncrementAnts, "maxMin"},
                 {"gr202", true, 5, maxMin, maxMinConfigIncrementAnts, "maxMin"},
                 {"pa561", false, 10, maxMin, maxMinConfigIncrementAnts, "maxMin"},
                 {"pa561", true, 10, maxMin, maxMinConfigIncrementAnts, "maxMin"},
-                /*{"dsj1000", false, 20, maxMin, maxMinConfigIncrementAnts, "maxMin"},
-                {"dsj1000", true, 20, maxMin, maxMinConfigIncrementAnts, "maxMin"},*/
+                {"dsj1000", false, 20, maxMin, maxMinConfigIncrementAnts, "maxMin"},
+                {"dsj1000", true, 20, maxMin, maxMinConfigIncrementAnts, "maxMin"},
         };
     }
 
-    @Test(dataProvider = "incrementAntsProvider")
+    @Test(dataProvider = "incrementAntsProvider", enabled = false)
     public void testStatsIncrementAnts(String name,
                                        boolean localSearch,
                                        int step,
@@ -146,14 +150,14 @@ public class StatsSolverTest {
     @DataProvider
     public Object[][] incrementNNProvider() {
         return new Object[][]{
-                {"berlin52", false, antSystem, acoConfigIncrementNN},//TODO add algo name
-                {"berlin52", true, antSystem, acoConfigIncrementNN},
-                {"gr202", false, antSystem, acoConfigIncrementNN},
-                {"gr202", true, antSystem, acoConfigIncrementNN},
-                {"pa561", false, antSystem, acoConfigIncrementNN},
-                {"pa561", true, antSystem, acoConfigIncrementNN},
-                /*{"dsj1000", false, 20, antSystem, acoConfigIncrementAnts},
-                {"dsj1000", true, 20, antSystem, acoConfigIncrementAnts},*/
+                {"berlin52", false, antSystem, acoConfigIncrementNN, "as"},
+                {"berlin52", true, antSystem, acoConfigIncrementNN, "as"},
+                {"gr202", false, antSystem, acoConfigIncrementNN, "as"},
+                {"gr202", true, antSystem, acoConfigIncrementNN, "as"},
+                {"pa561", false, antSystem, acoConfigIncrementNN, "as"},
+                {"pa561", true, antSystem, acoConfigIncrementNN, "as"},
+                {"dsj1000", false, 20, antSystem, acoConfigIncrementAnts},
+                {"dsj1000", true, 20, antSystem, acoConfigIncrementAnts},
         };
     }
 
@@ -162,7 +166,8 @@ public class StatsSolverTest {
     public void testStatsIncrementNN(String name,
                                      boolean localSearch,
                                      BiFunction<StaticData, AcoConfig, Solution> solving,
-                                     TriFunction<Integer, Integer, Boolean, AcoConfig> configuring) throws IOException {
+                                     TriFunction<Integer, Integer, Boolean, AcoConfig> configuring,
+                                     String algorithmName) throws IOException {
         StringBuilder stringBuilder = initStringBuilder();
         for (int nnFactor = MIN_NN_FACTOR; nnFactor <= MAX_NN_FACTOR; nnFactor++) {
             StaticData data = getData(nnFactor, name);
@@ -171,10 +176,11 @@ public class StatsSolverTest {
             for (int i = 0; i < ITERATIONS; i++) {
                 final Solution solution = solving.apply(data, config);
                 appendStringBuilder(localSearch, nnFactor, stringBuilder, antsCount, config, solution);
-                System.out.println(((double) (((nnFactor - 15) * ITERATIONS) + i) / ((MAX_NN_FACTOR - MIN_NN_FACTOR) * ITERATIONS)) * 100 + "%");
+                System.out.println(((double) (((nnFactor - MIN_NN_FACTOR) * ITERATIONS) + i) / ((MAX_NN_FACTOR - MIN_NN_FACTOR) *
+                        ITERATIONS)) * 100 + "%");
             }
         }
-        writeToFile(localSearch, name + "_nn", stringBuilder);
+        writeToFile(localSearch, name + "_nn_" + algorithmName, stringBuilder);
     }
 
     @DataProvider
@@ -185,7 +191,7 @@ public class StatsSolverTest {
         };
     }
 
-    @Test(dataProvider = "performanceAntsProvider")
+    @Test(dataProvider = "performanceAntsProvider", enabled = false)
     public void testPerformanceForCPUCount(String name,
                                            boolean localSearch,
                                            int step,
@@ -270,6 +276,67 @@ public class StatsSolverTest {
     @FunctionalInterface
     interface TriFunction<A, B, C, R> {
         R apply(A a, B b, C c);
+    }
+
+    @Test(enabled = false)
+    public void testAvg() {
+        File folder = new File("results");
+        Arrays.stream(folder.listFiles())
+                .filter(File::isFile)
+                .filter(file -> file.getName().endsWith("csv"))
+                .forEach(this::printAvg);
+
+    }
+
+    private void printAvg(File file) {
+        try {
+            final OptionalDouble average = Files.lines(Paths.get(file.getAbsolutePath()))
+                    .filter(elem -> !elem.startsWith("N"))
+                    .map(line -> new Entry(line.split(",")))
+                    .mapToInt(Entry::getTourLen)
+                    .average();
+            average.ifPresent(avg -> System.out.println(file.getName() + " " + avg));
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private class Entry {
+        private int nn;
+        private int antCount;
+        private boolean ls;
+        private int tourLen;
+        private int solutionFoundIn;
+
+        public Entry(String[] line) {
+            this.nn = Integer.parseInt(line[0]);
+            this.antCount = Integer.parseInt(line[1]);
+            this.ls = Boolean.parseBoolean(line[2]);
+            this.tourLen = Integer.parseInt(line[3]);
+            this.solutionFoundIn = Integer.parseInt(line[4]);
+        }
+
+        public int getNn() {
+            return nn;
+        }
+
+        public int getAntCount() {
+            return antCount;
+        }
+
+        public boolean isLs() {
+            return ls;
+        }
+
+        public int getTourLen() {
+            return tourLen;
+        }
+
+        public int getSolutionFoundIn() {
+            return solutionFoundIn;
+        }
     }
 
 }
