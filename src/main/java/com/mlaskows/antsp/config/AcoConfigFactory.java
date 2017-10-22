@@ -31,8 +31,7 @@ public class AcoConfigFactory {
     }
 
     public static MaxMinConfig createDefaultMaxMinConfig(int antsCount) {
-        return createMaxMinConfig(3, 1, 0.05, antsCount, 15, 100, 2,
-                80, true);
+        return createMaxMinConfig(3, 1, 0.05, antsCount, 15, 100, 80, true);
     }
 
     public static MaxMinConfigBuilder createMaxMinConfigBuilderWithDefaults(int antsCount) {
@@ -71,13 +70,11 @@ public class AcoConfigFactory {
                                                   int antsCount,
                                                   int nearestNeighbourFactor,
                                                   int maxStagnationCount,
-                                                  int minPheromoneLimitDivider,
                                                   int reinitializationCount,
                                                   boolean withLocalSearch) {
         return new MaxMinConfig(heuristicImportance, pheromoneImportance,
                 pheromoneEvaporationFactor, antsCount, nearestNeighbourFactor,
-                maxStagnationCount, minPheromoneLimitDivider,
-                reinitializationCount, withLocalSearch);
+                maxStagnationCount, reinitializationCount, withLocalSearch);
     }
 
 }

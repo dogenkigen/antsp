@@ -2,7 +2,6 @@ package com.mlaskows.antsp.config;
 
 public class MaxMinConfigBuilder extends AcoConfigBuilder {
 
-    private int minPheromoneLimitDivider;
     private int reinitializationCount;
 
     public MaxMinConfigBuilder() {
@@ -11,13 +10,7 @@ public class MaxMinConfigBuilder extends AcoConfigBuilder {
 
     public MaxMinConfigBuilder(MaxMinConfig config) {
         super(config);
-        this.minPheromoneLimitDivider = config.getMinPheromoneLimitDivider();
         this.reinitializationCount = config.getReinitializationCount();
-    }
-
-    public MaxMinConfigBuilder withMinPheromoneLimitDivider(int minPheromoneLimitDivider) {
-        this.minPheromoneLimitDivider = minPheromoneLimitDivider;
-        return this;
     }
 
     public MaxMinConfigBuilder withReinitializationCount(int reinitializationCount) {
@@ -28,7 +21,6 @@ public class MaxMinConfigBuilder extends AcoConfigBuilder {
     public MaxMinConfig build() {
         return new MaxMinConfig(heuristicImportance, pheromoneImportance,
                 pheromoneEvaporationFactor, antsCount, nearestNeighbourFactor,
-                maxStagnationCount, minPheromoneLimitDivider,
-                reinitializationCount, withLocalSearch);
+                maxStagnationCount, reinitializationCount, withLocalSearch);
     }
 }
