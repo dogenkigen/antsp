@@ -1,3 +1,18 @@
+/*
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.mlaskows.antsp.solvers.stats;
 
 import com.mlaskows.antsp.config.AcoConfig;
@@ -17,19 +32,17 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.OptionalDouble;
 import java.util.function.BiFunction;
 
 public class StatsSolverTest {
 
     private static final int ITERATIONS = 10;
     private static final int MAX_STAGNATION_COUNT = 100;
+    private static final int NN_FACTOR = 15;
     private static final int MIN_NN_FACTOR = 2;
     private static final int MAX_NN_FACTOR = 60;
 
@@ -49,22 +62,21 @@ public class StatsSolverTest {
             (numberOfAnts, localSearch) -> AcoConfigFactory.createAcoConfigBuilderWithDefaults(numberOfAnts)
                     .withMaxStagnationCount(MAX_STAGNATION_COUNT)
                     .withWithLocalSearch(localSearch)
-                    .withNearestNeighbourFactor(MIN_NN_FACTOR)
+                    .withNearestNeighbourFactor(NN_FACTOR)
                     .build();
 
     private BiFunction<Integer, Boolean, AcoConfig> elitistConfigIncrementAnts =
             (numberOfAnts, localSearch) -> AcoConfigFactory.createElitistConfigBuilderWithDefaults(numberOfAnts)
                     .withMaxStagnationCount(MAX_STAGNATION_COUNT)
                     .withWithLocalSearch(localSearch)
-                    .withNearestNeighbourFactor(MIN_NN_FACTOR)
-                    .withPheromoneEvaporationFactor(0.5)
+                    .withNearestNeighbourFactor(NN_FACTOR)
                     .build();
 
     private BiFunction<Integer, Boolean, AcoConfig> rankBasedConfigIncrementAnts =
             (numberOfAnts, localSearch) -> AcoConfigFactory.createRankBasedConfigBuilderWithDefaults(numberOfAnts)
                     .withMaxStagnationCount(MAX_STAGNATION_COUNT)
                     .withWithLocalSearch(localSearch)
-                    .withNearestNeighbourFactor(MIN_NN_FACTOR)
+                    .withNearestNeighbourFactor(NN_FACTOR)
                     .build();
 
     private BiFunction<Integer, Boolean, AcoConfig> maxMinConfigIncrementAnts =
@@ -72,7 +84,7 @@ public class StatsSolverTest {
                     .withReinitializationCount(80)
                     .withMaxStagnationCount(MAX_STAGNATION_COUNT)
                     .withWithLocalSearch(localSearch)
-                    .withNearestNeighbourFactor(MIN_NN_FACTOR)
+                    .withNearestNeighbourFactor(NN_FACTOR)
                     .withPheromoneEvaporationFactor(0.05)
                     .build();
 
@@ -132,14 +144,14 @@ public class StatsSolverTest {
                                        BiFunction<StaticData, AcoConfig, Solution> solving,
                                        BiFunction<Integer, Boolean, AcoConfig> configuring,
                                        String algorithmName) throws IOException {
-        StaticData data = getData(MIN_NN_FACTOR, name);
+        StaticData data = getData(NN_FACTOR, name);
         StringBuilder stringBuilder = initStringBuilder();
         int maxNumberOfAnts = data.getProblemSize();
         for (int numberOfAnts = 1; numberOfAnts <= maxNumberOfAnts; numberOfAnts += step) {
             AcoConfig config = configuring.apply(numberOfAnts, localSearch);
             for (int i = 0; i < ITERATIONS; i++) {
                 final Solution solution = solving.apply(data, config);
-                appendStringBuilder(localSearch, MIN_NN_FACTOR, stringBuilder, numberOfAnts, config, solution);
+                appendStringBuilder(localSearch, NN_FACTOR, stringBuilder, numberOfAnts, config, solution);
                 System.out.println(((double) (((numberOfAnts - 1) * ITERATIONS) + i) / ((maxNumberOfAnts) * ITERATIONS)) * 100 + "%");
             }
         }
@@ -176,7 +188,7 @@ public class StatsSolverTest {
             for (int i = 0; i < ITERATIONS; i++) {
                 final Solution solution = solving.apply(data, config);
                 appendStringBuilder(localSearch, nnFactor, stringBuilder, antsCount, config, solution);
-                System.out.println(((double) (((nnFactor - MIN_NN_FACTOR) * ITERATIONS) + i) / ((MAX_NN_FACTOR - MIN_NN_FACTOR) *
+                System.out.println(((double) (((nnFactor - MIN_NN_FACTOR) * ITERATIONS) + i) / ((MAX_NN_FACTOR - NN_FACTOR) *
                         ITERATIONS)) * 100 + "%");
             }
         }
@@ -205,9 +217,9 @@ public class StatsSolverTest {
             AcoConfig config = configuring.apply(numberOfAnts, localSearch);
             for (int i = 0; i < ITERATIONS; i++) {
                 long timeMillis = System.currentTimeMillis();
-                StaticData data = getData(MIN_NN_FACTOR, name);
+                StaticData data = getData(NN_FACTOR, name);
                 final Solution solution = solving.apply(data, config);
-                appendStringBuilder(localSearch, MIN_NN_FACTOR, stringBuilder, numberOfAnts, config, solution,
+                appendStringBuilder(localSearch, NN_FACTOR, stringBuilder, numberOfAnts, config, solution,
                         cpuCount, System.currentTimeMillis() - timeMillis);
                 System.out.println(((double) (((numberOfAnts - 1) * ITERATIONS) + i) / ((maxNumberOfAnts) * ITERATIONS)) * 100 + "%");
             }
