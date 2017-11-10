@@ -247,7 +247,7 @@ public class StatsSolverTest {
         stringBuilder.append(",");
         stringBuilder.append(statistics.getIterationsCount() - config.getMaxStagnationCount());
         stringBuilder.append(",");
-        statistics.getNonImprovementPeriods().stream().forEach(p -> stringBuilder.append(p + ";"));
+        statistics.getNonImprovementPeriods().forEach(p -> stringBuilder.append(p + ";"));
         stringBuilder.append("\n");
     }
 
@@ -276,67 +276,6 @@ public class StatsSolverTest {
     @FunctionalInterface
     interface TriFunction<A, B, C, R> {
         R apply(A a, B b, C c);
-    }
-
-    @Test(enabled = false)
-    public void testAvg() {
-        File folder = new File("results");
-        Arrays.stream(folder.listFiles())
-                .filter(File::isFile)
-                .filter(file -> file.getName().endsWith("csv"))
-                .forEach(this::printAvg);
-
-    }
-
-    private void printAvg(File file) {
-        try {
-            final OptionalDouble average = Files.lines(Paths.get(file.getAbsolutePath()))
-                    .filter(elem -> !elem.startsWith("N"))
-                    .map(line -> new Entry(line.split(",")))
-                    .mapToInt(Entry::getTourLen)
-                    .average();
-            average.ifPresent(avg -> System.out.println(file.getName() + " " + avg));
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    private class Entry {
-        private int nn;
-        private int antCount;
-        private boolean ls;
-        private int tourLen;
-        private int solutionFoundIn;
-
-        public Entry(String[] line) {
-            this.nn = Integer.parseInt(line[0]);
-            this.antCount = Integer.parseInt(line[1]);
-            this.ls = Boolean.parseBoolean(line[2]);
-            this.tourLen = Integer.parseInt(line[3]);
-            this.solutionFoundIn = Integer.parseInt(line[4]);
-        }
-
-        public int getNn() {
-            return nn;
-        }
-
-        public int getAntCount() {
-            return antCount;
-        }
-
-        public boolean isLs() {
-            return ls;
-        }
-
-        public int getTourLen() {
-            return tourLen;
-        }
-
-        public int getSolutionFoundIn() {
-            return solutionFoundIn;
-        }
     }
 
 }
