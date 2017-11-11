@@ -7,9 +7,9 @@ It requires TSPLIB files parser which can be found here https://github.com/dogen
 To use **antsp** just run code like this:
  
 ```java
-TspLibParser.parseTsp("path_to_tsp_file");
+Tsp tsp = TspLibParser.parseTsp("path_to_tsp_file");
 AcoConfig config = AcoConfigFactory.createDefaultAntSystemConfig(100);
-Solution solution = SolutionFactory.createAntSystemSolution(, config);
+Solution solution = SolutionFactory.createAntSystemSolution(tsp, config);
 ```
 
 This will create solution object using Ant System algorithm with colony of 100 artificial ants. `SolutionFacory` 
