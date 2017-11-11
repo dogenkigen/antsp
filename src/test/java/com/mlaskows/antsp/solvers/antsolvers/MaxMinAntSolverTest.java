@@ -15,6 +15,7 @@
 
 package com.mlaskows.antsp.solvers.antsolvers;
 
+import com.mlaskows.antsp.SolutionFactory;
 import com.mlaskows.antsp.config.MaxMinConfig;
 import com.mlaskows.antsp.datamodel.Solution;
 import com.mlaskows.antsp.datamodel.data.StaticData;
@@ -41,14 +42,8 @@ public class MaxMinAntSolverTest implements BaseWithTspTest {
         final Tsp tsp = getTsp("tsplib/ali535.tsp");
         final MaxMinConfig config = AcoConfigFactory
                 .createDefaultMaxMinConfig(tsp.getDimension());
-        final StaticData data = new StaticDataBuilder(tsp)
-                .withHeuristicInformationMatrix()
-                .withHeuristicSolution()
-                .withNearestNeighbors(config.getNearestNeighbourFactor())
-                .build();
-        final MaxMinAntSolver solver = new MaxMinAntSolver(data,
-                config);
-        final Solution solution = solver.getSolution();
+
+        final Solution solution = SolutionFactory.createMaxMinAntSolution(tsp, config);
 
         List<Integer> nonImprovementPeriods = solution.getStatistics().get()
                 .getNonImprovementPeriods();
@@ -62,27 +57,16 @@ public class MaxMinAntSolverTest implements BaseWithTspTest {
 
     @Test
     public void testAtt532Solution() throws IOException {
-        final long l = currentTimeMillis();
         final Tsp tsp = getTsp("tsplib/att532.tsp");
         final MaxMinConfig config =
                 AcoConfigFactory.createDefaultMaxMinConfig(tsp.getDimension());
-        final StaticData data = new StaticDataBuilder(tsp)
-                .withHeuristicInformationMatrix()
-                .withHeuristicSolution()
-                .withNearestNeighbors(config.getNearestNeighbourFactor())
-                .build();
-        final MaxMinAntSolver solver = new MaxMinAntSolver(data, config);
-        final Solution solution = solver.getSolution();
-        final long l1 = currentTimeMillis() - l;
+        final Solution solution = SolutionFactory.createMaxMinAntSolution(tsp, config);
 
         final Statistics statistics = solution.getStatistics().get();
         List<Integer> nonImprovementPeriods = statistics.getNonImprovementPeriods();
         Assert.assertEquals((int) nonImprovementPeriods.get(nonImprovementPeriods.size() - 1),
                 config.getMaxStagnationCount());
-        System.out.println("Solution: " + solution.getTourLength() + " after:" +
-                " " +
-                 + statistics.getIterationsCount() + " iterations in " + l1+
-                "ms");
+
         // We assume here that solution will be better than for nearest
         // neighbour algorithm.
         Assert.assertTrue(solution.getTourLength() < 33470);

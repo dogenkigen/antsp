@@ -16,12 +16,17 @@
 package com.mlaskows.antsp;
 
 import com.mlaskows.antsp.config.AcoConfig;
+import com.mlaskows.antsp.config.MaxMinConfig;
+import com.mlaskows.antsp.config.RankedBasedConfig;
 import com.mlaskows.antsp.datamodel.Solution;
 import com.mlaskows.antsp.datamodel.data.StaticData;
 import com.mlaskows.antsp.datamodel.data.StaticDataBuilder;
 import com.mlaskows.antsp.solvers.antsolvers.AntSystemSolver;
-import com.mlaskows.tsplib.parser.TspLibParser;
+import com.mlaskows.antsp.solvers.antsolvers.ElitistAntSolver;
+import com.mlaskows.antsp.solvers.antsolvers.MaxMinAntSolver;
+import com.mlaskows.antsp.solvers.antsolvers.RankBasedAntSolver;
 import com.mlaskows.tsplib.datamodel.item.Tsp;
+import com.mlaskows.tsplib.parser.TspLibParser;
 
 import java.io.IOException;
 
@@ -29,26 +34,23 @@ import static com.mlaskows.antsp.config.AcoConfigFactory.createDefaultAntSystemC
 
 public class SolutionFactory {
 
-    public static Solution getAntSystemSolutionWithDefaultConfig(String pathToTspLibFile)
-            throws IOException {
-        final Tsp tsp = TspLibParser.parseTsp(pathToTspLibFile);
-        final AcoConfig config = createDefaultAntSystemConfig(tsp.getDimension());
-        return createAntSystemSolution(config, tsp);
+    public static Solution createAntSystemSolution(Tsp tsp, AcoConfig config) {
+        return new AntSystemSolver(getAllData(tsp, config), config).getSolution();
     }
 
-    public static Solution getAntSystemSolution(String pathToTspLibFile,
-                                                AcoConfig config)
-            throws IOException {
-        final Tsp tsp = TspLibParser.parseTsp(pathToTspLibFile);
-        return createAntSystemSolution(config, tsp);
+    public static Solution createElitistAntSolution(Tsp tsp, AcoConfig config) {
+        return new ElitistAntSolver(getAllData(tsp, config), config).getSolution();
     }
 
-    public static Solution createAntSystemSolution(AcoConfig config, Tsp tsp) {
-        return new AntSystemSolver(getAllData(config, tsp), config)
-                .getSolution();
+    public static Solution createRankBasedAntSolution(Tsp tsp, RankedBasedConfig config) {
+        return new RankBasedAntSolver(getAllData(tsp, config), config).getSolution();
     }
 
-    private static StaticData getAllData(AcoConfig config, Tsp tsp) {
+    public static Solution createMaxMinAntSolution(Tsp tsp, MaxMinConfig config) {
+        return new MaxMinAntSolver(getAllData(tsp, config), config).getSolution();
+    }
+
+    private static StaticData getAllData(Tsp tsp, AcoConfig config) {
         return new StaticDataBuilder(tsp)
                 .withHeuristicInformationMatrix()
                 .withHeuristicSolution()

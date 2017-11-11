@@ -15,6 +15,7 @@
 
 package com.mlaskows.antsp.solvers.antsolvers;
 
+import com.mlaskows.antsp.SolutionFactory;
 import com.mlaskows.antsp.config.AcoConfig;
 import com.mlaskows.antsp.config.AcoConfigFactory;
 import com.mlaskows.antsp.datamodel.Solution;
@@ -23,8 +24,6 @@ import org.testng.annotations.Test;
 
 import java.io.IOException;
 
-import static com.mlaskows.antsp.SolutionFactory.getAntSystemSolution;
-import static com.mlaskows.antsp.SolutionFactory.getAntSystemSolutionWithDefaultConfig;
 import static org.testng.Assert.assertTrue;
 
 /**
@@ -34,17 +33,19 @@ public class AntSystemSolverTest implements BaseWithTspTest {
 
     @Test
     public void testAli535Solution() throws IOException {
-        final Solution solution =
-                getAntSystemSolutionWithDefaultConfig(getFileAbsolutePath("tsplib/ali535.tsp"));
+        final AcoConfig config = AcoConfigFactory
+                .createDefaultAntSystemConfig(535);
+        final Solution solution = SolutionFactory.createAntSystemSolution(getTsp("tsplib/ali535.tsp"), config);
         // We assume here that solution will be better than for nearest
         // neighbour algorithm.
         assertTrue(solution.getTourLength() < 256086);
     }
 
-    @Test(enabled = false)
+    @Test
     public void testAtt532Solution() throws IOException {
-        final Solution solution =
-                getAntSystemSolutionWithDefaultConfig(getFileAbsolutePath("tsplib/att532.tsp"));
+        final AcoConfig config = AcoConfigFactory
+                .createDefaultAntSystemConfig(532);
+        final Solution solution = SolutionFactory.createAntSystemSolution(getTsp("tsplib/att532.tsp"), config);
 
         // We assume here that solution will be better than for nearest
         // neighbour algorithm.
@@ -56,7 +57,8 @@ public class AntSystemSolverTest implements BaseWithTspTest {
         // More ants then cities
         final AcoConfig config = AcoConfigFactory
                 .createDefaultAntSystemConfig(100);
-        final Solution solution = getAntSystemSolution(getFileAbsolutePath("tsplib/berlin52.tsp"), config);
+        final Solution solution = SolutionFactory
+                .createAntSystemSolution(getTsp("tsplib/berlin52.tsp"), config);
 
         assertTrue(solution.getTourLength() < 8314);
     }

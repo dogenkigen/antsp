@@ -15,6 +15,7 @@
 
 package com.mlaskows.antsp.solvers.antsolvers;
 
+import com.mlaskows.antsp.SolutionFactory;
 import com.mlaskows.antsp.config.AcoConfigFactory;
 import com.mlaskows.antsp.config.RankedBasedConfig;
 import com.mlaskows.antsp.datamodel.Solution;
@@ -35,13 +36,8 @@ public class RankBasedAntSolverTest implements BaseWithTspTest {
         final Tsp tsp = getTsp("tsplib/ali535.tsp");
         final RankedBasedConfig config =
                 AcoConfigFactory.createDefaultRankedBasedConfig(tsp.getDimension());
-        final StaticData data = new StaticDataBuilder(tsp)
-                .withHeuristicInformationMatrix()
-                .withHeuristicSolution()
-                .withNearestNeighbors(config.getNearestNeighbourFactor())
-                .build();
-        final RankBasedAntSolver solver = new RankBasedAntSolver(data, config);
-        final Solution solution = solver.getSolution();
+
+        final Solution solution = SolutionFactory.createRankBasedAntSolution(tsp, config);
 
         List<Integer> nonImprovementPeriods = solution.getStatistics().get()
                 .getNonImprovementPeriods();
