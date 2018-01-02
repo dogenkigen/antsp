@@ -18,7 +18,7 @@ package com.mlaskows.antsp.datamodel.data;
 import com.mlaskows.antsp.datamodel.Solution;
 import com.mlaskows.antsp.solvers.heuristic.NearestNeighbourSolver;
 import com.mlaskows.tsplib.datamodel.types.EdgeWeightType;
-import com.mlaskows.tsplib.util.DistanceCalculationMethodFactory;
+import com.mlaskows.tsplib.util.EdgeWeightCalculationMethodFactory;
 import com.mlaskows.antsp.datamodel.Step;
 import com.mlaskows.tsplib.datamodel.item.Tsp;
 import com.mlaskows.tsplib.datamodel.item.Node;
@@ -50,8 +50,8 @@ public class StaticDataBuilder {
             // TSP edge weight data instead.
             this.distanceCalculationMethod = null;
         } else {
-            this.distanceCalculationMethod = DistanceCalculationMethodFactory
-                    .getDistanceCalculationMethod(edgeWeightType);
+            this.distanceCalculationMethod = EdgeWeightCalculationMethodFactory
+                    .getEdgeWeightCalculationMethod(edgeWeightType);
         }
     }
 
