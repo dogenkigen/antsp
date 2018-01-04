@@ -17,7 +17,7 @@ package com.mlaskows.antsp.datamodel.data;
 
 import com.mlaskows.BaseWithTspTest;
 import com.mlaskows.antsp.datamodel.Solution;
-import com.mlaskows.tsplib.datamodel.item.Tsp;
+import com.mlaskows.tsplib.datamodel.tsp.Tsp;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 

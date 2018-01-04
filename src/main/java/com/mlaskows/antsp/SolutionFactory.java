@@ -25,12 +25,7 @@ import com.mlaskows.antsp.solvers.antsolvers.AntSystemSolver;
 import com.mlaskows.antsp.solvers.antsolvers.ElitistAntSolver;
 import com.mlaskows.antsp.solvers.antsolvers.MaxMinAntSolver;
 import com.mlaskows.antsp.solvers.antsolvers.RankBasedAntSolver;
-import com.mlaskows.tsplib.datamodel.item.Tsp;
-import com.mlaskows.tsplib.parser.TspLibParser;
-
-import java.io.IOException;
-
-import static com.mlaskows.antsp.config.AcoConfigFactory.createDefaultAntSystemConfig;
+import com.mlaskows.tsplib.datamodel.tsp.Tsp;
 
 public class SolutionFactory {
 

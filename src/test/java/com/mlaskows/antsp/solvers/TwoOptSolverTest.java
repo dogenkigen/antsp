@@ -19,7 +19,7 @@ import com.mlaskows.antsp.datamodel.data.StaticData;
 import com.mlaskows.antsp.datamodel.Solution;
 import com.mlaskows.antsp.datamodel.data.StaticDataBuilder;
 import com.mlaskows.antsp.solvers.heuristic.TwoOptSolver;
-import com.mlaskows.tsplib.datamodel.item.Tsp;
+import com.mlaskows.tsplib.datamodel.tsp.Tsp;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 

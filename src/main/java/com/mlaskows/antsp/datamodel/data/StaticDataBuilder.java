@@ -20,8 +20,7 @@ import com.mlaskows.antsp.solvers.heuristic.NearestNeighbourSolver;
 import com.mlaskows.tsplib.datamodel.types.EdgeWeightType;
 import com.mlaskows.tsplib.util.EdgeWeightCalculationMethodFactory;
 import com.mlaskows.antsp.datamodel.Step;
-import com.mlaskows.tsplib.datamodel.item.Tsp;
-import com.mlaskows.tsplib.datamodel.item.Node;
+import com.mlaskows.tsplib.datamodel.tsp.Tsp;
 
 import java.util.List;
 import java.util.function.BiFunction;
@@ -38,7 +37,7 @@ public class StaticDataBuilder {
     private double[][] heuristicInformationMatrix;
     private final int problemSize;
     private final Tsp tsp;
-    private final BiFunction<Node, Node, Integer> distanceCalculationMethod;
+    private final BiFunction<Tsp.Node, Tsp.Node, Integer> distanceCalculationMethod;
     private Solution heuristicSolution;
 
     public StaticDataBuilder(Tsp tsp) {
@@ -83,7 +82,7 @@ public class StaticDataBuilder {
     }
 
     private void calculateData() {
-        final List<Node> nodes = tsp.getNodes().orElse(null);
+        final List<Tsp.Node> nodes = tsp.getNodes().orElse(null);
         final boolean edgeWeightDataIsPresent = tsp.getEdgeWeightData()
                 .isPresent();
         if (edgeWeightDataIsPresent) {
@@ -137,7 +136,7 @@ public class StaticDataBuilder {
         return distances;
     }
 
-    private int calculateDistance(Node nodeI, Node nodeJ) {
+    private int calculateDistance(Tsp.Node nodeI, Tsp.Node nodeJ) {
         int distance;
         if (nodeI.equals(nodeJ)) {
             distance = Integer.MAX_VALUE;

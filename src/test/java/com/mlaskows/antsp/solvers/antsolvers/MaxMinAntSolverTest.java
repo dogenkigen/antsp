@@ -18,10 +18,8 @@ package com.mlaskows.antsp.solvers.antsolvers;
 import com.mlaskows.antsp.SolutionFactory;
 import com.mlaskows.antsp.config.MaxMinConfig;
 import com.mlaskows.antsp.datamodel.Solution;
-import com.mlaskows.antsp.datamodel.data.StaticData;
-import com.mlaskows.antsp.datamodel.data.StaticDataBuilder;
 import com.mlaskows.BaseWithTspTest;
-import com.mlaskows.tsplib.datamodel.item.Tsp;
+import com.mlaskows.tsplib.datamodel.tsp.Tsp;
 import com.mlaskows.antsp.config.AcoConfigFactory;
 import com.mlaskows.antsp.statistics.Statistics;
 import org.testng.Assert;
@@ -29,8 +27,6 @@ import org.testng.annotations.Test;
 
 import java.io.IOException;
 import java.util.List;
-
-import static java.lang.System.currentTimeMillis;
 
 /**
  * Created by mlaskows on 15/07/2017.
